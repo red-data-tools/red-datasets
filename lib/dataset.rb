@@ -7,6 +7,7 @@ module Datasets
       @csv = CSV.open(path)
     end
 
+    def each(&block)
       @csv.each(&block)
     end
   end

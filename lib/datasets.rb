@@ -4,7 +4,7 @@ module Datasets
   class Iris
     def initialize
       path = File.expand_path('../data/iris.csv', File.dirname(__FILE__))
-      @csv = CSV.open(path)
+      @csv = CSV.open(path, converters: [:numeric])
     end
 
     def each(&block)

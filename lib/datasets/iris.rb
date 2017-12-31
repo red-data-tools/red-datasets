@@ -14,6 +14,7 @@ module Datasets
       super()
       @metadata.name = "iris"
       @metadata.url = "https://archive.ics.uci.edu/ml/datasets/Iris"
+      @metadata.description = open_description
     end
 
     def each
@@ -24,14 +25,6 @@ module Datasets
           next if row[0].nil?
           record = Record.new(*row)
           yield(record)
-        end
-      end
-    end
-    
-    def description
-      open_description do |desc|
-        desc.each do |line|
-          puts "#{line.chomp}"
         end
       end
     end
@@ -54,8 +47,8 @@ module Datasets
         data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.names"
         download(data_path, data_url)
       end
-      File.open(data_path) do |desc|
-        yield(desc)
+      File.read(data_path) do |desc|
+        desc.read
       end
     end
   end

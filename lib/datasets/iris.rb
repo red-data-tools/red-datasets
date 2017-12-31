@@ -27,6 +27,14 @@ module Datasets
         end
       end
     end
+    
+    def description
+      open_description do |desc|
+        desc.each do |line|
+          puts "#{line.chomp}"
+        end
+      end
+    end
 
     private
     def open_data
@@ -37,6 +45,17 @@ module Datasets
       end
       CSV.open(data_path, converters: [:numeric]) do |csv|
         yield(csv)
+      end
+    end
+
+    def open_description
+      data_path = cache_dir_path + "iris.names"
+      unless data_path.exist?
+        data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.names"
+        download(data_path, data_url)
+      end
+      File.open(data_path) do |desc|
+        yield(desc)
       end
     end
   end

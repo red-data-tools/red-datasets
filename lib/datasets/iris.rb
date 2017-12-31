@@ -14,6 +14,7 @@ module Datasets
       super()
       @metadata.name = "iris"
       @metadata.url = "https://archive.ics.uci.edu/ml/datasets/Iris"
+      @metadata.description = open_description
     end
 
     def each
@@ -37,6 +38,17 @@ module Datasets
       end
       CSV.open(data_path, converters: [:numeric]) do |csv|
         yield(csv)
+      end
+    end
+
+    def open_description
+      data_path = cache_dir_path + "iris.names"
+      unless data_path.exist?
+        data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.names"
+        download(data_path, data_url)
+      end
+      File.read(data_path) do |desc|
+        desc.read
       end
     end
   end

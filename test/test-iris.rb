@@ -20,4 +20,13 @@ class IrisTest < Test::Unit::TestCase
                    records[-1],
                  ])
   end
+
+  sub_test_case("#metadata") do
+    test("#description") do
+      description = @dataset.metadata.description
+      assert do
+        description.start_with?("1. Title: Iris Plants Database")
+      end
+    end
+  end
 end

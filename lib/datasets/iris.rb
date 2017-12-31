@@ -14,7 +14,9 @@ module Datasets
       super()
       @metadata.name = "iris"
       @metadata.url = "https://archive.ics.uci.edu/ml/datasets/Iris"
-      @metadata.description = open_description
+      @metadata.description = lambda do
+        read_names
+      end
     end
 
     def each
@@ -41,15 +43,13 @@ module Datasets
       end
     end
 
-    def open_description
-      data_path = cache_dir_path + "iris.names"
-      unless data_path.exist?
-        data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.names"
-        download(data_path, data_url)
+    def read_names
+      names_path = cache_dir_path + "iris.names"
+      unless names_path.exist?
+        names_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.names"
+        download(names_path, names_url)
       end
-      File.read(data_path) do |desc|
-        desc.read
-      end
+      names_path.read
     end
   end
 end

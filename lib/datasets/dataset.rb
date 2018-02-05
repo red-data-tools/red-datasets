@@ -1,7 +1,6 @@
-require "fileutils"
-require "open-uri"
 require "pathname"
 
+require_relative "downloader"
 require_relative "metadata"
 
 module Datasets
@@ -25,18 +24,8 @@ module Datasets
     end
 
     def download(output_path, url)
-      url = URI.parse(url) unless url.is_a?(URI::Generic)
-      output_path.parent.mkpath
-      begin
-        url.open do |input|
-          output_path.open("wb") do |output|
-            IO.copy_stream(input, output)
-          end
-        end
-      rescue
-        FileUtils.rm_f(output_path)
-        raise
-      end
+      downloader = Downloader.new(url)
+      downloader.download(output_path)
     end
   end
 end

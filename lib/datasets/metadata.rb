@@ -1,7 +1,7 @@
 module Datasets
   class Metadata < Struct.new(:name,
                               :url,
-                              :license,
+                              :licenses,
                               :description)
     def description
       description_raw = super

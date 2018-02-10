@@ -3,9 +3,12 @@ require "open-uri"
 
 module Datasets
   class Downloader
+    PROC_STAT_PATH = "/proc/self/stat"
+
     def initialize(url)
       url = URI.parse(url) unless url.is_a?(URI::Generic)
       @url = url
+      @have_proc_stat = File.exist?(PROC_STAT_PATH)
     end
 
     def download(output_path)
@@ -18,13 +21,7 @@ module Datasets
           max = content_length
         end
         progress_proc = lambda do |current|
-          if max
-            percent = (current / max.to_f) * 100
-            formatted_size = "[%s/%s]" % [format_size(current), format_size(max)]
-            $stderr.print("\r%s - %06.2f%% %s" %
-                          [base_name, percent, formatted_size])
-            $stderr.puts if current == max
-          end
+          show_progress(base_name, current, max)
         end
         options = {
           :content_length_proc => content_length_proc,
@@ -59,6 +56,26 @@ module Datasets
       else
         "%.2fTiB" % (size.to_f / (1024 ** 4))
       end
+    end
+
+    def foreground?
+      return false unless @have_proc_stat
+
+      stat = File.read(PROC_STAT_PATH).sub(/\A.+\) /, "").split
+      process_group_id = stat[2]
+      terminal_process_group_id = stat[5]
+      process_group_id == terminal_process_group_id
+    end
+
+    def show_progress(base_name, current, max)
+      return if max.nil?
+      return unless foreground?
+
+      percent = (current / max.to_f) * 100
+      formatted_size = "[%s/%s]" % [format_size(current), format_size(max)]
+      $stderr.print("\r%s - %06.2f%% %s" %
+                    [base_name, percent, formatted_size])
+      $stderr.puts if current == max
     end
   end
 end

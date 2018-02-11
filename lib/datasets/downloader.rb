@@ -118,7 +118,6 @@ module Datasets
 
         read_bytes = size_current - @size_previous
         throughput = read_bytes.to_f / (time_current - @time_previous)
-        tp = @time_previous
         @time_previous = time_current
         @size_previous = size_current
 

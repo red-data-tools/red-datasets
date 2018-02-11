@@ -114,38 +114,51 @@ module Datasets
           return
         end
 
-        width = guess_terminal_width
-
         read_bytes = size_current - @size_previous
         throughput = read_bytes.to_f / (time_current - @time_previous)
         @time_previous = time_current
         @size_previous = size_current
 
+        message = build_message(size_current, throughput)
+        $stderr.print("\r#{message}") if message
+        $stderr.puts if done
+      end
+
+      private
+      def build_message(size_current, throughput)
         percent = (size_current / @size_max.to_f) * 100
         formatted_size = "[%s/%s]" % [
           format_size(size_current),
           format_size(@size_max),
         ]
         rest_second = (@size_max - size_current) / throughput
-        progress = " - %05.1f%% %s %s %s" % [
+        separator = " - "
+        progress = "%05.1f%% %s %s %s" % [
           percent,
           formatted_size,
           format_time_interval(rest_second),
           format_throughput(throughput),
         ]
         base_name = @base_name
-        if width
-          base_name_width = width - progress.size
-          if base_name.size > base_name_width
-            ellipsis = "..."
-            base_name = base_name[0, base_name_width - ellipsis.size] + ellipsis
+
+        width = guess_terminal_width
+        return "#{base_name}#{separator}#{progress}" if width.nil?
+
+        return nil if progress.size > width
+
+        base_name_width = width - progress.size - separator.size
+        if base_name.size > base_name_width
+          ellipsis = "..."
+          shorten_base_name_width = base_name_width - ellipsis.size
+          if shorten_base_name_width < 1
+            return progress
+          else
+            base_name = base_name[0, shorten_base_name_width] + ellipsis
           end
         end
-        $stderr.print("\r#{base_name}#{progress}")
-        $stderr.puts if done
+        "#{base_name}#{separator}#{progress}"
       end
 
-      private
       def format_size(size)
         if size < 1000
           "%d" % size

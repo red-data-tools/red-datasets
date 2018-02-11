@@ -1,39 +1,91 @@
 require "fileutils"
 require "open-uri"
+require "pathname"
 
 module Datasets
   class Downloader
     def initialize(url)
-      url = URI.parse(url) unless url.is_a?(URI::Generic)
+      if url.is_a?(URI::Generic)
+        url = url.dup
+      else
+        url = URI.parse(url)
+      end
       @url = url
+      @url.extend(CurrentBufferReadable)
     end
 
     def download(output_path)
       output_path.parent.mkpath
 
+      start = nil
+      partial_output_path = Pathname.new("#{output_path}.partial")
+      if partial_output_path.exist?
+        start = partial_output_path.size
+      end
+
       progress_reporter = nil
       content_length_proc = lambda do |content_length|
         base_name = @url.path.split("/").last
         size_max = content_length
+        size_max += start if start
         progress_reporter = ProgressReporter.new(base_name, size_max)
       end
       progress_proc = lambda do |size_current|
+        size_current += start if start
         progress_reporter.report(size_current) if progress_reporter
       end
       options = {
         :content_length_proc => content_length_proc,
         :progress_proc => progress_proc,
       }
+      if start
+        options["Range"] = "bytes=#{start}-"
+      end
 
       begin
         @url.open(options) do |input|
-          output_path.open("wb") do |output|
-            IO.copy_stream(input, output)
-          end
+          copy_stream(input, partial_output_path)
         end
-      rescue
-        FileUtils.rm_f(output_path)
+      rescue Interrupt, Net::ReadTimeout
+        if @url.current_buffer
+          input = @url.current_buffer.io
+          input.rewind
+          copy_stream(input, partial_output_path)
+        end
         raise
+      end
+
+      FileUtils.mv(partial_output_path, output_path)
+    end
+
+    private
+    def copy_stream(input, partial_output_path)
+      if partial_output_path.exist?
+        # TODO: It's better that we use "206 Partial Content" response
+        # to detect partial response.
+        partial_head = partial_output_path.open("rb") do |partial_output|
+          partial_output.read(256)
+        end
+        input_head = input.read(partial_head.bytesize)
+        input.rewind
+        if partial_head == input_head
+          mode = "wb"
+        else
+          mode = "ab"
+        end
+      else
+        mode = "wb"
+      end
+      partial_output_path.open(mode) do |partial_output|
+        IO.copy_stream(input, partial_output)
+      end
+    end
+
+    module CurrentBufferReadable
+      attr_reader :current_buffer
+      def buffer_open(buffer, proxy, options)
+        @current_buffer = buffer
+        super
       end
     end
 

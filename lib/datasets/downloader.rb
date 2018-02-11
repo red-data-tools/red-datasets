@@ -62,6 +62,8 @@ module Datasets
           return
         end
 
+        width = guess_terminal_width
+
         read_bytes = size_current - @size_previous
         throughput = read_bytes.to_f / (time_current - @time_previous)
         tp = @time_previous
@@ -74,14 +76,21 @@ module Datasets
           format_size(@size_max),
         ]
         rest_second = (@size_max - size_current) / throughput
-        $stderr.print("\r%s - %05.1f%% %s %s %s" %
-                      [
-                        @base_name,
-                        percent,
-                        formatted_size,
-                        format_time_interval(rest_second),
-                        format_throughput(throughput),
-                      ])
+        progress = " - %05.1f%% %s %s %s" % [
+          percent,
+          formatted_size,
+          format_time_interval(rest_second),
+          format_throughput(throughput),
+        ]
+        base_name = @base_name
+        if width
+          base_name_width = width - progress.size
+          if base_name.size > base_name_width
+            ellipsis = "..."
+            base_name = base_name[0, base_name_width - ellipsis.size] + ellipsis
+          end
+        end
+        $stderr.print("\r#{base_name}#{progress}")
         $stderr.puts if done
       end
 
@@ -138,6 +147,57 @@ module Datasets
         process_group_id = stat[2]
         terminal_process_group_id = stat[5]
         process_group_id == terminal_process_group_id
+      end
+
+      def guess_terminal_width
+        guess_terminal_width_from_io ||
+          guess_terminal_width_from_command ||
+          guess_terminal_width_from_env ||
+          80
+      end
+
+      def guess_terminal_width_from_io
+        if $stderr.respond_to?(:winsize)
+          begin
+            $stderr.winsize[1]
+          rescue SystemCallError
+            nil
+          end
+        else
+          nil
+        end
+      end
+
+      def guess_terminal_width_from_command
+        IO.pipe do |input, output|
+          begin
+            pid = spawn("tput", "cols", {:out => output, :err => output})
+          rescue SystemCallError
+            return nil
+          end
+
+          output.close
+          _, status = Process.waitpid2(pid)
+          return nil unless status.success?
+
+          result = input.read.chomp
+          begin
+            Integer(result, 10)
+          rescue ArgumentError
+            nil
+          end
+        end
+      end
+
+      def guess_terminal_width_from_env
+        env = ENV["COLUMNS"] || ENV["TERM_WIDTH"]
+        return nil if env.nil?
+
+        begin
+          Integer(env, 10)
+        rescue ArgumentError
+          nil
+        end
       end
     end
   end

@@ -206,7 +206,7 @@ module Datasets
         ps_path = "/bin/ps"
 
         if File.exist?(proc_stat_path)
-          stat = File.read(PROC_STAT_PATH).sub(/\A.+\) /, "").split
+          stat = File.read(proc_stat_path).sub(/\A.+\) /, "").split
           process_group_id = stat[2]
           terminal_process_group_id = stat[5]
           process_group_id == terminal_process_group_id

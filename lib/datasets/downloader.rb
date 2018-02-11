@@ -90,8 +90,6 @@ module Datasets
     end
 
     class ProgressReporter
-      PROC_STAT_PATH = "/proc/self/stat"
-
       def initialize(base_name, size_max)
         @base_name = base_name
         @size_max = size_max
@@ -100,7 +98,6 @@ module Datasets
         @size_previous = 0
 
         @need_report = ($stderr == STDERR and $stderr.tty?)
-        @have_proc_stat = File.exist?(PROC_STAT_PATH)
       end
 
       def report(size_current)
@@ -205,12 +202,27 @@ module Datasets
       end
 
       def foreground?
-        return false unless @have_proc_stat
+        proc_stat_path = "/proc/self/stat"
+        ps_path = "/bin/ps"
 
-        stat = File.read(PROC_STAT_PATH).sub(/\A.+\) /, "").split
-        process_group_id = stat[2]
-        terminal_process_group_id = stat[5]
-        process_group_id == terminal_process_group_id
+        if File.exist?(proc_stat_path)
+          stat = File.read(PROC_STAT_PATH).sub(/\A.+\) /, "").split
+          process_group_id = stat[2]
+          terminal_process_group_id = stat[5]
+          process_group_id == terminal_process_group_id
+        elsif File.executable?(ps_path)
+          IO.pipe do |input, output|
+            pid = spawn(ps_path, "-o", "stat", "-p", Process.pid.to_s,
+                        {:out => output, :err => output})
+            output.close
+            _, status = Process.waitpid2(pid)
+            return false unless status.success?
+
+            input.each_line.to_a.last.include?("+")
+          end
+        else
+          false
+        end
       end
 
       def guess_terminal_width

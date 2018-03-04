@@ -1,4 +1,8 @@
 require "fileutils"
+begin
+  require "io/console"
+rescue LoadError
+end
 require "open-uri"
 require "pathname"
 
@@ -233,7 +237,9 @@ module Datasets
       end
 
       def guess_terminal_width_from_io
-        if $stderr.respond_to?(:winsize)
+        if IO.respond_to?(:console)
+          IO.console.winsize[1]
+        elsif $stderr.respond_to?(:winsize)
           begin
             $stderr.winsize[1]
           rescue SystemCallError

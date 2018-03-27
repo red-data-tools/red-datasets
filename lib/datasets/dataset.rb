@@ -2,12 +2,17 @@ require "pathname"
 
 require_relative "downloader"
 require_relative "metadata"
+require_relative "table"
 
 module Datasets
   class Dataset
     attr_reader :metadata
     def initialize
       @metadata = Metadata.new
+    end
+
+    def to_table
+      Table.new(self)
     end
 
     private

@@ -1,5 +1,26 @@
 # News
 
+## 0.0.3 - 2018-03-27
+
+### Improvements
+
+  * `Datasets::Metadata#licenses`: Renamed from `#license`. This is a
+    broken change.
+
+  * `Datasets::Wikipedia`: Added missing license information.
+
+  * Progress: Stopped progress bar when the process goes to background.
+
+  * Progress: Added rest time and throughput information.
+
+  * Progress: Added dynamic terminal width change support.
+
+  * Progress: Added continuous download support.
+
+  * `Datasets::Dataset#to_table`: Added.
+
+  * `Datasets::Table`: Added.
+
 ## 0.0.2 - 2018-02-06
 
 ### Improvements

@@ -6,6 +6,8 @@ require_relative "table"
 
 module Datasets
   class Dataset
+    include Enumerable
+
     attr_reader :metadata
     def initialize
       @metadata = Metadata.new

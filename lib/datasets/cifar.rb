@@ -54,13 +54,13 @@ module Datasets
 
       open_tar(data_path) do |tar|
         file_names.each do |file_name|
-          entry = tar.find { |e| File.basename(e.full_name) == file_name }
-          while b = entry.read(3073) do
-            datasets = b.unpack("C*") 
-            label = datasets.shift
-            yield datasets, label
+          tar.seek("cifar-10-batches-bin/#{file_name}") do |entry|
+            while b = entry.read(3073) do
+              datasets = b.unpack("C*") 
+              label = datasets.shift
+              yield datasets, label
+            end
           end
-          tar.rewind
         end
       end
     end
@@ -73,12 +73,13 @@ module Datasets
       end
 
       open_tar(data_path) do |tar|
-        entry = tar.find { |e| File.basename(e.full_name) == file_name }
-        while b = entry.read(3074) do
-          datasets = b.unpack("C*") 
-          # 0: coarse label, 1: fine label
-          labels = datasets.shift(2)
-          yield datasets, labels[1]
+        tar.seek("cifar-100-binary/#{file_name}") do |entry|
+          while b = entry.read(3074) do
+            datasets = b.unpack("C*") 
+            # 0: coarse label, 1: fine label
+            labels = datasets.shift(2)
+            yield datasets, labels[1]
+          end
         end
       end
     end

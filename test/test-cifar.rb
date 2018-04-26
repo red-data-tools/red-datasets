@@ -10,12 +10,12 @@ class CifarTest < Test::Unit::TestCase
         assert_equal([
                         50000,
                         3072,
-                        Integer,
+                        6,
                       ],
                       [
                         records.size,
                         records[0].data.size,
-                        records[0].label.class
+                        records[0].label,
                       ]) 
       end
     end
@@ -30,12 +30,12 @@ class CifarTest < Test::Unit::TestCase
         assert_equal([
                         10000,
                         3072,
-                        Integer,
+                        3,
                       ],
                       [
                         records.size,
                         records[0].data.size,
-                        records[0].label.class
+                        records[0].label,
                       ]) 
       end
     end
@@ -52,19 +52,19 @@ class CifarTest < Test::Unit::TestCase
         assert_equal([
                         50000,
                         3072,
-                        Integer,
+                        19,
                       ],
                       [
                         records.size,
                         records[0].data.size,
-                        records[0].label.class
+                        records[0].label,
                       ]) 
       end
     end
 
     sub_test_case("test") do
       def setup
-        @dataset = Datasets::Cifar.new(class_num: 100, set_type: :train)
+        @dataset = Datasets::Cifar.new(class_num: 100, set_type: :test)
       end
 
       test("#each") do
@@ -72,12 +72,12 @@ class CifarTest < Test::Unit::TestCase
         assert_equal([
                         10000,
                         3072,
-                        Integer,
+                        49,
                       ],
                       [
                         records.size,
                         records[0].data.size,
-                        records[0].label.class
+                        records[0].label
                       ]) 
       end
     end

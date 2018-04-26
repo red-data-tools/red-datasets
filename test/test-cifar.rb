@@ -16,7 +16,7 @@ class CifarTest < Test::Unit::TestCase
                         records.size,
                         records[0].data.size,
                         records[0].label,
-                      ]) 
+                      ])
       end
     end
 
@@ -36,11 +36,11 @@ class CifarTest < Test::Unit::TestCase
                         records.size,
                         records[0].data.size,
                         records[0].label,
-                      ]) 
+                      ])
       end
     end
   end
-  
+
   sub_test_case("cifar-100") do
     sub_test_case("train") do
       def setup
@@ -58,7 +58,7 @@ class CifarTest < Test::Unit::TestCase
                         records.size,
                         records[0].data.size,
                         records[0].label,
-                      ]) 
+                      ])
       end
     end
 
@@ -78,7 +78,7 @@ class CifarTest < Test::Unit::TestCase
                         records.size,
                         records[0].data.size,
                         records[0].label
-                      ]) 
+                      ])
       end
     end
   end

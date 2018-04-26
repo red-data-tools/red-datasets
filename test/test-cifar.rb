@@ -121,43 +121,67 @@ class CifarTest < Test::Unit::TestCase
   end
 
   sub_test_case("cifar-100") do
+    def create_data(coarse_label, fine_label, pixel)
+      [coarse_label, fine_label].pack("C*") + ([pixel] * 3072).pack("C*")
+    end
+
     sub_test_case("train") do
       def setup
         @dataset = Datasets::Cifar.new(class_num: 100, set_type: :train)
+        directory = "cifar-100-binary"
+        data = create_data(1, 11, 10) + create_data(2, 22, 20)
+        setup_raw_data(directory => :directory,
+                       "#{directory}/train.bin" => data)
       end
 
       test("#each") do
-        records = @dataset.to_a
+        raw_dataset = @dataset.collect do |record|
+          {
+            :label => record.label,
+            :data => record.data,
+          }
+        end
         assert_equal([
-                       50000,
-                       3072,
-                       19,
+                       {
+                         :label => 11,
+                         :data => [10] * 3072,
+                       },
+                       {
+                         :label => 22,
+                         :data => [20] * 3072,
+                       },
                      ],
-                     [
-                       records.size,
-                       records[0].data.size,
-                       records[0].label,
-                     ])
+                     raw_dataset)
       end
     end
 
     sub_test_case("test") do
       def setup
         @dataset = Datasets::Cifar.new(class_num: 100, set_type: :test)
+        directory = "cifar-100-binary"
+        data = create_data(1, 11, 100) + create_data(6, 66, 200)
+        setup_raw_data(directory => :directory,
+                       "#{directory}/test.bin" => data)
       end
 
       test("#each") do
-        records = @dataset.to_a
+        raw_dataset = @dataset.collect do |record|
+          {
+            :label => record.label,
+            :data => record.data,
+          }
+        end
         assert_equal([
-                       10000,
-                       3072,
-                       49,
+                       {
+                         :label => 11,
+                         :data => [100] * 3072,
+                       },
+                       {
+                         :label => 66,
+                         :data => [200] * 3072,
+                       },
                      ],
-                     [
-                       records.size,
-                       records[0].data.size,
-                       records[0].label
-                     ])
+                     raw_dataset)
       end
     end
   end

@@ -16,7 +16,7 @@ module Datasets
 
       @metadata.name = "CIFAR-#{class_num}"
       @metadata.url = "https://www.cs.toronto.edu/~kriz/cifar.html"
-      @metadata.description = "CIFAR-#{class_num} is 32x32 image datasets"
+      @metadata.description = "CIFAR-#{class_num} is 32x32 image dataset"
 
       @class_num = class_num
       @set_type = set_type

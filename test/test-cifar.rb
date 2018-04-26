@@ -8,15 +8,15 @@ class CifarTest < Test::Unit::TestCase
       test("#each") do
         records = @dataset.to_a
         assert_equal([
-                        50000,
-                        3072,
-                        6,
-                      ],
-                      [
-                        records.size,
-                        records[0].data.size,
-                        records[0].label,
-                      ])
+                       50000,
+                       3072,
+                       6,
+                     ],
+                     [
+                       records.size,
+                       records[0].data.size,
+                       records[0].label,
+                     ])
       end
     end
 
@@ -28,15 +28,15 @@ class CifarTest < Test::Unit::TestCase
       test("#each") do
         records = @dataset.to_a
         assert_equal([
-                        10000,
-                        3072,
-                        3,
-                      ],
-                      [
-                        records.size,
-                        records[0].data.size,
-                        records[0].label,
-                      ])
+                       10000,
+                       3072,
+                       3,
+                     ],
+                     [
+                       records.size,
+                       records[0].data.size,
+                       records[0].label,
+                     ])
       end
     end
   end
@@ -50,15 +50,15 @@ class CifarTest < Test::Unit::TestCase
       test("#each") do
         records = @dataset.to_a
         assert_equal([
-                        50000,
-                        3072,
-                        19,
-                      ],
-                      [
-                        records.size,
-                        records[0].data.size,
-                        records[0].label,
-                      ])
+                       50000,
+                       3072,
+                       19,
+                     ],
+                     [
+                       records.size,
+                       records[0].data.size,
+                       records[0].label,
+                     ])
       end
     end
 
@@ -70,15 +70,15 @@ class CifarTest < Test::Unit::TestCase
       test("#each") do
         records = @dataset.to_a
         assert_equal([
-                        10000,
-                        3072,
-                        49,
-                      ],
-                      [
-                        records.size,
-                        records[0].data.size,
-                        records[0].label
-                      ])
+                       10000,
+                       3072,
+                       49,
+                     ],
+                     [
+                       records.size,
+                       records[0].data.size,
+                       records[0].label
+                     ])
       end
     end
   end

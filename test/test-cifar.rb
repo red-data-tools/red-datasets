@@ -45,7 +45,7 @@ class CifarTest < Test::Unit::TestCase
 
     sub_test_case("train") do
       def setup
-        @dataset = Datasets::Cifar.new(class_num: 10, set_type: :train)
+        @dataset = Datasets::Cifar.new(n_classes: 10, set_type: :train)
         directory = "cifar-10-batches-bin"
         setup_raw_data(directory => :directory,
                        "#{directory}/data_batch_1.bin" => create_data(1, 10),
@@ -91,7 +91,7 @@ class CifarTest < Test::Unit::TestCase
 
     sub_test_case("test") do
       def setup
-        @dataset = Datasets::Cifar.new(class_num: 10, set_type: :test)
+        @dataset = Datasets::Cifar.new(n_classes: 10, set_type: :test)
         directory = "cifar-10-batches-bin"
         data = create_data(1, 100) + create_data(2, 200)
         setup_raw_data(directory => :directory,
@@ -127,7 +127,7 @@ class CifarTest < Test::Unit::TestCase
 
     sub_test_case("train") do
       def setup
-        @dataset = Datasets::Cifar.new(class_num: 100, set_type: :train)
+        @dataset = Datasets::Cifar.new(n_classes: 100, set_type: :train)
         directory = "cifar-100-binary"
         data = create_data(1, 11, 10) + create_data(2, 22, 20)
         setup_raw_data(directory => :directory,
@@ -157,7 +157,7 @@ class CifarTest < Test::Unit::TestCase
 
     sub_test_case("test") do
       def setup
-        @dataset = Datasets::Cifar.new(class_num: 100, set_type: :test)
+        @dataset = Datasets::Cifar.new(n_classes: 100, set_type: :test)
         directory = "cifar-100-binary"
         data = create_data(1, 11, 100) + create_data(6, 66, 200)
         setup_raw_data(directory => :directory,

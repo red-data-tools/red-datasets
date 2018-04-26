@@ -9,8 +9,12 @@ module Datasets
                         :label)
 
     def initialize(class_num: 10, set_type: :train)
-      raise 'Please set class_num 10 or 100' unless [10, 100].include?(class_num)
-      raise 'Please set set_type :train or :test' unless [:train, :test].include?(set_type)
+      unless [10, 100].include?(class_num)
+        raise 'Please set class_num 10 or 100'
+      end
+      unless [:train, :test].include?(set_type)
+        raise 'Please set set_type :train or :test'
+      end
 
       super()
 
@@ -47,7 +51,13 @@ module Datasets
 
     def open_cifar10(data_path)
       if @set_type == :train
-        file_names = ["data_batch_1.bin", "data_batch_2.bin", "data_batch_3.bin", "data_batch_4.bin", "data_batch_5.bin"]
+        file_names = [
+          "data_batch_1.bin",
+          "data_batch_2.bin",
+          "data_batch_3.bin",
+          "data_batch_4.bin",
+          "data_batch_5.bin",
+        ]
       elsif @set_type == :test
         file_names = ["test_batch.bin"]
       end

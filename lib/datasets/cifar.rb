@@ -11,7 +11,7 @@ module Datasets
     def initialize(class_num: 10, set_type: :train)
       raise 'Please set class_num 10 or 100' unless [10, 100].include?(class_num)
       raise 'Please set set_type :train or :test' unless [:train, :test].include?(set_type)
- 
+
       super()
 
       @metadata.name = "CIFAR-#{class_num}"
@@ -31,7 +31,7 @@ module Datasets
       end
     end
 
-    private 
+    private
 
     def open_data
       data_path = cache_dir_path + "cifar-#{@class_num}.tar.gz"
@@ -56,7 +56,7 @@ module Datasets
         file_names.each do |file_name|
           tar.seek("cifar-10-batches-bin/#{file_name}") do |entry|
             while b = entry.read(3073) do
-              datasets = b.unpack("C*") 
+              datasets = b.unpack("C*")
               label = datasets.shift
               yield datasets, label
             end
@@ -75,7 +75,7 @@ module Datasets
       open_tar(data_path) do |tar|
         tar.seek("cifar-100-binary/#{file_name}") do |entry|
           while b = entry.read(3074) do
-            datasets = b.unpack("C*") 
+            datasets = b.unpack("C*")
             # 0: coarse label, 1: fine label
             labels = datasets.shift(2)
             yield datasets, labels[1]

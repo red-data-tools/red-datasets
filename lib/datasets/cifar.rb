@@ -8,12 +8,12 @@ module Datasets
     Record = Struct.new(:data,
                         :label)
 
-    def initialize(n_classes: 10, set_type: :train)
+    def initialize(n_classes: 10, type: :train)
       unless [10, 100].include?(n_classes)
         raise 'Please set n_classes 10 or 100'
       end
-      unless [:train, :test].include?(set_type)
-        raise 'Please set set_type :train or :test'
+      unless [:train, :test].include?(type)
+        raise 'Please set type :train or :test'
       end
 
       super()
@@ -23,7 +23,7 @@ module Datasets
       @metadata.description = "CIFAR-#{n_classes} is 32x32 image dataset"
 
       @n_classes = n_classes
-      @set_type = set_type
+      @type = type
     end
 
     def each
@@ -50,7 +50,7 @@ module Datasets
     end
 
     def open_cifar10(data_path)
-      if @set_type == :train
+      if @type == :train
         file_names = [
           "data_batch_1.bin",
           "data_batch_2.bin",
@@ -58,7 +58,7 @@ module Datasets
           "data_batch_4.bin",
           "data_batch_5.bin",
         ]
-      elsif @set_type == :test
+      elsif @type == :test
         file_names = ["test_batch.bin"]
       end
 
@@ -76,9 +76,9 @@ module Datasets
     end
 
     def open_cifar100(data_path)
-      if @set_type == :train
+      if @type == :train
         file_name = "train.bin"
-      elsif @set_type == :test
+      elsif @type == :test
         file_name = "test.bin"
       end
 

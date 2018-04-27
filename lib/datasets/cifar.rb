@@ -4,7 +4,7 @@ require "zlib"
 require_relative "dataset"
 
 module Datasets
-  class Cifar < Dataset
+  class CIFAR < Dataset
     Record = Struct.new(:data,
                         :label)
 

@@ -8,9 +8,9 @@ module Datasets
     Record = Struct.new(:data,
                         :label)
 
-    def initialize(class_num: 10, set_type: :train)
-      unless [10, 100].include?(class_num)
-        raise 'Please set class_num 10 or 100'
+    def initialize(n_classes: 10, set_type: :train)
+      unless [10, 100].include?(n_classes)
+        raise 'Please set n_classes 10 or 100'
       end
       unless [:train, :test].include?(set_type)
         raise 'Please set set_type :train or :test'
@@ -18,11 +18,11 @@ module Datasets
 
       super()
 
-      @metadata.name = "CIFAR-#{class_num}"
+      @metadata.name = "CIFAR-#{n_classes}"
       @metadata.url = "https://www.cs.toronto.edu/~kriz/cifar.html"
-      @metadata.description = "CIFAR-#{class_num} is 32x32 image dataset"
+      @metadata.description = "CIFAR-#{n_classes} is 32x32 image dataset"
 
-      @class_num = class_num
+      @n_classes = n_classes
       @set_type = set_type
     end
 
@@ -38,13 +38,13 @@ module Datasets
     private
 
     def open_data
-      data_path = cache_dir_path + "cifar-#{@class_num}.tar.gz"
+      data_path = cache_dir_path + "cifar-#{@n_classes}.tar.gz"
       unless data_path.exist?
-        data_url = "https://www.cs.toronto.edu/~kriz/cifar-#{@class_num}-binary.tar.gz"
+        data_url = "https://www.cs.toronto.edu/~kriz/cifar-#{@n_classes}-binary.tar.gz"
         download(data_path, data_url)
       end
 
-      send("open_cifar#{@class_num}", data_path) do |data, label|
+      send("open_cifar#{@n_classes}", data_path) do |data, label|
         yield [data, label]
       end
     end

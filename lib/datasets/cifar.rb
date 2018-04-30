@@ -5,8 +5,17 @@ require_relative "dataset"
 
 module Datasets
   class CIFAR < Dataset
-    Record = Struct.new(:data,
-                        :label)
+    class CIFAR10Record < Struct.new(:data, :label)
+      def pixels
+        data.unpack("C*")
+      end
+    end
+
+    class CIFAR100Record < Struct.new(:data, :coarse_label, :fine_label)
+      def pixels
+        data.unpack("C*")
+      end
+    end
 
     def initialize(n_classes: 10, type: :train)
       unless [10, 100].include?(n_classes)
@@ -30,7 +39,12 @@ module Datasets
       return to_enum(__method__) unless block_given?
 
       open_data do |row|
-        record = Record.new(*row)
+        klass = if @n_classes == 10
+                  CIFAR10Record
+                elsif @n_classes == 100
+                  CIFAR100Record
+                end
+        record = klass.new(*row)
         yield(record)
       end
     end
@@ -44,8 +58,8 @@ module Datasets
         download(data_path, data_url)
       end
 
-      send("open_cifar#{@n_classes}", data_path) do |data, label|
-        yield [data, label]
+      send("open_cifar#{@n_classes}", data_path) do |*data|
+        yield data
       end
     end
 
@@ -66,9 +80,8 @@ module Datasets
         file_names.each do |file_name|
           tar.seek("cifar-10-batches-bin/#{file_name}") do |entry|
             while b = entry.read(3073) do
-              datasets = b.unpack("C*")
-              label = datasets.shift
-              yield datasets, label
+              label = b.slice!(0)
+              yield b, label.getbyte(0)
             end
           end
         end
@@ -85,10 +98,9 @@ module Datasets
       open_tar(data_path) do |tar|
         tar.seek("cifar-100-binary/#{file_name}") do |entry|
           while b = entry.read(3074) do
-            datasets = b.unpack("C*")
+            labels = b.slice!(0..1)
             # 0: coarse label, 1: fine label
-            labels = datasets.shift(2)
-            yield datasets, labels[1]
+            yield b, labels.getbyte(0), labels.getbyte(1)
           end
         end
       end

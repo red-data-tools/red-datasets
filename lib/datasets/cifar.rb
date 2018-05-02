@@ -35,73 +35,81 @@ module Datasets
       @type = type
     end
 
-    def each
+    def each(&block)
       return to_enum(__method__) unless block_given?
 
-      open_data do |row|
-        klass = if @n_classes == 10
-                  Record10
-                elsif @n_classes == 100
-                  Record100
-                end
-        record = klass.new(*row)
-        yield(record)
-      end
-    end
-
-    private
-
-    def open_data
       data_path = cache_dir_path + "cifar-#{@n_classes}.tar.gz"
       unless data_path.exist?
         data_url = "https://www.cs.toronto.edu/~kriz/cifar-#{@n_classes}-binary.tar.gz"
         download(data_path, data_url)
       end
 
-      send("open_cifar#{@n_classes}", data_path) do |*data|
-        yield data
-      end
+      parse_data(data_path, &block)
     end
 
-    def open_cifar10(data_path)
-      if @type == :train
-        file_names = [
-          "data_batch_1.bin",
-          "data_batch_2.bin",
-          "data_batch_3.bin",
-          "data_batch_4.bin",
-          "data_batch_5.bin",
-        ]
-      elsif @type == :test
-        file_names = ["test_batch.bin"]
-      end
+    private
 
+    def parse_data(data_path, &block)
       open_tar(data_path) do |tar|
-        file_names.each do |file_name|
-          tar.seek("cifar-10-batches-bin/#{file_name}") do |entry|
-            while b = entry.read(3073) do
-              label = b.slice!(0)
-              yield b, label.getbyte(0)
-            end
+        target_file_names.each do |target_file_name|
+          tar.seek(target_file_name) do |entry|
+            parse_entry(entry, &block)
           end
         end
       end
     end
 
-    def open_cifar100(data_path)
-      if @type == :train
-        file_name = "train.bin"
-      elsif @type == :test
-        file_name = "test.bin"
+    def target_file_names
+      case @n_classes
+      when 10
+        prefix = 'cifar-10-batches-bin'
+        case @type
+        when :train
+          [
+            "#{prefix}/data_batch_1.bin",
+            "#{prefix}/data_batch_2.bin",
+            "#{prefix}/data_batch_3.bin",
+            "#{prefix}/data_batch_4.bin",
+            "#{prefix}/data_batch_5.bin",
+          ]
+        when :test
+          [
+            "#{prefix}/test_batch.bin"
+          ]
+        end
+      when 100
+        prefix = "cifar-100-binary"
+        case @type
+        when :train
+          [
+            "#{prefix}/train.bin",
+          ]
+        when :test
+          [
+            "#{prefix}/test.bin",
+          ]
+        end
       end
+    end
 
-      open_tar(data_path) do |tar|
-        tar.seek("cifar-100-binary/#{file_name}") do |entry|
-          while b = entry.read(3074) do
-            labels = b.slice!(0..1)
-            # 0: coarse label, 1: fine label
-            yield b, labels.getbyte(0), labels.getbyte(1)
-          end
+    def parse_entry(entry)
+      case @n_classes
+      when 10
+        loop do
+          label = entry.read(1)
+          break if label.nil?
+          label = label.unpack("C")[0]
+          data = entry.read(3072)
+          yield Record10.new(data, label)
+        end
+      when 100
+        loop do
+          coarse_label = entry.read(1)
+          break if coarse_label.nil?
+          coarse_label = coarse_label.unpack("C")[0]
+          fine_label = entry.read(1).unpack("C")[0]
+          data = entry.read(3072)
+          yield Record100.new(data, coarse_label, fine_label)
         end
       end
     end

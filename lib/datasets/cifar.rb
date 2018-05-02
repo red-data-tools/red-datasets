@@ -4,16 +4,25 @@ require "zlib"
 require_relative "dataset"
 
 module Datasets
-  class Cifar < Dataset
-    Record = Struct.new(:data,
-                        :label)
+  class CIFAR < Dataset
+    class Record10 < Struct.new(:data, :label)
+      def pixels
+        data.unpack("C*")
+      end
+    end
 
-    def initialize(n_classes: 10, set_type: :train)
+    class Record100 < Struct.new(:data, :coarse_label, :fine_label)
+      def pixels
+        data.unpack("C*")
+      end
+    end
+
+    def initialize(n_classes: 10, type: :train)
       unless [10, 100].include?(n_classes)
         raise 'Please set n_classes 10 or 100'
       end
-      unless [:train, :test].include?(set_type)
-        raise 'Please set set_type :train or :test'
+      unless [:train, :test].include?(type)
+        raise 'Please set type :train or :test'
       end
 
       super()
@@ -23,73 +32,84 @@ module Datasets
       @metadata.description = "CIFAR-#{n_classes} is 32x32 image dataset"
 
       @n_classes = n_classes
-      @set_type = set_type
+      @type = type
     end
 
-    def each
+    def each(&block)
       return to_enum(__method__) unless block_given?
 
-      open_data do |row|
-        record = Record.new(*row)
-        yield(record)
-      end
-    end
-
-    private
-
-    def open_data
       data_path = cache_dir_path + "cifar-#{@n_classes}.tar.gz"
       unless data_path.exist?
         data_url = "https://www.cs.toronto.edu/~kriz/cifar-#{@n_classes}-binary.tar.gz"
         download(data_path, data_url)
       end
 
-      send("open_cifar#{@n_classes}", data_path) do |data, label|
-        yield [data, label]
-      end
+      parse_data(data_path, &block)
     end
 
-    def open_cifar10(data_path)
-      if @set_type == :train
-        file_names = [
-          "data_batch_1.bin",
-          "data_batch_2.bin",
-          "data_batch_3.bin",
-          "data_batch_4.bin",
-          "data_batch_5.bin",
-        ]
-      elsif @set_type == :test
-        file_names = ["test_batch.bin"]
-      end
+    private
 
+    def parse_data(data_path, &block)
       open_tar(data_path) do |tar|
-        file_names.each do |file_name|
-          tar.seek("cifar-10-batches-bin/#{file_name}") do |entry|
-            while b = entry.read(3073) do
-              datasets = b.unpack("C*")
-              label = datasets.shift
-              yield datasets, label
-            end
+        target_file_names.each do |target_file_name|
+          tar.seek(target_file_name) do |entry|
+            parse_entry(entry, &block)
           end
         end
       end
     end
 
-    def open_cifar100(data_path)
-      if @set_type == :train
-        file_name = "train.bin"
-      elsif @set_type == :test
-        file_name = "test.bin"
+    def target_file_names
+      case @n_classes
+      when 10
+        prefix = 'cifar-10-batches-bin'
+        case @type
+        when :train
+          [
+            "#{prefix}/data_batch_1.bin",
+            "#{prefix}/data_batch_2.bin",
+            "#{prefix}/data_batch_3.bin",
+            "#{prefix}/data_batch_4.bin",
+            "#{prefix}/data_batch_5.bin",
+          ]
+        when :test
+          [
+            "#{prefix}/test_batch.bin"
+          ]
+        end
+      when 100
+        prefix = "cifar-100-binary"
+        case @type
+        when :train
+          [
+            "#{prefix}/train.bin",
+          ]
+        when :test
+          [
+            "#{prefix}/test.bin",
+          ]
+        end
       end
+    end
 
-      open_tar(data_path) do |tar|
-        tar.seek("cifar-100-binary/#{file_name}") do |entry|
-          while b = entry.read(3074) do
-            datasets = b.unpack("C*")
-            # 0: coarse label, 1: fine label
-            labels = datasets.shift(2)
-            yield datasets, labels[1]
-          end
+    def parse_entry(entry)
+      case @n_classes
+      when 10
+        loop do
+          label = entry.read(1)
+          break if label.nil?
+          label = label.unpack("C")[0]
+          data = entry.read(3072)
+          yield Record10.new(data, label)
+        end
+      when 100
+        loop do
+          coarse_label = entry.read(1)
+          break if coarse_label.nil?
+          coarse_label = coarse_label.unpack("C")[0]
+          fine_label = entry.read(1).unpack("C")[0]
+          data = entry.read(3072)
+          yield Record100.new(data, coarse_label, fine_label)
         end
       end
     end

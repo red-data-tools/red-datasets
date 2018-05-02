@@ -1,4 +1,4 @@
-class CifarTest < Test::Unit::TestCase
+class CIFARTest < Test::Unit::TestCase
   include Helper::Sandbox
 
   def setup_raw_data(data)
@@ -45,7 +45,7 @@ class CifarTest < Test::Unit::TestCase
 
     sub_test_case("train") do
       def setup
-        @dataset = Datasets::Cifar.new(n_classes: 10, set_type: :train)
+        @dataset = Datasets::CIFAR.new(n_classes: 10, type: :train)
         directory = "cifar-10-batches-bin"
         setup_raw_data(directory => :directory,
                        "#{directory}/data_batch_1.bin" => create_data(1, 10),
@@ -61,28 +61,34 @@ class CifarTest < Test::Unit::TestCase
           {
             :label => record.label,
             :data => record.data,
+            :pixels => record.pixels
           }
         end
         assert_equal([
                        {
                          :label => 1,
-                         :data => [10] * 3072,
+                         :data => ([10] * 3072).pack("C*"),
+                         :pixels => [10] * 3072
                        },
                        {
                          :label => 2,
-                         :data => [20] * 3072,
+                         :data => ([20] * 3072).pack("C*"),
+                         :pixels => [20] * 3072
                        },
                        {
                          :label => 3,
-                         :data => [30] * 3072,
+                         :data => ([30] * 3072).pack("C*"),
+                         :pixels => [30] * 3072
                        },
                        {
                          :label => 4,
-                         :data => [40] * 3072,
+                         :data => ([40] * 3072).pack("C*"),
+                         :pixels => [40] * 3072
                        },
                        {
                          :label => 5,
-                         :data => [50] * 3072,
+                         :data => ([50] * 3072).pack("C*"),
+                         :pixels => [50] * 3072
                        },
                      ],
                      raw_dataset)
@@ -91,7 +97,7 @@ class CifarTest < Test::Unit::TestCase
 
     sub_test_case("test") do
       def setup
-        @dataset = Datasets::Cifar.new(n_classes: 10, set_type: :test)
+        @dataset = Datasets::CIFAR.new(n_classes: 10, type: :test)
         directory = "cifar-10-batches-bin"
         data = create_data(1, 100) + create_data(2, 200)
         setup_raw_data(directory => :directory,
@@ -103,16 +109,19 @@ class CifarTest < Test::Unit::TestCase
           {
             :label => record.label,
             :data => record.data,
+            :pixels => record.pixels,
           }
         end
         assert_equal([
                        {
                          :label => 1,
-                         :data => [100] * 3072,
+                         :data => ([100] * 3072).pack("C*"),
+                         :pixels => [100] * 3072
                        },
                        {
                          :label => 2,
-                         :data => [200] * 3072,
+                         :data => ([200] * 3072).pack("C*"),
+                         :pixels => [200] * 3072
                        },
                      ],
                      raw_dataset)
@@ -127,7 +136,7 @@ class CifarTest < Test::Unit::TestCase
 
     sub_test_case("train") do
       def setup
-        @dataset = Datasets::Cifar.new(n_classes: 100, set_type: :train)
+        @dataset = Datasets::CIFAR.new(n_classes: 100, type: :train)
         directory = "cifar-100-binary"
         data = create_data(1, 11, 10) + create_data(2, 22, 20)
         setup_raw_data(directory => :directory,
@@ -137,18 +146,24 @@ class CifarTest < Test::Unit::TestCase
       test("#each") do
         raw_dataset = @dataset.collect do |record|
           {
-            :label => record.label,
+            :coarse_label => record.coarse_label,
+            :fine_label => record.fine_label,
             :data => record.data,
+            :pixels => record.pixels,
           }
         end
         assert_equal([
                        {
-                         :label => 11,
-                         :data => [10] * 3072,
+                         :coarse_label => 1,
+                         :fine_label => 11,
+                         :data => ([10] * 3072).pack("C*"),
+                         :pixels => [10] * 3072
                        },
                        {
-                         :label => 22,
-                         :data => [20] * 3072,
+                         :coarse_label => 2,
+                         :fine_label => 22,
+                         :data => ([20] * 3072).pack("C*"),
+                         :pixels => [20] * 3072
                        },
                      ],
                      raw_dataset)
@@ -157,7 +172,7 @@ class CifarTest < Test::Unit::TestCase
 
     sub_test_case("test") do
       def setup
-        @dataset = Datasets::Cifar.new(n_classes: 100, set_type: :test)
+        @dataset = Datasets::CIFAR.new(n_classes: 100, type: :test)
         directory = "cifar-100-binary"
         data = create_data(1, 11, 100) + create_data(6, 66, 200)
         setup_raw_data(directory => :directory,
@@ -167,18 +182,24 @@ class CifarTest < Test::Unit::TestCase
       test("#each") do
         raw_dataset = @dataset.collect do |record|
           {
-            :label => record.label,
+            :coarse_label => record.coarse_label,
+            :fine_label => record.fine_label,
             :data => record.data,
+            :pixels => record.pixels,
           }
         end
         assert_equal([
                        {
-                         :label => 11,
-                         :data => [100] * 3072,
+                         :coarse_label => 1,
+                         :fine_label => 11,
+                         :data => ([100] * 3072).pack("C*"),
+                         :pixels => [100] * 3072
                        },
                        {
-                         :label => 66,
-                         :data => [200] * 3072,
+                         :coarse_label => 6,
+                         :fine_label => 66,
+                         :data => ([200] * 3072).pack("C*"),
+                         :pixels => [200] * 3072
                        },
                      ],
                      raw_dataset)

@@ -37,6 +37,44 @@ iris.each do |record|
 end
 ```
 
+Here is an example to access CIFAR dataset by `#each`:
+
+**CIFAR-10**
+
+```ruby
+require "datasets"
+
+cifar = Datasets::CIFAR.new(n_classes: 10, type: :train)
+cifar.metadata
+#=> #<struct Datasets::Metadata name="CIFAR-10", url="https://www.cs.toronto.edu/~kriz/cifar.html", licenses=nil, description="CIFAR-10 is 32x32 image dataset">licenses=nil, description="CIFAR-10 is 32x32 image datasets">
+cifar.each do |record|
+    p record.pixels
+    # => [59, 43, 50, 68, 98, 119, 139, 145, 149, 143, .....]
+    p record.label
+    # => 6
+  end
+end
+```
+
+**CIFAR-100**
+
+```ruby
+require "datasets"
+
+cifar = Datasets::CIFAR.new(n_classes: 100, type: :test)
+cifar.metadata
+#=> #<struct Datasets::Metadata name="CIFAR-100", url="https://www.cs.toronto.edu/~kriz/cifar.html", licenses=nil, description="CIFAR-100 is 32x32 image dataset">
+cifar.each do |record|
+    p record.pixels
+    #=> [199, 196, 195, 195, 196, 197, 198, 198, 199, .....]
+    p record.coarse_label
+    #=> 10
+    p record.fine_label
+    #=> 49
+  end
+end
+```
+
 ## License
 
 The MIT license. See `LICENSE.txt` for details.

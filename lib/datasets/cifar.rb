@@ -5,13 +5,13 @@ require_relative "dataset"
 
 module Datasets
   class CIFAR < Dataset
-    class CIFAR10Record < Struct.new(:data, :label)
+    class Record10 < Struct.new(:data, :label)
       def pixels
         data.unpack("C*")
       end
     end
 
-    class CIFAR100Record < Struct.new(:data, :coarse_label, :fine_label)
+    class Record100 < Struct.new(:data, :coarse_label, :fine_label)
       def pixels
         data.unpack("C*")
       end
@@ -40,9 +40,9 @@ module Datasets
 
       open_data do |row|
         klass = if @n_classes == 10
-                  CIFAR10Record
+                  Record10
                 elsif @n_classes == 100
-                  CIFAR100Record
+                  Record100
                 end
         record = klass.new(*row)
         yield(record)

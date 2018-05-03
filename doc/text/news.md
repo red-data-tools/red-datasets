@@ -1,5 +1,19 @@
 # News
 
+## 0.0.4 - 2018-05-03
+
+### Improvements
+
+  * `Datasets::Dataset`: Made enumerable.
+
+  * `Datasets::CIFAR`: Added the CIFAR dataset.
+    [GitHub#7][GitHub#8][GitHub#9][GitHub#10]
+    [Patch by Yusaku Hatanaka]
+
+### Thanks
+
+  * Yusaku Hatanaka
+
 ## 0.0.3 - 2018-03-27
 
 ### Improvements

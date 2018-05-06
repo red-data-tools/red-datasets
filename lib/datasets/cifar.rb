@@ -5,16 +5,24 @@ require_relative "dataset"
 
 module Datasets
   class CIFAR < Dataset
-    class Record10 < Struct.new(:data, :label)
+    module Pixelable
       def pixels
         data.unpack("C*")
+      end
+
+      def to_h
+        hash = super
+        hash[:pixels] = pixels
+        hash
       end
     end
 
+    class Record10 < Struct.new(:data, :label)
+      include Pixelable
+    end
+
     class Record100 < Struct.new(:data, :coarse_label, :fine_label)
-      def pixels
-        data.unpack("C*")
-      end
+      include Pixelable
     end
 
     def initialize(n_classes: 10, type: :train)

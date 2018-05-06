@@ -168,6 +168,11 @@ class CIFARTest < Test::Unit::TestCase
                      ],
                      raw_dataset)
       end
+
+      test("#to_table") do
+        assert_equal([[10] * 3072, [20] * 3072],
+                     @dataset.to_table[:pixels])
+      end
     end
 
     sub_test_case("test") do
@@ -203,6 +208,11 @@ class CIFARTest < Test::Unit::TestCase
                        },
                      ],
                      raw_dataset)
+      end
+
+      test("#to_table") do
+        assert_equal([[100] * 3072, [200] * 3072],
+                     @dataset.to_table[:pixels])
       end
     end
   end

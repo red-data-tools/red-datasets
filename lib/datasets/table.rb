@@ -4,6 +4,10 @@ module Datasets
       @dataset = dataset
     end
 
+    def [](name)
+      (@columns ||= to_h)[name.to_sym]
+    end
+
     def to_h
       columns = {}
       @dataset.each do |record|

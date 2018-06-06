@@ -1,7 +1,13 @@
 module Datasets
   class Table
+    include Enumerable
+
     def initialize(dataset)
       @dataset = dataset
+    end
+
+    def each(&block)
+      columner_data.each(&block)
     end
 
     def [](name)

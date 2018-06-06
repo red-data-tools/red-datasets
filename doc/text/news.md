@@ -1,5 +1,26 @@
 # News
 
+## 0.0.5 - 2018-06-06
+
+### Improvements
+
+  * `Datasets::Table#[]`: Added.
+
+  * `Datasets::Table#fetch_values`: Added.
+
+  * `Datasets::Table#each`: Added.
+
+  * `Datasets::CIFAR`: Added pixels data to `Datasets::Table`.
+
+### Fixes
+
+  * Fixed indent of sample codes in README.
+    [GitHub#11][Patch by FURUSAWA Tomohiro]
+
+### Thanks
+
+  * FURUSAWA Tomohiro
+
 ## 0.0.4 - 2018-05-03
 
 ### Improvements

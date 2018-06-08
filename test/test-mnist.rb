@@ -14,28 +14,22 @@ class MnistTest < Test::Unit::TestCase
     @dataset.cache_dir_path = @tmp_dir
 
     def @dataset.download(output_path, url)
-
       directory = (Pathname.new(__dir__) + "tmp").expand_path
-      image_paths = ["#{directory}/train-images-idx3-ubyte.gz",
-                     "#{directory}/t10k-images-idx3-ubyte.gz"]
-      label_paths = ["#{directory}/train-labels-idx1-ubyte.gz",
-                     "#{directory}/t10k-labels-idx1-ubyte.gz"]
-      image_num, image_size_x, image_size_y, label = 10, 28, 28, 1
+      n_image, image_size_x, image_size_y, label = 10, 28, 28, 1
 
       Zlib::GzipWriter.open(output_path) do |gz|
-        if image_paths.include?(output_path.to_s)
-          image_data = ([2051, image_num]).pack('N2') +
+        if output_path.basename.to_s.include?("-images-")
+          image_data = ([2051, n_image]).pack('N2') +
                        ([image_size_x,image_size_y]).pack('N2') +
-                       ([0] * image_size_x * image_size_y).pack("C*") * image_num
+                       ([0] * image_size_x * image_size_y).pack("C*") * n_image
           gz.puts(image_data)
-        elsif label_paths.include?(output_path.to_s)
-          label_data = ([2049, image_num]).pack('N2') +
-                       ([label] * image_num).pack("C*")
+        else
+          label_data = ([2049, n_image]).pack('N2') +
+                       ([label] * n_image).pack("C*")
           gz.puts(label_data)
         end
       end
     end
-
   end
 
   def teardown
@@ -73,7 +67,6 @@ class MnistTest < Test::Unit::TestCase
         assert_equal([[0] * 28 * 28] * 10,
                      table_data[:pixels])
       end
-
     end
 
     sub_test_case("test") do
@@ -106,8 +99,6 @@ class MnistTest < Test::Unit::TestCase
         assert_equal([[0] * 28 * 28] * 10,
                      table_data[:pixels])
       end
-
     end
-
   end
 end

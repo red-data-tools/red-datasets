@@ -73,7 +73,7 @@ cifar.each do |record|
 end
 ```
 
-**Mnist**
+**MNIST**
 
 ```ruby
 require "datasets"

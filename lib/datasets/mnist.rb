@@ -4,7 +4,7 @@ require_relative "dataset"
 
 
 module Datasets
-  class Mnist < Dataset
+  class MNIST < Dataset
 
     Record = Struct.new(:pixels, :label)
 

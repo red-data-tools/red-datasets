@@ -2,7 +2,7 @@
 
 require "datasets"
 
-mnist = Datasets::Mnist.new(type: :train)
+mnist = Datasets::MNIST.new(type: :train)
 mnist.each do |record|
   p record.pixels
   # => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, .....]

@@ -106,7 +106,7 @@ end
 ```ruby
 require "datasets"
 
-mnist = Datasets::Mnist.new(type: :train)
+mnist = Datasets::MNIST.new(type: :train)
 mnist.metadata
 #=> #<struct Datasets::Metadata name="mnist-train", url="http://yann.lecun.com/exdb/mnist/", licenses=nil, description="a training set of 60,000 examples">
 

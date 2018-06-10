@@ -5,8 +5,21 @@ require_relative "dataset"
 
 module Datasets
   class MNIST < Dataset
+    module Pixelable
+      def pixels
+        data.unpack("C*")
+      end
 
-    Record = Struct.new(:pixels, :label)
+      def to_h
+        hash = super
+        hash[:pixels] = pixels
+        hash
+      end
+    end
+
+    class Record < Struct.new(:data, :label)
+      include Pixelable
+    end
 
     def initialize(type: :train)
       unless [:train, :test].include?(type)
@@ -47,12 +60,18 @@ module Datasets
 
     private
     def open_data(image_path, label_path, &block)
-      images = parse_images(image_path)
-      lables = parse_labels(label_path)
-      images.zip(lables) do |row|
-        pixels = row[0]
-        label = row[1]
-        yield Record.new(pixels, label)
+      labels = parse_labels(label_path)
+
+      Zlib::GzipReader.open(image_path) do |f|
+        n_uint32s = 4
+        n_bytes = n_uint32s * 4
+        magic, n_images, n_rows, n_cols = f.read(n_bytes).unpack("N*")
+        raise 'This is not MNIST image file' if magic != 2051
+        n_images.times.collect do |i|
+          data = f.read(n_rows * n_cols)
+          label = labels[i]
+          yield Record.new(data, label)
+        end
       end
     end
 
@@ -75,20 +94,11 @@ module Datasets
       end
     end
 
-    def parse_images(file_path)
-      n_rows, n_cols = 0, 0
-      Zlib::GzipReader.open(file_path) do |f|
-        magic, n_images = f.read(8).unpack('N2')
-        n_rows, n_cols = f.read(8).unpack('N2')
-        n_images.times.collect do
-          f.read(n_rows * n_cols).unpack('C*')
-        end
-      end
-    end
 
     def parse_labels(file_path)
       Zlib::GzipReader.open(file_path) do |f|
         magic, n_labels = f.read(8).unpack('N2')
+        raise 'This is not MNIST label file' if magic != 2049
         f.read(n_labels).unpack('C*')
       end
     end

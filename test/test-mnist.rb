@@ -1,4 +1,4 @@
-class MnistTest < Test::Unit::TestCase
+class MNISTTest < Test::Unit::TestCase
   include Helper::Sandbox
 
   def setup_data
@@ -36,11 +36,10 @@ class MnistTest < Test::Unit::TestCase
     teardown_sandbox
   end
 
-  sub_test_case("mnist") do
-
+  sub_test_case("MNIST") do
     sub_test_case("train") do
       def setup
-        @dataset = Datasets::Mnist.new(type: :train)
+        @dataset = Datasets::MNIST.new(type: :train)
         setup_data()
       end
 
@@ -72,7 +71,7 @@ class MnistTest < Test::Unit::TestCase
     sub_test_case("test") do
 
       def setup
-        @dataset = Datasets::Mnist.new(type: :test)
+        @dataset = Datasets::MNIST.new(type: :test)
         setup_data()
       end
 

@@ -108,7 +108,7 @@ require "datasets"
 
 mnist = Datasets::MNIST.new(type: :train)
 mnist.metadata
-#=> #<struct Datasets::Metadata name="mnist-train", url="http://yann.lecun.com/exdb/mnist/", licenses=nil, description="a training set of 60,000 examples">
+#=> #<struct Datasets::Metadata name="MNIST-train", url="http://yann.lecun.com/exdb/mnist/", licenses=nil, description="a training set of 60,000 examples">
 
 mnist.each do |record|
   p record.pixels

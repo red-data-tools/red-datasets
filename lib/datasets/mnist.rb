@@ -28,7 +28,7 @@ module Datasets
 
       super()
 
-      @metadata.name = "mnist-#{type}"
+      @metadata.name = "MNIST-#{type}"
       @metadata.url = "http://yann.lecun.com/exdb/mnist/"
       @type = type
 

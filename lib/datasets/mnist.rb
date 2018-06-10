@@ -97,7 +97,9 @@ module Datasets
 
     def parse_labels(file_path)
       Zlib::GzipReader.open(file_path) do |f|
-        magic, n_labels = f.read(8).unpack('N2')
+        n_uint32s = 4
+        n_bytes = n_uint32s * 2
+        magic, n_labels = f.read(n_bytes).unpack('N2')
         raise 'This is not MNIST label file' if magic != 2049
         f.read(n_labels).unpack('C*')
       end

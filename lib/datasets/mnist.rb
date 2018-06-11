@@ -2,7 +2,6 @@ require 'zlib'
 
 require_relative "dataset"
 
-
 module Datasets
   class MNIST < Dataset
     module Pixelable

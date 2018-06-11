@@ -44,7 +44,6 @@ class MNISTTest < Test::Unit::TestCase
       end
 
       test("#each") do
-
         raw_dataset = @dataset.collect do |record|
           {
             :label => record.label,
@@ -69,14 +68,12 @@ class MNISTTest < Test::Unit::TestCase
     end
 
     sub_test_case("test") do
-
       def setup
         @dataset = Datasets::MNIST.new(type: :test)
         setup_data()
       end
 
       test("#each") do
-
         raw_dataset = @dataset.collect do |record|
           {
             :label => record.label,

@@ -94,7 +94,6 @@ module Datasets
       end
     end
 
-
     def parse_labels(file_path)
       Zlib::GzipReader.open(file_path) do |f|
         n_uint32s = 4

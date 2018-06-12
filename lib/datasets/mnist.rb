@@ -2,9 +2,12 @@ require 'zlib'
 
 require_relative "dataset"
 
+class SetTypeError < StandardError; end
+
 module Datasets
   class MNIST < Dataset
-    module Pixelable
+
+    class Record < Struct.new(:data, :label)
       def pixels
         data.unpack("C*")
       end
@@ -16,13 +19,9 @@ module Datasets
       end
     end
 
-    class Record < Struct.new(:data, :label)
-      include Pixelable
-    end
-
     def initialize(type: :train)
       unless [:train, :test].include?(type)
-        raise 'Please set type :train or :test'
+        raise SetTypeError, "Please set type :train or :test: #{type.inspect}"
       end
 
       super()
@@ -42,12 +41,12 @@ module Datasets
     def each(&block)
       return to_enum(__method__) unless block_given?
 
-      image_path = cache_dir_path + target_file(:img)
+      image_path = cache_dir_path + target_file(:image)
       label_path = cache_dir_path + target_file(:label)
       base_url = "http://yann.lecun.com/exdb/mnist/"
 
       unless image_path.exist?
-        download(image_path, base_url + target_file(:img))
+        download(image_path, base_url + target_file(:image))
       end
 
       unless label_path.exist?
@@ -64,9 +63,10 @@ module Datasets
       Zlib::GzipReader.open(image_path) do |f|
         n_uint32s = 4
         n_bytes = n_uint32s * 4
+        mnist_magic_number = 2051
         magic, n_images, n_rows, n_cols = f.read(n_bytes).unpack("N*")
-        raise 'This is not MNIST image file' if magic != 2051
-        n_images.times.collect do |i|
+        raise 'This is not MNIST image file' if magic != mnist_magic_number
+        n_images.times do |i|
           data = f.read(n_rows * n_cols)
           label = labels[i]
           yield Record.new(data, label)
@@ -78,14 +78,14 @@ module Datasets
       case @type
       when :train
         case data
-        when :img
+        when :image
           "train-images-idx3-ubyte.gz"
         when :label
           "train-labels-idx1-ubyte.gz"
         end
       when :test
         case data
-        when :img
+        when :image
           "t10k-images-idx3-ubyte.gz"
         when :label
           "t10k-labels-idx1-ubyte.gz"
@@ -97,8 +97,9 @@ module Datasets
       Zlib::GzipReader.open(file_path) do |f|
         n_uint32s = 4
         n_bytes = n_uint32s * 2
+        mnist_magic_number = 2049
         magic, n_labels = f.read(n_bytes).unpack('N2')
-        raise 'This is not MNIST label file' if magic != 2049
+        raise 'This is not MNIST label file' if magic != mnist_magic_number
         f.read(n_labels).unpack('C*')
       end
     end

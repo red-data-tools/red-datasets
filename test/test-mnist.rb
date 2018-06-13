@@ -1,7 +1,7 @@
 class MNISTTest < Test::Unit::TestCase
   include Helper::Sandbox
 
-  sub_test_case("MNIST Normal") do
+  sub_test_case("Normal") do
     def setup_data
       setup_sandbox
 
@@ -99,7 +99,7 @@ class MNISTTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case("MNIST Abnormal") do
+  sub_test_case("Abnormal") do
     test("SetTypeError") do
       other_type = :other
       e = assert_raises(SetTypeError) do

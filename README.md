@@ -101,6 +101,24 @@ cifar.each do |record|
 end
 ```
 
+**MNIST**
+
+```ruby
+require "datasets"
+
+mnist = Datasets::MNIST.new(type: :train)
+mnist.metadata
+#=> #<struct Datasets::Metadata name="MNIST-train", url="http://yann.lecun.com/exdb/mnist/", licenses=nil, description="a training set of 60,000 examples">
+
+mnist.each do |record|
+  p record.pixels
+  # => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, .....]
+  p record.label
+  # => 5
+end
+```
+
+
 ## License
 
 The MIT license. See `LICENSE.txt` for details.

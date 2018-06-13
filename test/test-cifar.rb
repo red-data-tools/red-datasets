@@ -216,4 +216,14 @@ class CIFARTest < Test::Unit::TestCase
       end
     end
   end
+
+  sub_test_case("invalid") do
+    test("type") do
+      invalid_type = :invalid
+      message = "Please set type :train or :test: #{invalid_type.inspect}"
+      assert_raise(ArgumentError.new(message)) do
+        Datasets::CIFAR.new(type: invalid_type)
+      end
+    end
+  end
 end

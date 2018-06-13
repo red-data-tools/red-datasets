@@ -13,6 +13,7 @@ module Helper
     end
 
     def teardown_sandbox
+      return unless defined?(@tmp_dir)
       FileUtils.rm_rf(@tmp_dir)
     end
   end

@@ -21,7 +21,7 @@ module Datasets
 
     def initialize(type: :train)
       unless [:train, :test].include?(type)
-        raise SetTypeError, "Please set type :train or :test: #{type.inspect}"
+        raise ArgumentError, "Please set type :train or :test: #{type.inspect}"
       end
 
       super()

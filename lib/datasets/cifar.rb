@@ -27,10 +27,12 @@ module Datasets
 
     def initialize(n_classes: 10, type: :train)
       unless [10, 100].include?(n_classes)
-        raise 'Please set n_classes 10 or 100'
+        message = "Please set n_classes 10 or 100: #{n_classes.inspect}"
+        raise ArgumentError, message
       end
       unless [:train, :test].include?(type)
-        raise 'Please set type :train or :test'
+        message = "Please set type :train or :test: #{type.inspect}"
+        raise ArgumentError, message
       end
 
       super()

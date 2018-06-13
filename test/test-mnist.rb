@@ -101,9 +101,9 @@ class MNISTTest < Test::Unit::TestCase
 
   sub_test_case("Abnormal") do
     test("invalid type") do
-      invalid_type = :other
-      error_message = "Please set type :train or :test: #{invalid_type.inspect}"
-      assert_raise(SetTypeError.new(error_message)) do
+      invalid_type = :invalid
+      message = "Please set type :train or :test: #{invalid_type.inspect}"
+      assert_raise(ArgumentError.new(message)) do
         Datasets::MNIST.new(type: invalid_type)
       end
     end

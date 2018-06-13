@@ -102,11 +102,10 @@ class MNISTTest < Test::Unit::TestCase
   sub_test_case("Abnormal") do
     test("SetTypeError") do
       other_type = :other
-      e = assert_raises(SetTypeError) do
+      error_message = "Please set type :train or :test: #{other_type.inspect}"
+      assert_raise(SetTypeError.new(error_message)) do
         Datasets::MNIST.new(type: other_type)
       end
-      error_message = "Please set type :train or :test: #{other_type.inspect}"
-      assert_equal(error_message, e.message)
     end
   end
 end

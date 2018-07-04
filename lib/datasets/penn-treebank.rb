@@ -37,48 +37,22 @@ module Datasets
         download(data_path, data_url(@type))
       end
 
-      vocab = {}
-      if @keep_vocabulary
-        @vocabulary = vocab
-      end
-
-      parse_data(data_path, vocab, &block)
-      cache_vocabulaty(vocab)
-      self
+      parse_data(data_path, &block)
     end
 
-    def vocabulary
-      if @keep_vocabulary
-        @vocabulary
-      else
-        vocab_cache_path.each_line.with_index.each_with_object({}) {|(word, index), vocab| vocab[word] = index }
-      end
-    end
-
-    def parse_data(data_path, vocab)
+    def parse_data(data_path)
       index = 0
+      vocabulary = {}
       File.open(data_path) do |f|
         f.each_line do |line|
           line.split.each do |word|
             word = word.strip
-            unless vocab.key?(word)
-              vocab[word] = index
+            unless vocabulary.key?(word)
+              vocabulary[word] = index
               index += 1
             end
             yield(Record.new(word, index))
           end
-        end
-      end
-    end
-
-    def vocab_cache_path
-      cache_dir_path + "ptb-vocab-#{@type}.txt"
-    end
-
-    def cache_vocabulaty(vocab)
-      if vocab_cache_path.exist?
-        File.open(path, "w") do |f|
-          vocab.keys.each{|word| f.write(word + "\n") }
         end
       end
     end

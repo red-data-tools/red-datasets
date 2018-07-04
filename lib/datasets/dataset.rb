@@ -27,7 +27,7 @@ module Datasets
       else
         base_dir = ENV["XDG_CACHE_HOME"] || "~/.cache"
       end
-      Pathname(base_dir).expand_path + "red-datasets" + metadata.name
+      Pathname(base_dir).expand_path + "red-datasets" + metadata.id
     end
 
     def download(output_path, url)

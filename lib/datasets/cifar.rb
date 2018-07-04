@@ -37,6 +37,7 @@ module Datasets
 
       super()
 
+      @metadata.id = "cifar-#{n_classes}"
       @metadata.name = "CIFAR-#{n_classes}"
       @metadata.url = "https://www.cs.toronto.edu/~kriz/cifar.html"
       @metadata.description = "CIFAR-#{n_classes} is 32x32 image dataset"

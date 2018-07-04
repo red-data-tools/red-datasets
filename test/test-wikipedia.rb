@@ -83,13 +83,18 @@ class WikipediaTest < Test::Unit::TestCase
       end
 
       sub_test_case("#metadata") do
-        test("#name") do
+        test("#id") do
           assert_equal("wikipedia-ja-articles",
+                       @dataset.metadata.id)
+        end
+
+        test("#name") do
+          assert_equal("Wikipedia articles (ja)",
                        @dataset.metadata.name)
         end
 
         test("#description") do
-          assert_equal("Wikipedia articles (ja)",
+          assert_equal("Wikipedia articles in ja",
                        @dataset.metadata.description)
         end
       end

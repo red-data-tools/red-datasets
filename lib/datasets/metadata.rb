@@ -1,5 +1,6 @@
 module Datasets
-  class Metadata < Struct.new(:name,
+  class Metadata < Struct.new(:id,
+                              :name,
                               :url,
                               :licenses,
                               :description)

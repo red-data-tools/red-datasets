@@ -24,7 +24,8 @@ module Datasets
 
       super()
 
-      @metadata.name = "PennTreebank"
+      @metadata.id = "penn-treebank-#{@type}"
+      @metadata.name = "Penn Treebank: #{@type}"
       @metadata.description = DESCRIPTION
       @metadata.url = "https://github.com/wojzaremba/lstm"
       @metadata.licenses = ["Apache-2.0"]

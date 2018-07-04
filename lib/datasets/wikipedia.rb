@@ -30,14 +30,15 @@ module Datasets
       super()
       @language = language
       @type = type
-      @metadata.name = "wikipedia-#{@language}-#{@type}"
+      @metadata.id = "wikipedia-#{@language}-#{@type}"
+      @metadata.name = "Wikipedia #{@type} (#{@language})"
       @metadata.url = "https://dumps.wikimedia.org/"
       @metadata.licenses = [
         "CC-BY-SA-3.0",
         "CC-BY-SA-4.0",
         "GFDL-1.3-or-later",
       ]
-      @metadata.description = "Wikipedia #{@type} (#{@language})"
+      @metadata.description = "Wikipedia #{@type} in #{@language}"
     end
 
     def each(&block)

@@ -55,7 +55,7 @@ module Datasets
               vocabulary[word] = index
               index += 1
             end
-            yield(Record.new(word, index))
+            yield(Record.new(word, vocabulary[word]))
           end
         end
       end

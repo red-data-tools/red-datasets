@@ -9,8 +9,8 @@ class PennTreebankTest < Test::Unit::TestCase
       records = dataset.to_a
       assert_equal([
                      887521,
-                     record("aer", 1),
-                     record("<unk>", 9999),
+                     record("aer", 0),
+                     record("<unk>", 25),
                    ],
                    [
                      records.size,
@@ -24,8 +24,8 @@ class PennTreebankTest < Test::Unit::TestCase
       records = dataset.to_a
       assert_equal([
                      78669,
-                     record("no", 1),
-                     record("us", 6048),
+                     record("no", 0),
+                     record("us", 953),
                    ],
                    [
                      records.size,
@@ -39,8 +39,8 @@ class PennTreebankTest < Test::Unit::TestCase
       records = dataset.to_a
       assert_equal([
                      70390,
-                     record("consumers", 1),
-                     record("N", 6021),
+                     record("consumers", 0),
+                     record("N", 28),
                    ],
                    [
                      records.size,

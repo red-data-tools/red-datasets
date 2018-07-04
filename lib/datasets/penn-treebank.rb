@@ -43,6 +43,7 @@ module Datasets
       parse_data(data_path, &block)
     end
 
+    private
     def parse_data(data_path)
       index = 0
       vocabulary = {}

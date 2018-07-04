@@ -33,9 +33,11 @@ module Datasets
     def each(&block)
       return to_enum(__method__) unless block_given?
 
-      data_path = cache_dir_path + "ptb-#{@type}.txt"
+      base_name = "ptb.#{@type}.txt"
+      data_path = cache_dir_path + base_name
       unless data_path.exist?
-        download(data_path, data_url(@type))
+        base_url = "https://raw.githubusercontent.com/wojzaremba/lstm/master/data"
+        download(data_path, "#{base_url}/#{base_name}")
       end
 
       parse_data(data_path, &block)
@@ -56,11 +58,6 @@ module Datasets
           end
         end
       end
-    end
-
-    def data_url(type)
-      base_url = "https://raw.githubusercontent.com/wojzaremba/lstm/master/data/"
-      "#{base_url}/ptb.#{type}.txt"
     end
   end
 end

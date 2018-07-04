@@ -23,6 +23,7 @@ module Datasets
       @metadata.name = "PennTreebank"
       @metadata.description = DESCRIPTION
       @metadata.url = "https://github.com/wojzaremba/lstm"
+      @metadata.licenses = ["Apache-2.0"]
 
       @type = type
       @keep_vocabulary = keep_vocabulary

@@ -8,7 +8,9 @@ params = ARGV.getopts("n:")
 ptb = Datasets::PennTreebank.new(type: :train, keep_vocabulary: true)
 
 if params["n"]
-  ptb.each.take(params["n"].to_i).each {|index| puts ptb.vocabulary.keys[index] }
+  records = ptb.take(params["n"].to_i)
 else
-  ptb.each {|index| puts ptb.vocabulary.keys[index] }
+  records = ptb
 end
+
+records.each {|record| puts record.word }

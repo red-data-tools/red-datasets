@@ -2,6 +2,8 @@ require_relative "dataset"
 
 module Datasets
   class PennTreebank < Dataset
+    Record = Struct.new(:word, :id)
+
     TRAIN_URL = "https://raw.githubusercontent.com/wojzaremba/lstm/master/data/ptb.train.txt"
     TEST_URL = "https://raw.githubusercontent.com/wojzaremba/lstm/master/data/ptb.test.txt"
     VALID_URL = "https://raw.githubusercontent.com/wojzaremba/lstm/master/data/ptb.valid.txt"
@@ -53,19 +55,17 @@ module Datasets
       end
     end
 
-    def parse_data(data_path, vocab, &block)
+    def parse_data(data_path, vocab)
       index = 0
       File.open(data_path) do |f|
         f.each_line do |line|
           line.split.each do |word|
             word = word.strip
-            x = if vocab.has_key?(word)
-              vocab[word]
-            else
+            unless vocab.key?(word)
               vocab[word] = index
-              index.tap{ index += 1 }
+              index += 1
             end
-            block.call(x)
+            yield(Record.new(word, index))
           end
         end
       end

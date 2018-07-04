@@ -48,5 +48,12 @@ class PennTreebankTest < Test::Unit::TestCase
                      records[-1],
                    ])
     end
+
+    test("invalid") do
+      message = "Type must be one of [:train, :test, :valid]: :invalid"
+      assert_raise(ArgumentError.new(message)) do
+        Datasets::PennTreebank.new(type: :invalid)
+      end
+    end
   end
 end

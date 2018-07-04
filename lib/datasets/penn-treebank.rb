@@ -4,10 +4,6 @@ module Datasets
   class PennTreebank < Dataset
     Record = Struct.new(:word, :id)
 
-    TRAIN_URL = "https://raw.githubusercontent.com/wojzaremba/lstm/master/data/ptb.train.txt"
-    TEST_URL = "https://raw.githubusercontent.com/wojzaremba/lstm/master/data/ptb.test.txt"
-    VALID_URL = "https://raw.githubusercontent.com/wojzaremba/lstm/master/data/ptb.valid.txt"
-
     DESCRIPTION = <<~DESC
       `Penn Tree Bank <https://www.cis.upenn.edu/~treebank/>`_ is originally a
       corpus of English sentences with linguistic structure annotations. This
@@ -18,14 +14,20 @@ module Datasets
     DESC
 
     def initialize(type: :train)
+      valid_types = [:train, :test, :valid]
+      unless valid_types.include?(type)
+        valid_types_label = valid_types.collect(&:inspect).join(", ")
+        message = "Type must be one of [#{valid_types_label}]: #{type.inspect}"
+        raise ArgumentError, message
+      end
+      @type = type
+
       super()
 
       @metadata.name = "PennTreebank"
       @metadata.description = DESCRIPTION
       @metadata.url = "https://github.com/wojzaremba/lstm"
       @metadata.licenses = ["Apache-2.0"]
-
-      @type = type
     end
 
     def each(&block)
@@ -57,16 +59,8 @@ module Datasets
     end
 
     def data_url(type)
-      case type
-      when :train
-        TRAIN_URL
-      when :test
-        TEST_URL
-      when :valid
-        VALID_URL
-      else
-        raise ArgumentError, "Invalid type: #{type}, please choose from [:train, :test, :valid]"
-      end
+      base_url = "https://raw.githubusercontent.com/wojzaremba/lstm/master/data/"
+      "#{base_url}/ptb.#{type}.txt"
     end
   end
 end

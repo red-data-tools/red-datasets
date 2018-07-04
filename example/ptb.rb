@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -I./lib
+#!/usr/bin/env ruby
 
 require "datasets"
 require "optparse"

@@ -5,7 +5,7 @@ require "optparse"
 
 params = ARGV.getopts("n:")
 
-ptb = Datasets::PennTreebank.new(type: :train, keep_vocabulary: true)
+ptb = Datasets::PennTreebank.new(type: :train)
 
 if params["n"]
   records = ptb.take(params["n"].to_i)

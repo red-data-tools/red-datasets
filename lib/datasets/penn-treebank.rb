@@ -17,7 +17,7 @@ module Datasets
       training, validation, and test.
     DESC
 
-    def initialize(type: :train, keep_vocabulary: false)
+    def initialize(type: :train)
       super()
 
       @metadata.name = "PennTreebank"
@@ -26,7 +26,6 @@ module Datasets
       @metadata.licenses = ["Apache-2.0"]
 
       @type = type
-      @keep_vocabulary = keep_vocabulary
     end
 
     def each(&block)

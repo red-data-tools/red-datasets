@@ -1,5 +1,3 @@
-require "rubygems/package"
-
 require_relative "dataset"
 
 module Datasets

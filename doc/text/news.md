@@ -1,5 +1,13 @@
 # News
 
+## 0.0.6 - 2018-07-25
+
+### Improvements
+
+  * `Datasets::MNIST`: Added.
+
+  * `Datasets::PennTreebank`: Added.
+
 ## 0.0.5 - 2018-06-06
 
 ### Improvements

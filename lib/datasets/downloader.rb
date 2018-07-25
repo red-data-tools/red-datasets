@@ -3,7 +3,7 @@ begin
   require "io/console"
 rescue LoadError
 end
-require "open-uri"
+require "net/http"
 require "pathname"
 
 module Datasets
@@ -15,82 +15,51 @@ module Datasets
         url = URI.parse(url)
       end
       @url = url
-      @url.extend(CurrentBufferReadable)
+      unless @url.is_a?(URI::HTTP)
+        raise ArgumentError, "download URL must be HTTP or HTTPS: <#{@url}>"
+      end
     end
 
     def download(output_path)
       output_path.parent.mkpath
 
+      headers = {"User-Agent" => "Red Datasets/#{VERSION}"}
       start = nil
       partial_output_path = Pathname.new("#{output_path}.partial")
       if partial_output_path.exist?
         start = partial_output_path.size
+        headers["Range"] = "bytes=#{start}-"
       end
 
-      progress_reporter = nil
-      content_length_proc = lambda do |content_length|
-        base_name = @url.path.split("/").last
-        size_max = content_length
-        size_max += start if start
-        progress_reporter = ProgressReporter.new(base_name, size_max)
-      end
-      progress_proc = lambda do |size_current|
-        size_current += start if start
-        progress_reporter.report(size_current) if progress_reporter
-      end
-      options = {
-        :content_length_proc => content_length_proc,
-        :progress_proc => progress_proc,
-      }
-      if start
-        options["Range"] = "bytes=#{start}-"
-      end
+      Net::HTTP.start(@url.hostname,
+                      @url.port,
+                      :use_ssl => (@url.scheme == "https")) do |http|
+        request = Net::HTTP::Get.new(@url.path, headers)
+        http.request(request) do |response|
+          case response
+          when Net::HTTPPartialContent
+            mode = "ab"
+          when Net::HTTPSuccess
+            mode = "wb"
+          else
+            break
+          end
 
-      begin
-        @url.open(options) do |input|
-          copy_stream(input, partial_output_path)
+          base_name = @url.path.split("/").last
+          size_max = response.content_length
+          size_max += start if start
+          size_current = start || 0
+          progress_reporter = ProgressReporter.new(base_name, size_max)
+          partial_output_path.open(mode) do |output|
+            response.read_body do |chunk|
+              size_current += chunk.bytesize
+              progress_reporter.report(size_current)
+              output.write(chunk)
+            end
+          end
         end
-      rescue Interrupt, Net::ReadTimeout
-        if @url.current_buffer
-          input = @url.current_buffer.io
-          input.rewind
-          copy_stream(input, partial_output_path)
-        end
-        raise
       end
-
       FileUtils.mv(partial_output_path, output_path)
-    end
-
-    private
-    def copy_stream(input, partial_output_path)
-      if partial_output_path.exist?
-        # TODO: It's better that we use "206 Partial Content" response
-        # to detect partial response.
-        partial_head = partial_output_path.open("rb") do |partial_output|
-          partial_output.read(256)
-        end
-        input_head = input.read(partial_head.bytesize)
-        input.rewind
-        if partial_head == input_head
-          mode = "wb"
-        else
-          mode = "ab"
-        end
-      else
-        mode = "wb"
-      end
-      partial_output_path.open(mode) do |partial_output|
-        IO.copy_stream(input, partial_output)
-      end
-    end
-
-    module CurrentBufferReadable
-      attr_reader :current_buffer
-      def buffer_open(buffer, proxy, options)
-        @current_buffer = buffer
-        super
-      end
     end
 
     class ProgressReporter

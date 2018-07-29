@@ -40,15 +40,19 @@ module Datasets
           when Net::HTTPPartialContent
             mode = "ab"
           when Net::HTTPSuccess
+            start = nil
             mode = "wb"
           else
             break
           end
 
           base_name = @url.path.split("/").last
+          size_current = 0
           size_max = response.content_length
-          size_max += start if start
-          size_current = start || 0
+          if start
+            size_current += start
+            size_max += start
+          end
           progress_reporter = ProgressReporter.new(base_name, size_max)
           partial_output_path.open(mode) do |output|
             response.read_body do |chunk|

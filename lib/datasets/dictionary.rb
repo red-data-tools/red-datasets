@@ -26,6 +26,10 @@ module Datasets
       @id_to_value.each(&block)
     end
 
+    def size
+      @id_to_value.size
+    end
+
     private
     def build_dictionary(values)
       @id_to_value = {}

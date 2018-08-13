@@ -29,6 +29,7 @@ module Datasets
     def size
       @id_to_value.size
     end
+    alias_method :length, :size
 
     private
     def build_dictionary(values)

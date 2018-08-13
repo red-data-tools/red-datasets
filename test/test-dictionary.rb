@@ -35,4 +35,9 @@ class DictionaryTest < Test::Unit::TestCase
   test("#size") do
     assert_equal(6048, @dictionary.size)
   end
+
+  test("#length") do
+    assert_equal(@dictionary.size,
+                 @dictionary.length)
+  end
 end

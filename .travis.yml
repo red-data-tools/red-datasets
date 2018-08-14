@@ -1,7 +1,6 @@
 notifications:
-  email:
-    recipients:
-      - red-data-tools@ml.commit-email.info
+  webhooks:
+    - https://webhook.commit-email.info/
 
 language: ruby
 

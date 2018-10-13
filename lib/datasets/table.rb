@@ -20,6 +20,13 @@ module Datasets
       Dictionary.new(self[name])
     end
 
+    def label_encode(name)
+      dictionary = dictionary_encode(name)
+      self[name].collect do |value|
+        dictionary.id(value)
+      end
+    end
+
     def fetch_values(*keys)
       data = columner_data
       keys.collect do |key|

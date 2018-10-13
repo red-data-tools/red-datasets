@@ -17,6 +17,17 @@ class TableTest < Test::Unit::TestCase
                  @table.dictionary_encode(:class).to_a)
   end
 
+  test("#label_encode") do
+    label_encoded_classes = @table.label_encode(:class)
+    classes = @table[:class]
+    assert_equal([0, 1, 2],
+                 [
+                   label_encoded_classes[classes.find_index("Iris-setosa")],
+                   label_encoded_classes[classes.find_index("Iris-versicolor")],
+                   label_encoded_classes[classes.find_index("Iris-virginica")],
+                 ])
+  end
+
   sub_test_case("#fetch_values") do
     test("found") do
       values = @table.fetch_values(:petal_length, :petal_width)

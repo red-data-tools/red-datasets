@@ -2,7 +2,7 @@ require_relative "dataset"
 
 module Datasets
   class PennTreebank < Dataset
-    Record = Struct.new(:word, :id)
+    Record = Struct.new(:word)
 
     DESCRIPTION = <<~DESC
       `Penn Tree Bank <https://www.cis.upenn.edu/~treebank/>`_ is originally a
@@ -46,17 +46,10 @@ module Datasets
 
     private
     def parse_data(data_path)
-      index = 0
-      vocabulary = {}
       File.open(data_path) do |f|
         f.each_line do |line|
           line.split.each do |word|
-            word = word.strip
-            unless vocabulary.key?(word)
-              vocabulary[word] = index
-              index += 1
-            end
-            yield(Record.new(word, vocabulary[word]))
+            yield(Record.new(word.strip))
           end
         end
       end

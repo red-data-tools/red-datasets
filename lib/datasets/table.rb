@@ -1,3 +1,5 @@
+require "datasets/dictionary"
+
 module Datasets
   class Table
     include Enumerable
@@ -12,6 +14,17 @@ module Datasets
 
     def [](name)
       columner_data[name.to_sym]
+    end
+
+    def dictionary_encode(name)
+      Dictionary.new(self[name])
+    end
+
+    def label_encode(name)
+      dictionary = dictionary_encode(name)
+      self[name].collect do |value|
+        dictionary.id(value)
+      end
     end
 
     def fetch_values(*keys)

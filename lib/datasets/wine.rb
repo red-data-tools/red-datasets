@@ -4,20 +4,20 @@ require_relative 'dataset'
 
 module Datasets
   class Wine < Dataset
-    Record = Struct.new(:wine_class,
+    Record = Struct.new(:class,
                         :alcohol,
                         :malic_acid,
                         :ash,
                         :alcalinity_of_ash,
-                        :magnesium,
-                        :total_phenols,
-                        :flavanoids,
-                        :nonflavanoid_phenols,
-                        :proanthocyanins,
+                        :n_magnesium,
+                        :n_phenols,
+                        :n_flavonoids,
+                        :n_nonflavanoid_phenols,
+                        :n_proanthocyanins,
                         :color_intensity,
                         :hue,
-                        :od280_od315_of_diluted_wines,
-                        :proline)
+                        :optical_nucleic_acid_concentration,
+                        :n_proline)
 
     def initialize
       super

@@ -27,8 +27,8 @@ module Datasets
 
       super()
 
-      @metadata.id = "#{class_name.downcase}-#{type}"
-      @metadata.name = "#{class_name}: #{type}"
+      @metadata.id = "#{dataset_name.downcase}-#{type}"
+      @metadata.name = "#{dataset_name}: #{type}"
       @metadata.url = self.class::BASE_URL
       @type = type
 
@@ -67,7 +67,7 @@ module Datasets
         n_bytes = n_uint32s * 4
         mnist_magic_number = 2051
         magic, n_images, n_rows, n_cols = f.read(n_bytes).unpack("N*")
-        raise "This is not #{class_name} image file" if magic != mnist_magic_number
+        raise "This is not #{dataset_name} image file" if magic != mnist_magic_number
         n_images.times do |i|
           data = f.read(n_rows * n_cols)
           label = labels[i]
@@ -101,13 +101,13 @@ module Datasets
         n_bytes = n_uint32s * 2
         mnist_magic_number = 2049
         magic, n_labels = f.read(n_bytes).unpack('N2')
-        raise "This is not #{class_name} label file" if magic != mnist_magic_number
+        raise "This is not #{dataset_name} label file" if magic != mnist_magic_number
         f.read(n_labels).unpack('C*')
       end
     end
 
-    def class_name
-      self.class.name.split("::").last
+    def dataset_name
+      "MNIST"
     end
   end
 end

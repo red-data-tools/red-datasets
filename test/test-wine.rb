@@ -3,18 +3,48 @@ class WineTest < Test::Unit::TestCase
     @dataset = Datasets::Wine.new
   end
 
-  def record(*args)
-    Datasets::Wine::Record.new(*args)
-  end
-
   test('#each') do
     records = @dataset.each.to_a
     assert_equal([
                    178,
-                   record(1, 14.23, 1.71, 2.43, 15.6, 127, 2.8, 3.06, 0.28, 2.29, 5.64, 1.04, 3.92, 1065),
-                   record(3, 14.13, 4.1, 2.74, 24.5, 96, 2.05, 0.76, 0.56, 1.35, 9.2, 0.61, 1.6, 560)
+                   {
+                     :alcalinity_of_ash => 15.6,
+                     :alcohol => 14.23,
+                     :ash => 2.43,
+                     :class => 1,
+                     :color_intensity => 5.64,
+                     :hue => 1.04,
+                     :malic_acid => 1.71,
+                     :total_flavonoids => 3.06,
+                     :n_magnesiums => 127,
+                     :total_nonflavanoid_phenols => 0.28,
+                     :total_proanthocyanins => 2.29,
+                     :n_prolines => 1065,
+                     :optical_nucleic_acid_concentration => 3.92,
+                     :total_phenols => 2.8
+                   },
+                   {
+                     :alcalinity_of_ash => 24.5,
+                     :alcohol => 14.13,
+                     :ash => 2.74,
+                     :class => 3,
+                     :color_intensity => 9.2,
+                     :hue => 0.61,
+                     :malic_acid => 4.1,
+                     :total_flavonoids => 0.76,
+                     :n_magnesiums => 96,
+                     :total_nonflavanoid_phenols => 0.56,
+                     :total_proanthocyanins => 1.35,
+                     :n_prolines => 560,
+                     :optical_nucleic_acid_concentration => 1.6,
+                     :total_phenols => 2.05,
+                   },
                  ],
-                 [records.size, records[0], records[-1]])
+                 [
+                   records.size,
+                   records[0].to_h,
+                   records[-1].to_h,
+                 ])
   end
 
   sub_test_case('#metadata') do

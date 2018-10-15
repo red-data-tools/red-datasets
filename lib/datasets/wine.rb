@@ -11,13 +11,13 @@ module Datasets
                         :alcalinity_of_ash,
                         :n_magnesiums,
                         :total_phenols,
-                        :n_flavonoids,
-                        :n_nonflavanoid_phenols,
-                        :n_proanthocyanins,
+                        :total_flavonoids,
+                        :total_nonflavanoid_phenols,
+                        :total_proanthocyanins,
                         :color_intensity,
                         :hue,
                         :optical_nucleic_acid_concentration,
-                        :n_proline)
+                        :n_prolines)
 
     def initialize
       super

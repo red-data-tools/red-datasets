@@ -1,6 +1,4 @@
 class FashionMNISTTest < Test::Unit::TestCase
-  include Helper::Sandbox
-
   sub_test_case("Normal") do
     sub_test_case("train") do
       def setup

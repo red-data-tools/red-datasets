@@ -14,17 +14,17 @@ class TableTest < Test::Unit::TestCase
                    [1, "Iris-versicolor"],
                    [2, "Iris-virginica"],
                  ],
-                 @table.dictionary_encode(:class).to_a)
+                 @table.dictionary_encode(:label).to_a)
   end
 
   test("#label_encode") do
-    label_encoded_classes = @table.label_encode(:class)
-    classes = @table[:class]
+    label_encoded_labels = @table.label_encode(:label)
+    labels = @table[:label]
     assert_equal([0, 1, 2],
                  [
-                   label_encoded_classes[classes.find_index("Iris-setosa")],
-                   label_encoded_classes[classes.find_index("Iris-versicolor")],
-                   label_encoded_classes[classes.find_index("Iris-virginica")],
+                   label_encoded_labels[labels.find_index("Iris-setosa")],
+                   label_encoded_labels[labels.find_index("Iris-versicolor")],
+                   label_encoded_labels[labels.find_index("Iris-virginica")],
                  ])
   end
 
@@ -64,7 +64,7 @@ class TableTest < Test::Unit::TestCase
       shorten_hash[name] = values.first(5)
     end
     assert_equal({
-                   :class        => ["Iris-setosa"] * 5,
+                   :label        => ["Iris-setosa"] * 5,
                    :petal_length => [1.4, 1.4, 1.3, 1.5, 1.4],
                    :petal_width  => [0.2, 0.2, 0.2, 0.2, 0.2],
                    :sepal_length => [5.1, 4.9, 4.7, 4.6, 5.0],
@@ -79,7 +79,7 @@ class TableTest < Test::Unit::TestCase
       shorten_hash[name] = values.first(5)
     end
     assert_equal({
-                   :class        => ["Iris-setosa"] * 5,
+                   :label        => ["Iris-setosa"] * 5,
                    :petal_length => [1.4, 1.4, 1.3, 1.5, 1.4],
                    :petal_width  => [0.2, 0.2, 0.2, 0.2, 0.2],
                    :sepal_length => [5.1, 4.9, 4.7, 4.6, 5.0],

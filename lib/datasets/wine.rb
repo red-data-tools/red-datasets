@@ -4,7 +4,7 @@ require_relative 'dataset'
 
 module Datasets
   class Wine < Dataset
-    Record = Struct.new(:class,
+    Record = Struct.new(:label,
                         :alcohol,
                         :malic_acid,
                         :ash,

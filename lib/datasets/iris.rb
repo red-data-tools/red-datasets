@@ -8,7 +8,7 @@ module Datasets
                         :sepal_width,
                         :petal_length,
                         :petal_width,
-                        :class)
+                        :label)
 
     def initialize
       super()

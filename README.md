@@ -30,7 +30,7 @@ iris.each do |record|
      record.sepal_width,
      record.petal_length,
      record.petal_width,
-     record.class,
+     record.label,
   ]
 end
 # => [5.1, 3.5, 1.4, 0.2, "Iris-setosa"]
@@ -48,7 +48,7 @@ p iris_hash[:petal_length]
 # => [1.4, 1.4, .. , 4.7, ..
 p iris_hash[:petal_width]
 # => [0.2, 0.2, .. , 1.4, ..
-p iris_hash[:class]
+p iris_hash[:label]
 # => ["Iris-setosa", "Iris-setosa", .. , "Iris-versicolor", ..
 
 
@@ -60,7 +60,7 @@ p iris_table.fetch_values(:sepal_length, :sepal_width, :petal_length, :petal_wid
       [7.0, 3.2, 4.7, 1.4],
       :
 
-p iris_table[:class]
+p iris_table[:label]
 # => ["Iris-setosa", "Iris-setosa", .. , "Iris-versicolor", ..
 ```
 

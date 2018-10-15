@@ -6,6 +6,7 @@ class SetTypeError < StandardError; end
 
 module Datasets
   class MNIST < Dataset
+    BASE_URL = "http://yann.lecun.com/exdb/mnist/"
 
     class Record < Struct.new(:data, :label)
       def pixels
@@ -26,9 +27,9 @@ module Datasets
 
       super()
 
-      @metadata.id = "mnist-#{type}"
-      @metadata.name = "MNIST: #{type}"
-      @metadata.url = "http://yann.lecun.com/exdb/mnist/"
+      @metadata.id = "#{dataset_name.downcase}-#{type}"
+      @metadata.name = "#{dataset_name}: #{type}"
+      @metadata.url = self.class::BASE_URL
       @type = type
 
       case type
@@ -44,7 +45,7 @@ module Datasets
 
       image_path = cache_dir_path + target_file(:image)
       label_path = cache_dir_path + target_file(:label)
-      base_url = "http://yann.lecun.com/exdb/mnist/"
+      base_url = self.class::BASE_URL
 
       unless image_path.exist?
         download(image_path, base_url + target_file(:image))
@@ -66,7 +67,7 @@ module Datasets
         n_bytes = n_uint32s * 4
         mnist_magic_number = 2051
         magic, n_images, n_rows, n_cols = f.read(n_bytes).unpack("N*")
-        raise 'This is not MNIST image file' if magic != mnist_magic_number
+        raise "This is not #{dataset_name} image file" if magic != mnist_magic_number
         n_images.times do |i|
           data = f.read(n_rows * n_cols)
           label = labels[i]
@@ -100,9 +101,13 @@ module Datasets
         n_bytes = n_uint32s * 2
         mnist_magic_number = 2049
         magic, n_labels = f.read(n_bytes).unpack('N2')
-        raise 'This is not MNIST label file' if magic != mnist_magic_number
+        raise "This is not #{dataset_name} label file" if magic != mnist_magic_number
         f.read(n_labels).unpack('C*')
       end
+    end
+
+    def dataset_name
+      "MNIST"
     end
   end
 end

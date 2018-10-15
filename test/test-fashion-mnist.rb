@@ -10,15 +10,16 @@ class FashionMNISTTest < Test::Unit::TestCase
         assert_equal([
                        60000,
                        [
+                         9,
+                         784,
+                         [0, 0, 0, 0, 237, 226, 217, 223, 222, 219],
+                         [220, 232, 246, 0, 3, 202, 228, 224, 221, 211],
+                       ],
+                       [
                          5,
                          784,
-                         [0, 0, 0, 49, 238, 253, 253, 253, 253, 253],
-                         [0, 0, 0, 0, 0, 81, 240, 253, 253, 119],
-                       ],
-                       [8,
-                         784,
-                         [0, 0, 0, 0, 0, 0, 0, 0, 0, 62],
-                         [0, 0, 190, 196, 14, 2, 97, 254, 252, 146],
+                         [129, 153, 34, 0, 3, 3, 0, 3, 0, 24],
+                         [180, 177, 177, 47, 101, 235, 194, 223, 232, 255],
                        ],
                      ],
                      [
@@ -26,14 +27,14 @@ class FashionMNISTTest < Test::Unit::TestCase
                        [
                          records[0].label,
                          records[0].pixels.size,
-                         records[0].pixels[200, 10],
                          records[0].pixels[400, 10],
+                         records[0].pixels[500, 10],
                        ],
                        [
                          records[-1].label,
                          records[-1].pixels.size,
-                         records[-1].pixels[200, 10],
                          records[-1].pixels[400, 10],
+                         records[-1].pixels[500, 10],
                        ],
                      ])
       end
@@ -41,12 +42,12 @@ class FashionMNISTTest < Test::Unit::TestCase
       test("#to_table") do
         table_data = @dataset.to_table
         assert_equal([
-                       [0, 0, 0, 49, 238, 253, 253, 253, 253, 253],
-                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 62],
+                       [0, 0, 0, 0, 237, 226, 217, 223, 222, 219],
+                       [129, 153, 34, 0, 3, 3, 0, 3, 0, 24],
                      ],
                      [
-                       table_data[:pixels][0][200, 10],
-                       table_data[:pixels][-1][200, 10],
+                       table_data[:pixels][0][400, 10],
+                       table_data[:pixels][-1][400, 10],
                      ])
       end
     end

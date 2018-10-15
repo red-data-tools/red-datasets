@@ -49,6 +49,16 @@ class MNISTTest < Test::Unit::TestCase
                        table_data[:pixels][-1][200, 10],
                      ])
       end
+
+      sub_test_case("#metadata") do
+        test("#id") do
+          assert_equal("mnist-train", @dataset.metadata.id)
+        end
+
+        test("#name") do
+          assert_equal("MNIST: train", @dataset.metadata.name)
+        end
+      end
     end
 
     sub_test_case("test") do
@@ -100,6 +110,16 @@ class MNISTTest < Test::Unit::TestCase
                        table_data[:pixels][0][200, 10],
                        table_data[:pixels][-1][200, 10],
                      ])
+      end
+
+      sub_test_case("#metadata") do
+        test("#id") do
+          assert_equal("mnist-test", @dataset.metadata.id)
+        end
+
+        test("#name") do
+          assert_equal("MNIST: test", @dataset.metadata.name)
+        end
       end
     end
   end

@@ -50,6 +50,16 @@ class FashionMNISTTest < Test::Unit::TestCase
                        table_data[:pixels][-1][400, 10],
                      ])
       end
+
+      sub_test_case("#metadata") do
+        test("#id") do
+          assert_equal("fashion-mnist-train", @dataset.metadata.id)
+        end
+
+        test("#name") do
+          assert_equal("Fashion-MNIST: train", @dataset.metadata.name)
+        end
+      end
     end
 
     sub_test_case("test") do
@@ -101,6 +111,16 @@ class FashionMNISTTest < Test::Unit::TestCase
                        table_data[:pixels][0][400, 10],
                        table_data[:pixels][-1][400, 10],
                      ])
+      end
+
+      sub_test_case("#metadata") do
+        test("#id") do
+          assert_equal("fashion-mnist-test", @dataset.metadata.id)
+        end
+
+        test("#name") do
+          assert_equal("Fashion-MNIST: test", @dataset.metadata.name)
+        end
       end
     end
   end

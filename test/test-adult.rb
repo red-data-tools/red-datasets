@@ -11,14 +11,46 @@ class AdultTest < Test::Unit::TestCase
     records = @dataset.each.to_a
     assert_equal([
                    32561,
-                   record(39, "State-gov", 77516, "Bachelors", 13, "Never-married", "Adm-clerical", "Not-in-family", "White", "Male", 2174, 0, 40, "United-States", "<=50K"),
-                   record(52, "Self-emp-inc", 287927, "HS-grad", 9, "Married-civ-spouse", "Exec-managerial", "Wife", "White", "Female", 15024, 0, 40, "United-States", ">50K"),
-                 ],
-                 [
+                   {
+                    :age => 39,
+                    :work_class => "State-gov",
+                    :fnlwgt => 77516,
+                    :education => "Bachelors",
+                    :n_education_years => 13,
+                    :marital_status => "Never-married",
+                    :occupation => "Adm-clerical",
+                    :relationship => "Not-in-family",
+                    :race => "White",
+                    :sex => "Male",
+                    :capital_gain => 2174,
+                    :capital_loss => 0,
+                    :hours_per_week => 40,
+                    :native_country => "United-States",
+                    :income_per_year => "<=50K"
+                   },
+                   {
+                    :age => 52,
+                    :work_class => "Self-emp-inc",
+                    :fnlwgt => 287927,
+                    :education => "HS-grad",
+                    :n_education_years => 9,
+                    :marital_status => "Married-civ-spouse",
+                    :occupation => "Exec-managerial",
+                    :relationship => "Wife",
+                    :race => "White",
+                    :sex => "Female",
+                    :capital_gain => 15024,
+                    :capital_loss => 0,
+                    :hours_per_week => 40,
+                    :native_country => "United-States",
+                    :income_per_year => ">50K"
+                   }
+                  ],
+                  [
                    records.size,
-                   records[0],
-                   records[-1],
-                 ])
+                   records[0].to_h,
+                   records[-1].to_h
+                  ])
   end
 
   sub_test_case("#metadata") do

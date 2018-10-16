@@ -6,6 +6,7 @@ module Datasets
 
     def initialize(dataset)
       @dataset = dataset
+      @dictionaries = {}
     end
 
     def each(&block)
@@ -13,11 +14,11 @@ module Datasets
     end
 
     def [](name)
-      columner_data[name.to_sym]
+      columner_data[normalize_name(name)]
     end
 
     def dictionary_encode(name)
-      Dictionary.new(self[name])
+      @dictionaries[normalize_name(name)] ||= Dictionary.new(self[name])
     end
 
     def label_encode(name)
@@ -67,6 +68,10 @@ module Datasets
 
     def columner_data
       @columns ||= to_h
+    end
+
+    def normalize_name(name)
+      name.to_sym
     end
   end
 end

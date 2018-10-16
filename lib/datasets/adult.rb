@@ -6,10 +6,10 @@ module Datasets
   class Adult < Dataset
     Record = Struct.new(
       :age,
-      :workclass,
+      :work_class,
       :fnlwgt,
       :education,
-      :education_num,
+      :n_education_years,
       :marital_status,
       :occupation,
       :relationship,

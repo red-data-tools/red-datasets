@@ -19,7 +19,7 @@ module Datasets
       :capital_loss,
       :hours_per_week,
       :native_country,
-      :income_per_year
+      :label
     )
 
     def initialize

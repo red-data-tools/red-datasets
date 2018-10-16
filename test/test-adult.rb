@@ -26,7 +26,7 @@ class AdultTest < Test::Unit::TestCase
                     :capital_loss => 0,
                     :hours_per_week => 40,
                     :native_country => "United-States",
-                    :income_per_year => "<=50K"
+                    :label => "<=50K"
                    },
                    {
                     :age => 52,
@@ -43,7 +43,7 @@ class AdultTest < Test::Unit::TestCase
                     :capital_loss => 0,
                     :hours_per_week => 40,
                     :native_country => "United-States",
-                    :income_per_year => ">50K"
+                    :label => ">50K"
                    }
                   ],
                   [

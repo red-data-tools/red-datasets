@@ -22,11 +22,16 @@ module Datasets
       :label
     )
 
-    def initialize
+    def initialize(type: :train)
+      unless [:train, :test].include?(type)
+        raise 'Please set type :train or :test'
+      end
+
       super()
-      @metadata.id = "adult"
-      @metadata.name = "Adult"
+      @metadata.id = "adult-#{type}"
+      @metadata.name = "Adult-#{type}"
       @metadata.url = "http://archive.ics.uci.edu/ml/datasets/adult"
+      @type = type
       @metadata.description = lambda do
         read_names
       end
@@ -46,12 +51,18 @@ module Datasets
 
     private
     def open_data
-      data_path = cache_dir_path + "adult.csv"
+      case @type
+      when :train
+        ext = "data"
+      when :test
+        ext = "test"
+      end
+      data_path = cache_dir_path + "adult-#{ext}.csv"
       unless data_path.exist?
-        data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data"
+        data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.#{ext}"
         download(data_path, data_url)
       end
-      CSV.open(data_path, converters: [:numeric, lambda {|f| f ? f.strip : nil}]) do |csv|
+      CSV.open(data_path, { converters: [:numeric, lambda {|f| f ? f.strip : nil}], skip_lines: /^\|.+$/ }) do |csv|
         yield(csv)
       end
     end

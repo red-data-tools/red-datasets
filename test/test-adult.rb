@@ -1,64 +1,118 @@
 class AdultTest < Test::Unit::TestCase
-  def setup
-    @dataset = Datasets::Adult.new
-  end
+  sub_test_case("train") do
+    def setup
+      @dataset = Datasets::Adult.new(type: :train)
+    end
 
-  def record(*args)
-    Datasets::Adult::Record.new(*args)
-  end
+    def record(*args)
+      Datasets::Adult::Record.new(*args)
+    end
 
-  test("#each") do
-    records = @dataset.each.to_a
-    assert_equal([
-                   32561,
-                   {
-                    :age => 39,
-                    :work_class => "State-gov",
-                    :fnlwgt => 77516,
-                    :education => "Bachelors",
-                    :n_education_years => 13,
-                    :marital_status => "Never-married",
-                    :occupation => "Adm-clerical",
-                    :relationship => "Not-in-family",
-                    :race => "White",
-                    :sex => "Male",
-                    :capital_gain => 2174,
-                    :capital_loss => 0,
-                    :hours_per_week => 40,
-                    :native_country => "United-States",
-                    :label => "<=50K"
-                   },
-                   {
-                    :age => 52,
-                    :work_class => "Self-emp-inc",
-                    :fnlwgt => 287927,
-                    :education => "HS-grad",
-                    :n_education_years => 9,
-                    :marital_status => "Married-civ-spouse",
-                    :occupation => "Exec-managerial",
-                    :relationship => "Wife",
-                    :race => "White",
-                    :sex => "Female",
-                    :capital_gain => 15024,
-                    :capital_loss => 0,
-                    :hours_per_week => 40,
-                    :native_country => "United-States",
-                    :label => ">50K"
-                   }
-                  ],
-                  [
-                   records.size,
-                   records[0].to_h,
-                   records[-1].to_h
-                  ])
-  end
-
-  sub_test_case("#metadata") do
-    test("#description") do
-      description = @dataset.metadata.description
-      assert do
-        description.start_with?("| This data was extracted from the census bureau database found at")
+    test("#each") do
+      records = @dataset.each.to_a
+      assert_equal([
+                     32561,
+                     {
+                      :age => 39,
+                      :work_class => "State-gov",
+                      :fnlwgt => 77516,
+                      :education => "Bachelors",
+                      :n_education_years => 13,
+                      :marital_status => "Never-married",
+                      :occupation => "Adm-clerical",
+                      :relationship => "Not-in-family",
+                      :race => "White",
+                      :sex => "Male",
+                      :capital_gain => 2174,
+                      :capital_loss => 0,
+                      :hours_per_week => 40,
+                      :native_country => "United-States",
+                      :label => "<=50K"
+                     },
+                     {
+                      :age => 52,
+                      :work_class => "Self-emp-inc",
+                      :fnlwgt => 287927,
+                      :education => "HS-grad",
+                      :n_education_years => 9,
+                      :marital_status => "Married-civ-spouse",
+                      :occupation => "Exec-managerial",
+                      :relationship => "Wife",
+                      :race => "White",
+                      :sex => "Female",
+                      :capital_gain => 15024,
+                      :capital_loss => 0,
+                      :hours_per_week => 40,
+                      :native_country => "United-States",
+                      :label => ">50K"
+                     }
+                    ],
+                    [
+                     records.size,
+                     records[0].to_h,
+                     records[-1].to_h
+                    ])
+    end
+    sub_test_case("#metadata") do
+      test("#description") do
+        description = @dataset.metadata.description
+        assert do
+          description.start_with?("| This data was extracted from the census bureau database found at")
+        end
       end
+    end
+  end
+
+  sub_test_case("test") do
+    def setup
+      @dataset = Datasets::Adult.new(type: :test)
+    end
+
+    def record(*args)
+      Datasets::Adult::Record.new(*args)
+    end
+
+    test("#each") do
+      records = @dataset.each.to_a
+      assert_equal([
+                     16281,
+                     {
+                      :age=>25,
+                      :capital_gain=>0,
+                      :capital_loss=>0,
+                      :education=>"11th",
+                      :fnlwgt=>226802,
+                      :hours_per_week=>40,
+                      :label=>"<=50K.",
+                      :marital_status=>"Never-married",
+                      :n_education_years=>7,
+                      :native_country=>"United-States",
+                      :occupation=>"Machine-op-inspct",
+                      :race=>"Black",
+                      :relationship=>"Own-child",
+                      :sex=>"Male",
+                      :work_class=>"Private"},
+                     {:age=>35,
+                      :capital_gain=>0,
+                      :capital_loss=>0,
+                      :education=>"Bachelors",
+                      :fnlwgt=>182148,
+                      :hours_per_week=>60,
+                      :label=>">50K.",
+                      :marital_status=>"Married-civ-spouse",
+                      :n_education_years=>13,
+                      :native_country=>"United-States",
+                      :occupation=>"Exec-managerial",
+                      :race=>"White",
+                      :relationship=>"Husband",
+                      :sex=>"Male",
+                      :work_class=>"Self-emp-inc"}
+                    ],
+                    [
+                     records.size,
+                     records[0].to_h,
+                     records[-1].to_h
+                    ])
     end
   end
 end

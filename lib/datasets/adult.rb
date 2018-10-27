@@ -28,10 +28,10 @@ module Datasets
       end
 
       super()
-      @metadata.id = "adult-#{type}"
-      @metadata.name = "Adult-#{type}"
-      @metadata.url = "http://archive.ics.uci.edu/ml/datasets/adult"
       @type = type
+      @metadata.id = "adult-#{@type}"
+      @metadata.name = "Adult: #{@type}"
+      @metadata.url = "http://archive.ics.uci.edu/ml/datasets/adult"
       @metadata.description = lambda do
         read_names
       end

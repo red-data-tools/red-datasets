@@ -7,7 +7,7 @@ module Datasets
     Record = Struct.new(
       :age,
       :work_class,
-      :fnlwgt,
+      :final_weight,
       :education,
       :n_education_years,
       :marital_status,

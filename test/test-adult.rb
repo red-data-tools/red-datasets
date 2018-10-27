@@ -15,7 +15,7 @@ class AdultTest < Test::Unit::TestCase
                      {
                        :age => 39,
                        :work_class => "State-gov",
-                       :fnlwgt => 77516,
+                       :final_weight => 77516,
                        :education => "Bachelors",
                        :n_education_years => 13,
                        :marital_status => "Never-married",
@@ -32,7 +32,7 @@ class AdultTest < Test::Unit::TestCase
                      {
                        :age => 52,
                        :work_class => "Self-emp-inc",
-                       :fnlwgt => 287927,
+                       :final_weight => 287927,
                        :education => "HS-grad",
                        :n_education_years => 9,
                        :marital_status => "Married-civ-spouse",
@@ -71,7 +71,7 @@ class AdultTest < Test::Unit::TestCase
                      {
                        :age => 25,
                        :work_class => "Private",
-                       :fnlwgt => 226802,
+                       :final_weight => 226802,
                        :education => "11th",
                        :n_education_years => 7,
                        :marital_status => "Never-married",
@@ -88,7 +88,7 @@ class AdultTest < Test::Unit::TestCase
                      {
                        :age => 35,
                        :work_class => "Self-emp-inc",
-                       :fnlwgt => 182148,
+                       :final_weight => 182148,
                        :education => "Bachelors",
                        :n_education_years => 13,
                        :marital_status => "Married-civ-spouse",

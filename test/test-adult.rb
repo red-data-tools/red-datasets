@@ -53,14 +53,6 @@ class AdultTest < Test::Unit::TestCase
                      records[-1].to_h
                    ])
     end
-    sub_test_case("#metadata") do
-      test("#description") do
-        description = @dataset.metadata.description
-        assert do
-          description.start_with?("| This data was extracted from the census bureau database found at")
-        end
-      end
-    end
   end
 
   sub_test_case("test") do
@@ -116,6 +108,15 @@ class AdultTest < Test::Unit::TestCase
                      records[0].to_h,
                      records[-1].to_h
                    ])
+    end
+  end
+
+  sub_test_case("#metadata") do
+    test("#description") do
+      description = @dataset.metadata.description
+      assert do
+        description.start_with?("| This data was extracted from the census bureau database found at")
+      end
     end
   end
 end

@@ -65,7 +65,7 @@ module Datasets
       CSV.open(data_path,
                {
                  converters: [:numeric, lambda {|f| f.strip}],
-                 skip_lines: /^\|.+$/,
+                 skip_lines: /\A\|/,
                }) do |csv|
         yield(csv)
       end

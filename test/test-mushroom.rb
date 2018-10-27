@@ -1,4 +1,4 @@
-class AdultTest < Test::Unit::TestCase
+class MushroomTest < Test::Unit::TestCase
   def setup
     @dataset = Datasets::Mushroom.new
   end

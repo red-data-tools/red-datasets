@@ -68,6 +68,7 @@ class MushroomTest < Test::Unit::TestCase
                    records[-1].to_h
                   ])
   end
+
   sub_test_case("#metadata") do
     test("#description") do
       description = @dataset.metadata.description

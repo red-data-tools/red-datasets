@@ -13,45 +13,45 @@ class AdultTest < Test::Unit::TestCase
       assert_equal([
                      32561,
                      {
-                      :age => 39,
-                      :work_class => "State-gov",
-                      :fnlwgt => 77516,
-                      :education => "Bachelors",
-                      :n_education_years => 13,
-                      :marital_status => "Never-married",
-                      :occupation => "Adm-clerical",
-                      :relationship => "Not-in-family",
-                      :race => "White",
-                      :sex => "Male",
-                      :capital_gain => 2174,
-                      :capital_loss => 0,
-                      :hours_per_week => 40,
-                      :native_country => "United-States",
-                      :label => "<=50K"
+                       :age => 39,
+                       :work_class => "State-gov",
+                       :fnlwgt => 77516,
+                       :education => "Bachelors",
+                       :n_education_years => 13,
+                       :marital_status => "Never-married",
+                       :occupation => "Adm-clerical",
+                       :relationship => "Not-in-family",
+                       :race => "White",
+                       :sex => "Male",
+                       :capital_gain => 2174,
+                       :capital_loss => 0,
+                       :hours_per_week => 40,
+                       :native_country => "United-States",
+                       :label => "<=50K"
                      },
                      {
-                      :age => 52,
-                      :work_class => "Self-emp-inc",
-                      :fnlwgt => 287927,
-                      :education => "HS-grad",
-                      :n_education_years => 9,
-                      :marital_status => "Married-civ-spouse",
-                      :occupation => "Exec-managerial",
-                      :relationship => "Wife",
-                      :race => "White",
-                      :sex => "Female",
-                      :capital_gain => 15024,
-                      :capital_loss => 0,
-                      :hours_per_week => 40,
-                      :native_country => "United-States",
-                      :label => ">50K"
+                       :age => 52,
+                       :work_class => "Self-emp-inc",
+                       :fnlwgt => 287927,
+                       :education => "HS-grad",
+                       :n_education_years => 9,
+                       :marital_status => "Married-civ-spouse",
+                       :occupation => "Exec-managerial",
+                       :relationship => "Wife",
+                       :race => "White",
+                       :sex => "Female",
+                       :capital_gain => 15024,
+                       :capital_loss => 0,
+                       :hours_per_week => 40,
+                       :native_country => "United-States",
+                       :label => ">50K"
                      }
-                    ],
-                    [
+                   ],
+                   [
                      records.size,
                      records[0].to_h,
                      records[-1].to_h
-                    ])
+                   ])
     end
     sub_test_case("#metadata") do
       test("#description") do
@@ -77,45 +77,45 @@ class AdultTest < Test::Unit::TestCase
       assert_equal([
                      16281,
                      {
-                      :age=>25,
-                      :work_class=>"Private",
-                      :fnlwgt=>226802,
-                      :education=>"11th",
-                      :n_education_years=>7,
-                      :marital_status=>"Never-married",
-                      :occupation=>"Machine-op-inspct",
-                      :relationship=>"Own-child",
-                      :race=>"Black",
-                      :sex=>"Male",
-                      :capital_gain=>0,
-                      :capital_loss=>0,
-                      :hours_per_week=>40,
-                      :native_country=>"United-States",
-                      :label=>"<=50K."
+                       :age=>25,
+                       :work_class=>"Private",
+                       :fnlwgt=>226802,
+                       :education=>"11th",
+                       :n_education_years=>7,
+                       :marital_status=>"Never-married",
+                       :occupation=>"Machine-op-inspct",
+                       :relationship=>"Own-child",
+                       :race=>"Black",
+                       :sex=>"Male",
+                       :capital_gain=>0,
+                       :capital_loss=>0,
+                       :hours_per_week=>40,
+                       :native_country=>"United-States",
+                       :label=>"<=50K."
                      },
                      {
-                      :age=>35,
-                      :work_class=>"Self-emp-inc",
-                      :fnlwgt=>182148,
-                      :education=>"Bachelors",
-                      :n_education_years=>13,
-                      :marital_status=>"Married-civ-spouse",
-                      :occupation=>"Exec-managerial",
-                      :relationship=>"Husband",
-                      :race=>"White",
-                      :sex=>"Male",
-                      :capital_gain=>0,
-                      :capital_loss=>0,
-                      :hours_per_week=>60,
-                      :native_country=>"United-States",
-                      :label=>">50K."
+                       :age=>35,
+                       :work_class=>"Self-emp-inc",
+                       :fnlwgt=>182148,
+                       :education=>"Bachelors",
+                       :n_education_years=>13,
+                       :marital_status=>"Married-civ-spouse",
+                       :occupation=>"Exec-managerial",
+                       :relationship=>"Husband",
+                       :race=>"White",
+                       :sex=>"Male",
+                       :capital_gain=>0,
+                       :capital_loss=>0,
+                       :hours_per_week=>60,
+                       :native_country=>"United-States",
+                       :label=>">50K."
                      }
-                    ],
-                    [
+                   ],
+                   [
                      records.size,
                      records[0].to_h,
                      records[-1].to_h
-                    ])
+                   ])
     end
   end
 end

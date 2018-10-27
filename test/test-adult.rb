@@ -112,6 +112,10 @@ class AdultTest < Test::Unit::TestCase
   end
 
   sub_test_case("#metadata") do
+    def setup
+      @dataset = Datasets::Adult.new(type: :train)
+    end
+
     test("#description") do
       description = @dataset.metadata.description
       assert do

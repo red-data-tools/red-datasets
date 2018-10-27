@@ -1,5 +1,6 @@
 require "datasets/version"
 
+require "datasets/adult"
 require "datasets/cifar"
 require "datasets/fashion-mnist"
 require "datasets/iris"

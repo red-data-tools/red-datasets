@@ -62,7 +62,11 @@ module Datasets
         data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.#{ext}"
         download(data_path, data_url)
       end
-      CSV.open(data_path, { converters: [:numeric, lambda {|f| f ? f.strip : nil}], skip_lines: /^\|.+$/ }) do |csv|
+      CSV.open(data_path,
+               {
+                 converters: [:numeric, lambda {|f| f ? f.strip : nil}],
+                 skip_lines: /^\|.+$/,
+               }) do |csv|
         yield(csv)
       end
     end

@@ -1,5 +1,36 @@
 # News
 
+## 0.0.7 - 2018-11-21
+
+### Improvements
+
+  * `Datasets::Table#dictionary_encode`: Added.
+    [GitHub#22]
+
+  * `Datasets::Table#label_encode`: Added.
+
+  * `Datasets::Dictionary`: Added.
+
+  * `Datasets::Wine`: Added.
+    [GitHub#26][Patch by Ryuta Suzuki]
+
+  * `Datasets::FashionMNIST`: Added.
+    [GitHub#27][Patch by chimame]
+
+  * `Datasets::Iris::Record#label`: Renamed from `#class`. This is an
+    incompatible change.
+
+  * `Datasets::Adult`: Added.
+    [GitHub#30][Patch by Yasuo Honda]
+
+### Thanks
+
+  * Ryuta Suzuki
+
+  * chimame
+
+  * Yasuo Honda
+
 ## 0.0.6 - 2018-07-25
 
 ### Improvements

@@ -23,9 +23,7 @@ module Datasets
 
     def label_encode(name)
       dictionary = dictionary_encode(name)
-      self[name].collect do |value|
-        dictionary.id(value)
-      end
+      dictionary.encode(self[name])
     end
 
     def fetch_values(*keys)

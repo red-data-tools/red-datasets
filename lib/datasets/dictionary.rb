@@ -31,6 +31,18 @@ module Datasets
     end
     alias_method :length, :size
 
+    def encode(values)
+      values.collect do |value|
+        id(value)
+      end
+    end
+
+    def decode(ids)
+      ids.collect do |id|
+        value(id)
+      end
+    end
+
     private
     def build_dictionary(values)
       @id_to_value = {}

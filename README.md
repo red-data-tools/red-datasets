@@ -14,6 +14,8 @@ You can use datasets easily because you can access each dataset with multiple wa
 
 ## Available datasets
 
+TODO: Document them in source code to list in document: https://www.rubydoc.info/gems/red-datasets
+
 * Adult Dataset
 * CIFAR-10 Dataset
 * CIFAR-100 Dataset

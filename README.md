@@ -1,8 +1,4 @@
-# README
-
-## Name
-
-Red Datasets
+# Red Datasets
 
 ## Description
 

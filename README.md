@@ -15,14 +15,14 @@ You can use datasets easily because you can access each dataset with multiple wa
 ## Available Datasets
 
 * Adult Dataset
-* CIFAR-10 Dataset 
-* CIFAR-100 Dataset 
+* CIFAR-10 Dataset
+* CIFAR-100 Dataset
 * Fashion-MNIST
 * Iris Dataset
 * MNIST database
 * The Penn Treebank Project
 * Wikipedia
-* Wine Dataset 
+* Wine Dataset
 
 ## Usage
 

@@ -1,8 +1,4 @@
-# README
-
-## Name
-
-Red Datasets
+# Red Datasets
 
 ## Description
 
@@ -15,6 +11,18 @@ You can use datasets easily because you can access each dataset with multiple wa
 ```console
 % gem install red-datasets
 ```
+
+## Available Datasets
+
+* Adult Dataset
+* CIFAR-10 Dataset 
+* CIFAR-100 Dataset 
+* Fashion-MNIST
+* Iris Dataset
+* MNIST database
+* The Penn Treebank Project
+* Wikipedia
+* Wine Dataset 
 
 ## Usage
 

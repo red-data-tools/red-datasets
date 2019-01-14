@@ -12,7 +12,7 @@ You can use datasets easily because you can access each dataset with multiple wa
 % gem install red-datasets
 ```
 
-## Available Datasets
+## Available datasets
 
 * Adult Dataset
 * CIFAR-10 Dataset

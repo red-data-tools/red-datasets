@@ -12,6 +12,18 @@ You can use datasets easily because you can access each dataset with multiple wa
 % gem install red-datasets
 ```
 
+## Available Datasets
+
+* Adult Dataset
+* CIFAR-10 Dataset 
+* CIFAR-100 Dataset 
+* Fashion-MNIST
+* Iris Dataset
+* MNIST database
+* The Penn Treebank Project
+* Wikipedia
+* Wine Dataset 
+
 ## Usage
 
 Here is an example to access [Iris Data Set](https://archive.ics.uci.edu/ml/datasets/iris) by `#each`  or `Table#to_h` or `Table#fetch_values`.

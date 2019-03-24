@@ -36,6 +36,7 @@ module Datasets
       return to_enum(__method__) unless block_given?
 
       open_data do |input|
+        # TODO: Improve performance
         document = REXML::Document.new(input)
         is_header = true
         document.each_element("//tr") do |tr|

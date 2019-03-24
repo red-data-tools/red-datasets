@@ -35,11 +35,11 @@ module Datasets
                    note: nil,
                    default_feature_value: 0)
       super()
-      @dataset_info = fetch_dataset_info(name)
+      @libsvm_dataset_metadata = fetch_dataset_info(name)
       @file = choose_file(note)
       @default_feature_value = default_feature_value
       @metadata.id = "libsvm-#{normalize_name(name)}"
-      @metadata.name = "LIBSVM data: #{name}"
+      @metadata.name = "LIBSVM dataset: #{name}"
       @metadata.url = "https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/"
     end
 
@@ -47,10 +47,11 @@ module Datasets
       return to_enum(__method__) unless block_given?
 
       open_data do |input|
+        n_features = @libsvm_dataset_metadata.n_features
         csv = CSV.new(input, col_sep: " ")
         csv.each do |row|
           label = parse_label(row.shift)
-          features = [@default_feature_value] * @dataset_info.n_features
+          features = [@default_feature_value] * n_features
           row.each do |column|
             next if column.nil?
             index, value = column.split(":", 2)
@@ -71,24 +72,27 @@ module Datasets
           return record
         end
       end
-      message = "unavailable LIBSVM data: #{name.inspect}: ["
-      message << available_datasets.join(", ")
+      message = "unavailable LIBSVM dataset: #{name.inspect}: "
+      message << "available datasets: ["
+      message << available_datasets.collect(&:inspect).join(", ")
       message << "]"
       raise ArgumentError, message
     end
 
     def choose_file(note)
-      files = @dataset_info.files
+      files = @libsvm_dataset_metadata.files
       return files.first if note.nil?
 
       available_notes = []
-      @dataset_info.files.find do |file|
+      @libsvm_dataset_metadata.files.find do |file|
         return file if file.note == note
-        available_notes << note if file.note
+        available_notes << file.note if file.note
       end
 
-      message = "unavailable note: #{@dataset_info.name}: #{note.inspect}: ["
-      message << available_notes.join(", ")
+      name = @libsvm_dataset_metadata.name
+      message = "unavailable note: #{name}: #{note.inspect}: "
+      message << "available notes: ["
+      message << available_notes.collect(&:inspect).join(", ")
       message << "]"
       raise ArgumentError, message
     end

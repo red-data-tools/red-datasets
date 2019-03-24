@@ -52,7 +52,7 @@ module Datasets
     end
 
     private
-    def open_data
+    def open_data(&block)
       base_name = "#{@language}wiki-latest-#{type_in_path}.xml.bz2"
       data_path = cache_dir_path + base_name
       unless data_path.exist?
@@ -60,15 +60,7 @@ module Datasets
         download(data_path, data_url)
       end
 
-      input, output = IO.pipe
-      pid = spawn("bzcat", data_path.to_s, {:out => output})
-      begin
-        output.close
-        yield(input)
-      ensure
-        input.close
-        Process.waitpid(pid)
-      end
+      extract_bz2(data_path, &block)
     end
 
     def type_in_path

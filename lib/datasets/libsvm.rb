@@ -103,15 +103,7 @@ module Datasets
         download(data_path, @file.url)
       end
       if data_path.extname == ".bz2"
-        input, output = IO.pipe
-        pid = spawn("bzcat", data_path.to_s, {:out => output})
-        begin
-          output.close
-          yield(input)
-        ensure
-          input.close
-          Process.waitpid(pid)
-        end
+        extract_bz2(data_path, &block)
       else
         File.open(data_path, &block)
       end

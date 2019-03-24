@@ -1,5 +1,22 @@
 # News
 
+## 0.0.8 - 2019-03-24
+
+### Improvements
+
+  * Improved README.
+    [GitHub#40][Patch by kojix2]
+
+  * `Datasets::PostalCodeJapan`: Added.
+
+  * `Datasets::LIBSVMDatasetList`: Added.
+
+  * `Datasets::LIBSVM`: Added.
+
+### Thanks
+
+  * kojix2
+
 ## 0.0.7 - 2018-11-21
 
 ### Improvements

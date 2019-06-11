@@ -1,6 +1,7 @@
 require "csv"
 
 require_relative "dataset"
+
 module Datasets
   class Mushroom < Dataset
     Record = Struct.new(

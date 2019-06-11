@@ -23,7 +23,7 @@ module Datasets
       :stalk_color_below_ring,
       :veil_type,
       :veil_color,
-      :ring_number,
+      :n_rings,
       :ring_type,
       :spore_print_color,
       :population,
@@ -48,7 +48,7 @@ module Datasets
           next if row[0].nil?
           record = Record.new(*row)
           record.members.each do |member|
-            eval("record[member] = convert_#{member}[record[:#{member}]]")
+            record[member] = CONVERTERS[member][record[member]]
           end
           yield(record)
         end
@@ -76,99 +76,181 @@ module Datasets
       names_path.read
     end
 
-    def convert_label
-      { "p" => "poisonous", "e" => "edible" }
-    end
-
-    def convert_cap_shape
-      { "b" => "bell", "c" => "conical", "x" => "convex", "f" => "flat", "k" =>  "knobbed", "s" => "sunken" }
-    end
-
-    def convert_cap_surface
-      { "f" => "fibrous", "g" => "grooves", "y" => "scaly", "s" => "smooth" }
-    end
-
-    def convert_cap_color
-      { "n" => "brown", "b" => "buff", "c" => "cinnamon", "g" => "gray", "r" => "green", "p" => "pink",
-        "u" => "purple", "e" => "red", "w" => "white", "y" => "yellow" }
-    end
-
-    def convert_bruises
-      { "t" => "bruises", "f" => "no" }
-    end
-
-    def convert_odor
-      { "a" => "almond", "l" => "anise", "c" => "creosote", "y" => "fishy", "f" => "foul",
-        "m" => "musty", "n" => "none", "p" => "pungent", "s" => "spicy" }
-    end
-
-    def convert_gill_attachment
-      { "a" => "attached" ,"d" => "descending", "f" => "free", "n" => "notched" }
-    end
-
-    def convert_gill_spacing
-      { "c" => "close", "w" => "crowded", "d" => "distant" }
-    end
-
-    def convert_gill_size
-      { "b" => "broad", "n" => "narrow" }
-    end
-
-    def convert_gill_color
-      { "k" => "black", "n" => "brown", "b" => "buff", "h" => "chocolate", "g" => "gray", "r" => "green",
-        "o" => "orange", "p" => "pink", "u" => "purple", "e" => "red", "w" => "white", "y" => "yellow" }
-    end
-
-    def convert_stalk_shape
-      { "e" => "enlarging", "t" => "tapering" }
-    end
-
-    def convert_stalk_root
-      { "b" => "bulbous", "c" => "club", "u" => "cup", "e" => "equal",
-        "z" => "rhizomorphs", "r" => "rooted", "?" => "missing" }
-    end
-
-    def convert_stalk_surface_above_ring
-      { "f" => "fibrous", "y" => "scaly", "k" => "silky", "s" => "smooth" }
-    end
-    alias_method :convert_stalk_surface_below_ring, :convert_stalk_surface_above_ring
-
-    def convert_stalk_color_above_ring
-        { "n" => "brown", "b" => "buff", "c" => "cinnamon" ,"g" => "gray",
-          "o" => "orange", "p" => "pink", "e" => "red", "w" => "white" ,"y" => "yellow" }
-    end
-    alias_method :convert_stalk_color_below_ring, :convert_stalk_color_above_ring
-
-    def convert_veil_type
-      { "p" => "partial", "u" => "universal" }
-    end
-
-    def convert_veil_color
-      { "n" => "brown", "o" => "orange", "w" => "white", "y" => "yellow" }
-    end
-
-    def convert_ring_number
-      { "n" => "none", "o" => "one", "t" => "two" }
-    end
-
-    def convert_ring_type
-      { "c" => "cobwebby", "e" => "evanescent", "f" => "flaring", "l" => "large",
-        "n" => "none", "p" => "pendant", "s" => "sheathing", "z" => "zone" }
-    end
-
-    def convert_spore_print_color
-      { "k" => "black", "n" => "brown", "b" => "buff", "h" => "chocolate",
-        "r" => "green", "o" => "orange", "u" => "purple", "w" => "white", "y" => "yellow" }
-    end
-
-    def convert_population
-      { "a" => "abundant", "c" => "clustered", "n" => "numerous",
-        "s" => "scattered", "v" => "several", "y" => "solitary" }
-    end
-
-    def convert_habitat
-      { "g" => "grasses" ,"l" => "leaves", "m" => "meadows",
-        "p" => "paths", "u" => "urban", "w" => "waste", "d" => "woods" }
-    end
+    CONVERTERS = {
+      label: {
+        "p" => "poisonous",
+        "e" => "edible",
+      },
+      cap_shape: {
+        "b" => "bell",
+        "c" => "conical",
+        "x" => "convex",
+        "f" => "flat",
+        "k" => "knobbed",
+        "s" => "sunken",
+      },
+      cap_surface: {
+        "f" => "fibrous",
+        "g" => "grooves",
+        "y" => "scaly",
+        "s" => "smooth",
+      },
+      cap_color: {
+        "n" => "brown",
+        "b" => "buff",
+        "c" => "cinnamon",
+        "g" => "gray",
+        "r" => "green",
+        "p" => "pink",
+        "u" => "purple",
+        "e" => "red",
+        "w" => "white",
+        "y" => "yellow",
+      },
+      bruises: {
+        "t" => "bruises",
+        "f" => "no",
+      },
+      odor: {
+        "a" => "almond",
+        "l" => "anise",
+        "c" => "creosote",
+        "y" => "fishy",
+        "f" => "foul",
+        "m" => "musty",
+        "n" => "none",
+        "p" => "pungent",
+        "s" => "spicy",
+      },
+      gill_attachment: {
+        "a" => "attached",
+        "d" => "descending",
+        "f" => "free",
+        "n" => "notched",
+      },
+      gill_spacing: {
+        "c" => "close",
+        "w" => "crowded",
+        "d" => "distant",
+      },
+      gill_size: {
+        "b" => "broad",
+        "n" => "narrow",
+      },
+      gill_color: {
+        "k" => "black",
+        "n" => "brown",
+        "b" => "buff",
+        "h" => "chocolate",
+        "g" => "gray",
+        "r" => "green",
+        "o" => "orange",
+        "p" => "pink",
+        "u" => "purple",
+        "e" => "red",
+        "w" => "white",
+        "y" => "yellow",
+      },
+      stalk_shape: {
+        "e" => "enlarging",
+        "t" => "tapering",
+      },
+      stalk_root: {
+        "b" => "bulbous",
+        "c" => "club",
+        "u" => "cup",
+        "e" => "equal",
+        "z" => "rhizomorphs",
+        "r" => "rooted",
+        "?" => "missing",
+      },
+      stalk_surface_above_ring: {
+        "f" => "fibrous",
+        "y" => "scaly",
+        "k" => "silky",
+        "s" => "smooth",
+      },
+      stalk_surface_below_ring: {
+        "f" => "fibrous",
+        "y" => "scaly",
+        "k" => "silky",
+        "s" => "smooth",
+      },
+      stalk_color_above_ring: {
+        "n" => "brown",
+        "b" => "buff",
+        "c" => "cinnamon",
+        "g" => "gray",
+        "o" => "orange",
+        "p" => "pink",
+        "e" => "red",
+        "w" => "white",
+        "y" => "yellow",
+      },
+      stalk_color_below_ring: {
+        "n" => "brown",
+        "b" => "buff",
+        "c" => "cinnamon",
+        "g" => "gray",
+        "o" => "orange",
+        "p" => "pink",
+        "e" => "red",
+        "w" => "white",
+        "y" => "yellow",
+      },
+      veil_type: {
+        "p" => "partial",
+        "u" => "universal",
+      },
+      veil_color: {
+        "n" => "brown",
+        "o" => "orange",
+        "w" => "white",
+        "y" => "yellow",
+      },
+      n_rings: {
+        "n" => 0,
+        "o" => 1,
+        "t" => 2,
+      },
+      ring_type: {
+        "c" => "cobwebby",
+        "e" => "evanescent",
+        "f" => "flaring",
+        "l" => "large",
+        "n" => "none",
+        "p" => "pendant",
+        "s" => "sheathing",
+        "z" => "zone",
+      },
+      spore_print_color: {
+        "k" => "black",
+        "n" => "brown",
+        "b" => "buff",
+        "h" => "chocolate",
+        "r" => "green",
+        "o" => "orange",
+        "u" => "purple",
+        "w" => "white",
+        "y" => "yellow",
+      },
+      population: {
+        "a" => "abundant",
+        "c" => "clustered",
+        "n" => "numerous",
+        "s" => "scattered",
+        "v" => "several",
+        "y" => "solitary",
+      },
+      habitat: {
+        "g" => "grasses",
+        "l" => "leaves",
+        "m" => "meadows",
+        "p" => "paths",
+        "u" => "urban",
+        "w" => "waste",
+        "d" => "woods",
+      }
+    }
   end
 end

@@ -5,26 +5,26 @@ require_relative "dataset"
 module Datasets
   class Hepatitis < Dataset
     Record = Struct.new(
-      :Class,
-      :AGE,
-      :SEX,
-      :STEROID,
-      :ANTIVIRALS,
-      :FATIGUE,
-      :MALAISE,
-      :ANOREXIA,
-      :LIVER_BIG,
-      :LIVER_FIRM,
-      :SPLEEN_PALPABLE,
-      :SPIDERS,
-      :ASCITES,
-      :VARICES,
-      :BILIRUBIN,
-      :ALK_PHOSPHATE,
-      :SGOT,
-      :ALBUMIN,
-      :PROTIME,
-      :HISTOLOGY
+      :class,
+      :age,
+      :sex,
+      :steroid,
+      :antivirals,
+      :fatigue,
+      :malaise,
+      :anorexia,
+      :liver_big,
+      :liver_firm,
+      :spleen_palpable,
+      :spiders,
+      :ascites,
+      :varices,
+      :bilirubin,
+      :alk_phosphate,
+      :sgot,
+      :albumin,
+      :protime,
+      :histology
     )
 
     def initialize(type: :train)

@@ -19,7 +19,7 @@ module Datasets
       :age_percent_12_to_29,
       :age_percent_16_to_24,
       :age_percent_65_and_upper,
-      :num_urban,
+      :n_urban,
       :percent_urban,
       :median_income,
       :percent_with_wage,

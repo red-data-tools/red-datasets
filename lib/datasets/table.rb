@@ -12,6 +12,8 @@ module Datasets
     def n_columns
       columner_data.size
     end
+    alias_method :size, :n_columns
+    alias_method :length, :n_columns
 
     def n_rows
       first_column = columner_data.first
@@ -23,9 +25,10 @@ module Datasets
       columner_data.keys
     end
 
-    def each(&block)
+    def each_column(&block)
       columner_data.each(&block)
     end
+    alias_method :each, :each_column
 
     def [](name_or_index)
       case name_or_index

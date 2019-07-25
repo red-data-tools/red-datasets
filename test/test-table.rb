@@ -11,9 +11,16 @@ class TableTest < Test::Unit::TestCase
     assert_equal(150, @table.n_rows)
   end
 
-  test("#[]") do
-    assert_equal([1.4, 1.4, 1.3, 1.5, 1.4],
-                 @table[:petal_length].first(5))
+  sub_test_case("#[]") do
+    test("index") do
+      assert_equal([1.4, 1.4, 1.3, 1.5, 1.4],
+                   @table[2].first(5))
+    end
+
+    test("name") do
+      assert_equal([1.4, 1.4, 1.3, 1.5, 1.4],
+                   @table[:petal_length].first(5))
+    end
   end
 
   test("#dictionary_encode") do

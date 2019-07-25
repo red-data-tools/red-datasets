@@ -23,8 +23,18 @@ module Datasets
       columner_data.each(&block)
     end
 
-    def [](name)
-      columner_data[normalize_name(name)]
+    def [](name_or_index)
+      case name_or_index
+      when Integer
+        index = name_or_index
+        columner_data.each_with_index do |(_name, values), i|
+          return values if i == index
+        end
+        nil
+      else
+        name = name_or_index
+        columner_data[normalize_name(name)]
+      end
     end
 
     def dictionary_encode(name)

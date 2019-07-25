@@ -9,6 +9,16 @@ module Datasets
       @dictionaries = {}
     end
 
+    def n_columns
+      columner_data.size
+    end
+
+    def n_rows
+      first_column = columner_data.first
+      return 0 if first_column.nil?
+      first_column[1].size
+    end
+
     def each(&block)
       columner_data.each(&block)
     end

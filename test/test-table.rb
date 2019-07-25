@@ -3,6 +3,14 @@ class TableTest < Test::Unit::TestCase
     @table = Datasets::Iris.new.to_table
   end
 
+  test("#n_columns") do
+    assert_equal(5, @table.n_columns)
+  end
+
+  test("#n_rows") do
+    assert_equal(150, @table.n_rows)
+  end
+
   test("#[]") do
     assert_equal([1.4, 1.4, 1.3, 1.5, 1.4],
                  @table[:petal_length].first(5))

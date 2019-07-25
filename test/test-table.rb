@@ -11,6 +11,17 @@ class TableTest < Test::Unit::TestCase
     assert_equal(150, @table.n_rows)
   end
 
+  test("#column_names") do
+    assert_equal([
+                   :sepal_length,
+                   :sepal_width,
+                   :petal_length,
+                   :petal_width,
+                   :label,
+                 ],
+                 @table.column_names)
+  end
+
   sub_test_case("#[]") do
     test("index") do
       assert_equal([1.4, 1.4, 1.3, 1.5, 1.4],

@@ -19,6 +19,10 @@ module Datasets
       first_column[1].size
     end
 
+    def column_names
+      columner_data.keys
+    end
+
     def each(&block)
       columner_data.each(&block)
     end

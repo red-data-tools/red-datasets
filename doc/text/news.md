@@ -1,5 +1,38 @@
 # News
 
+## 0.0.9 - 2019-09-09
+
+### Improvements
+
+  * `Datasets::LIBSVMDatasetList`: Improved performance.
+
+  * `Datasets::Mushroom`: Added.
+    [GitHub#33][Patch by Yasuo Honda]
+
+  * `Datasets::Table#n_columns`: Added.
+
+  * `Datasets::Table#n_rows`: Added.
+
+  * `Datasets::Table#[]`: Added support for index access.
+
+  * `Datasets::Table#coolumn_names`: Added.
+
+  * `Datasets::Table#size`: Added.
+
+  * `Datasets::Table#length`: Added.
+
+  * `Datasets::Table#each_column`: Added.
+
+  * `Datasets::Table#each_record`: Added.
+
+  * `Datasets::Table#find_record`: Added.
+
+### Thanks
+
+  * Yasuo Honda
+
+### Improvements
+
 ## 0.0.8 - 2019-03-24
 
 ### Improvements

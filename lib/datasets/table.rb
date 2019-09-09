@@ -76,6 +76,13 @@ module Datasets
       end
     end
 
+    def find_record(row)
+      row += n_rows if row < 0
+      return nil if row < 0
+      return nil if row >= n_rows
+      Record.new(self, row)
+    end
+
     def [](name_or_index)
       case name_or_index
       when Integer

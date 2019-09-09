@@ -52,6 +52,38 @@ class TableTest < Test::Unit::TestCase
                  shorten_hash)
   end
 
+  test("#each_record") do
+    records = []
+    @table.each_record do |record|
+      records << record
+      break if records.size == 3
+    end
+    assert_equal([
+                   {
+                     label: "Iris-setosa",
+                     petal_length: 1.4,
+                     petal_width: 0.2,
+                     sepal_length: 5.1,
+                     sepal_width: 3.5,
+                   },
+                   {
+                     label: "Iris-setosa",
+                     petal_length: 1.4,
+                     petal_width: 0.2,
+                     sepal_length: 4.9,
+                     sepal_width: 3.0,
+                   },
+                   {
+                     label: "Iris-setosa",
+                     petal_length: 1.3,
+                     petal_width: 0.2,
+                     sepal_length: 4.7,
+                     sepal_width: 3.2,
+                   },
+                 ],
+                 records.collect(&:to_h))
+  end
+
   sub_test_case("#[]") do
     test("index") do
       assert_equal([1.4, 1.4, 1.3, 1.5, 1.4],

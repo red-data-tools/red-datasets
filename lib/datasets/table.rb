@@ -2,8 +2,47 @@ require "datasets/dictionary"
 
 module Datasets
   class Table
+    class Record
+      include Enumerable
+
+      def initialize(table, index)
+        @table = table
+        @index = index
+      end
+
+      def [](column_name_or_column_index)
+        @table[column_name_or_column_index][@index]
+      end
+
+      def each
+        return to_enum(__method__) unless block_given?
+        @table.each_column.each do |column_name, column_values|
+          yield(column_name, column_values[@index])
+        end
+      end
+
+      def values
+        @table.each_column.collect do |_column_name, column_values|
+          column_values[@index]
+        end
+      end
+
+      def to_h
+        hash = {}
+        each do |column_name, column_value|
+          hash[column_name] = column_value
+        end
+        hash
+      end
+
+      def inspect
+        "#<#{self.class.name} #{@table.dataset.metadata.name}[#{@index}] #{to_h.inspect}>"
+      end
+    end
+
     include Enumerable
 
+    attr_reader :dataset
     def initialize(dataset)
       @dataset = dataset
       @dictionaries = {}
@@ -29,6 +68,13 @@ module Datasets
       columner_data.each(&block)
     end
     alias_method :each, :each_column
+
+    def each_record
+      return to_enum(__method__) unless block_given?
+      n_rows.times do |i|
+        yield(Record.new(self, i))
+      end
+    end
 
     def [](name_or_index)
       case name_or_index

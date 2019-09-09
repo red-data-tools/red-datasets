@@ -84,6 +84,38 @@ class TableTest < Test::Unit::TestCase
                  records.collect(&:to_h))
   end
 
+  sub_test_case("#find_record") do
+    test("positive") do
+      assert_equal({
+                     label: "Iris-setosa",
+                     petal_length: 1.4,
+                     petal_width: 0.2,
+                     sepal_length: 4.9,
+                     sepal_width: 3.0,
+                   },
+                   @table.find_record(1).to_h)
+    end
+
+    test("positive - over") do
+      assert_nil(@table.find_record(151))
+    end
+
+    test("negative") do
+      assert_equal({
+                     label: "Iris-virginica",
+                     petal_length: 5.1,
+                     petal_width: 1.8,
+                     sepal_length: 5.9,
+                     sepal_width: 3.0,
+                   },
+                   @table.find_record(-1).to_h)
+    end
+
+    test("negative - over") do
+      assert_nil(@table.find_record(-151))
+    end
+  end
+
   sub_test_case("#[]") do
     test("index") do
       assert_equal([1.4, 1.4, 1.3, 1.5, 1.4],

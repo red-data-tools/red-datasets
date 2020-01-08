@@ -5,7 +5,7 @@ require_relative "dataset"
 module Datasets
   class Hepatitis < Dataset
     Record = Struct.new(
-      :class,
+      :label,
       :age,
       :sex,
       :steroid,

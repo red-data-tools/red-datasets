@@ -13,7 +13,7 @@ class HepatitisTest < Test::Unit::TestCase
       assert_equal([
                      155,
                      {
-                       :class => 2,
+                         :label => 2,
                          :age => 30,
                          :sex => 2,
                          :steroid => 1,
@@ -35,7 +35,7 @@ class HepatitisTest < Test::Unit::TestCase
                          :histology => 1
                      },
                      {
-                       :class=>1,
+                       :label=>1,
                        :age=>43,
                        :sex=>1,
                        :steroid=>2,

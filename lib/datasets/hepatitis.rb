@@ -27,15 +27,10 @@ module Datasets
       :histology
     )
 
-    def initialize(type: :train)
-      unless [:train, :test].include?(type)
-        raise ArgumentError, 'Please set type :train or :test'
-      end
-
+    def initialize
       super()
-      @type = type
-      @metadata.id = "hepatitis-#{@type}"
-      @metadata.name = "Hepatitis: #{@type}"
+      @metadata.id = "hepatitis"
+      @metadata.name = "Hepatitis"
       @metadata.url = "https://archive.ics.uci.edu/ml/datasets/hepatitis"
       @metadata.description = lambda do
         read_names
@@ -56,15 +51,9 @@ module Datasets
 
     private
     def open_data
-      case @type
-      when :train
-        ext = "data"
-      when :test
-        ext = "data"
-      end
-      data_path = cache_dir_path + "hepatitis-#{ext}.csv"
+      data_path = cache_dir_path + "hepatitis.csv"
       unless data_path.exist?
-        data_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/hepatitis/hepatitis.#{ext}"
+        data_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/hepatitis/hepatitis.data"
         download(data_path, data_url)
       end
       CSV.open(data_path,

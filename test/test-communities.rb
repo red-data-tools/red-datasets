@@ -13,8 +13,8 @@ class CommunitiesTest < Test::Unit::TestCase
                     1994,
                     {
                       :state => 8,
-                      :county => "?",
-                      :community => "?",
+                      :county => nil,
+                      :community => nil,
                       :community_name => "Lakewoodcity",
                       :fold => 1,
                       :population => 0.19,
@@ -143,8 +143,8 @@ class CommunitiesTest < Test::Unit::TestCase
                     },
                     {
                       :state => 6,
-                      :county => "?",
-                      :community => "?",
+                      :county => nil,
+                      :community => nil,
                       :community_name => "Ontariocity",
                       :fold => 10,
                       :population => 0.2,

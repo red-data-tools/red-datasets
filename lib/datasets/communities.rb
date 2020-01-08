@@ -149,7 +149,14 @@ module Datasets
 
       open_data do |csv|
         csv.each do |row|
-          next if row[0].nil?
+          row = row.collect.with_index do |column, i|
+            if column == "?"
+              nil
+            else
+              column = Float(column) unless i == 3
+              column
+            end
+          end
           record = Record.new(*row)
           yield(record)
         end
@@ -164,10 +171,7 @@ module Datasets
         data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/communities/communities.data"
         download(data_path, data_url)
       end
-      options = {
-        converters: [:numeric, lambda {|f| f.strip}]
-      }
-      CSV.open(data_path, **options) do |csv|
+      CSV.open(data_path) do |csv|
         yield(csv)
       end
     end

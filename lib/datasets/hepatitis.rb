@@ -173,7 +173,6 @@ module Datasets
 
       open_data do |csv|
         csv.each do |row|
-          next if row[0].nil?
           record = Record.new(*row)
           yield(record)
         end

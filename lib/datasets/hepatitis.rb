@@ -66,7 +66,7 @@ module Datasets
     end
 
     def read_names
-      names_path = cache_dir_path + "adult.names"
+      names_path = cache_dir_path + "hepatitis.names"
       unless names_path.exist?
         names_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/hepatitis/hepatitis.names"
         download(names_path, names_url)

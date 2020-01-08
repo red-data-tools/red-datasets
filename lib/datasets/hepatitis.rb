@@ -64,7 +64,7 @@ module Datasets
       end
       data_path = cache_dir_path + "hepatitis-#{ext}.csv"
       unless data_path.exist?
-        data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/hepatitis/hepatitis.#{ext}"
+        data_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/hepatitis/hepatitis.#{ext}"
         download(data_path, data_url)
       end
       CSV.open(data_path,

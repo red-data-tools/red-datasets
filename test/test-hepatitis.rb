@@ -62,4 +62,13 @@ class HepatitisTest < Test::Unit::TestCase
                    records[-1].to_h,
                  ])
   end
+
+  sub_test_case("#metadata") do
+    test("#description") do
+      description = @dataset.metadata.description
+      assert do
+        description.start_with?("1. Title: Hepatitis Domain")
+      end
+    end
+  end
 end

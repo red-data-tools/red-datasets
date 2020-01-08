@@ -50,10 +50,14 @@ module Datasets
     end
 
     private
+    def base_url
+      "https://archive.ics.uci.edu/ml/machine-learning-databases/hepatitis"
+    end
+
     def open_data
       data_path = cache_dir_path + "hepatitis.csv"
       unless data_path.exist?
-        data_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/hepatitis/hepatitis.data"
+        data_url = "#{base_url}/hepatitis.data"
         download(data_path, data_url)
       end
       CSV.open(data_path,
@@ -68,7 +72,7 @@ module Datasets
     def read_names
       names_path = cache_dir_path + "hepatitis.names"
       unless names_path.exist?
-        names_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/hepatitis/hepatitis.names"
+        names_url = "#{base_url}/hepatitis.names"
         download(names_path, names_url)
       end
       names_path.read

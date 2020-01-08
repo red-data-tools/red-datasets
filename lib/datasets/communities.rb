@@ -164,10 +164,10 @@ module Datasets
         data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/communities/communities.data"
         download(data_path, data_url)
       end
-      CSV.open(data_path,
-                {
-                  converters: [:numeric, lambda {|f| f.strip}]
-                }) do |csv|
+      options = {
+        converters: [:numeric, lambda {|f| f.strip}]
+      }
+      CSV.open(data_path, **options) do |csv|
         yield(csv)
       end
     end

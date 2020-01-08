@@ -1,4 +1,4 @@
-class Hepatitis < Test::Unit::TestCase
+class HepatitisTest < Test::Unit::TestCase
   sub_test_case("train") do
     def setup
       @dataset = Datasets::Hepatitis.new(type: :train)

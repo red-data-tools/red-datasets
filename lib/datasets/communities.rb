@@ -24,7 +24,7 @@ module Datasets
       :median_income,
       :percent_with_wage,
       :percent_with_farm_self,
-      :percent_with_inv,
+      :percent_with_investment_income,
       :percent_with_social_security,
       :percent_with_public_assistant,
       :percent_with_retire,

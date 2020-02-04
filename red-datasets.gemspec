@@ -35,6 +35,7 @@ Gem::Specification.new do |spec|
   spec.test_files += Dir.glob("test/**/*")
 
   spec.add_runtime_dependency("csv", ">= 3.0.5")
+  spec.add_runtime_dependency("rexml")
   spec.add_runtime_dependency("rubyzip")
 
   spec.add_development_dependency("bundler")

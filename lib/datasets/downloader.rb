@@ -34,7 +34,9 @@ module Datasets
       Net::HTTP.start(@url.hostname,
                       @url.port,
                       :use_ssl => (@url.scheme == "https")) do |http|
-        request = Net::HTTP::Get.new(@url.path, headers)
+        path = @url.path
+        path += "?#{@url.query}" if @url.query
+        request = Net::HTTP::Get.new(path, headers)
         http.request(request) do |response|
           case response
           when Net::HTTPPartialContent

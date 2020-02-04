@@ -1,5 +1,23 @@
 # News
 
+## 0.1.0 - 2020-02-04
+
+### Improvements
+
+  * Added support for Ruby 2.7.
+    [GitHub#82][GitHub#83][Patch by Yasuo Honda]
+
+  * `Datasets::Hepatitis`: Added.
+    [GitHub#70][Patch by KazuhiroYoshimoto]
+
+  * `Datasets::Downloader`: Added support for query.
+
+### Thanks
+
+  * Yasuo Honda
+
+  * KazuhiroYoshimoto
+
 ## 0.0.9 - 2019-09-09
 
 ### Improvements

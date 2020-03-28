@@ -176,9 +176,11 @@ module Datasets
           @timetables.reject { |_key, x| x[:skip] }.each do |st_key, _st_value|
             row = []
             @columns.reject { |_key, x| x[:skip] }.each do |c_key, _c_value|
-              row << @indexed_data[st_key][a_key][c_key]
-            rescue NoMethodError
-              row << nil
+              begin
+                row << @indexed_data[st_key][a_key][c_key]
+              rescue NoMethodError
+                row << nil
+              end
             end
             rows << row
           end

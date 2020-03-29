@@ -131,6 +131,9 @@ mnist.each do |record|
 end
 ```
 
+## NArray compatibility
+
+* [red-datasets-numo-narray](https://github.com/red-data-tools/red-datasets-numo-narray)
 
 ## License
 

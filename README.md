@@ -5,9 +5,9 @@
 
 ## Description
 
-Red Datasets provides classes that provide common datasets such as iris dataset.
+Red Datasets provides an easy way to fetch standard datasets commonly used in the data science community.
 
-You can use datasets easily because you can access each dataset with multiple ways such as `#each` and Apache Arrow Record Batch.
+You can access these datasets in several formats, including Arrays, Numo::NArray, and ApacheArrow RecordBatch.
 
 ## Install
 
@@ -16,8 +16,6 @@ You can use datasets easily because you can access each dataset with multiple wa
 ```
 
 ## Available datasets
-
-TODO: Document them in source code to list in document: https://www.rubydoc.info/gems/red-datasets
 
 * Adult Dataset
 * CIFAR-10 Dataset
@@ -28,6 +26,8 @@ TODO: Document them in source code to list in document: https://www.rubydoc.info
 * The Penn Treebank Project
 * Wikipedia
 * Wine Dataset
+
+Please see https://www.rubydoc.info/gems/red-datasets for the full list.
 
 ## Usage
 

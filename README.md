@@ -131,7 +131,7 @@ mnist.each do |record|
 end
 ```
 
-## Related gems
+## Extensions
 
 * [red-datasets-numo-narray](https://github.com/red-data-tools/red-datasets-numo-narray)
 * [red-datasets-arrow](https://github.com/red-data-tools/red-datasets-arrow)

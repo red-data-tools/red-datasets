@@ -131,9 +131,12 @@ mnist.each do |record|
 end
 ```
 
-## NArray compatibility
+## Related gems
 
 * [red-datasets-numo-narray](https://github.com/red-data-tools/red-datasets-numo-narray)
+* [red-datasets-arrow](https://github.com/red-data-tools/red-datasets-arrow)
+* [red-datasets-daru](https://github.com/red-data-tools/red-datasets-daru)
+* [red-datasets-gdk-pixbuf](https://github.com/red-data-tools/red-datasets-gdk-pixbuf)
 
 ## License
 

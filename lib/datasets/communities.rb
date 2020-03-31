@@ -165,10 +165,14 @@ module Datasets
 
     private
 
+    def base_url
+      "http://archive.ics.uci.edu/ml/machine-learning-databases/communities"
+    end
+
     def open_data
       data_path = cache_dir_path + "communities.data"
       unless data_path.exist?
-        data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/communities/communities.data"
+        data_url = "#{base_url}/communities.data"
         download(data_path, data_url)
       end
       CSV.open(data_path) do |csv|
@@ -179,7 +183,7 @@ module Datasets
     def read_names
       names_path = cache_dir_path + "communities.names"
       unless names_path.exist?
-        names_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/communities/communities.names"
+        names_url = "#{base_url}/communities.names"
         download(names_path, names_url)
       end
       names_path.read

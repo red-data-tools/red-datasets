@@ -166,7 +166,7 @@ module Datasets
     private
 
     def open_data
-      data_path = cache_dir_path + "agaricus-lepiota.data"
+      data_path = cache_dir_path + "communities.data"
       unless data_path.exist?
         data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/communities/communities.data"
         download(data_path, data_url)

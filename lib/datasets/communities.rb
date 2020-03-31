@@ -138,7 +138,7 @@ module Datasets
       super()
       @metadata.id = "communities"
       @metadata.name = "Communities"
-      @metadata.url = "http://archive.ics.uci.edu/ml/datasets/communities+and+crime"
+      @metadata.url = "https://archive.ics.uci.edu/ml/datasets/communities+and+crime"
       @metadata.description = lambda do
         read_names
       end

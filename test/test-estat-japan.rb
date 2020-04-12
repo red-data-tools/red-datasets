@@ -9,7 +9,7 @@ class EStatJapanTest < Test::Unit::TestCase
       # error if app_id is undefined
       ENV['ESTATJAPAN_APPID'] = nil
       assert_raise(ArgumentError) do
-        Datasets::EStatJapan::JSONAPI.new('test')
+        Datasets::EStatJapan::StatsData.new('test')
       end
     end
 
@@ -17,7 +17,7 @@ class EStatJapanTest < Test::Unit::TestCase
       # ok if app_id is set by ENV
       ENV['ESTATJAPAN_APPID'] = 'test_by_env'
       assert_nothing_raised do
-        obj = Datasets::EStatJapan::JSONAPI.new('test')
+        obj = Datasets::EStatJapan::StatsData.new('test')
         assert_equal('test_by_env', obj.app_id)
       end
       ENV['ESTATJAPAN_APPID'] = nil
@@ -27,7 +27,7 @@ class EStatJapanTest < Test::Unit::TestCase
         config.app_id = 'test_by_method'
       end
       assert_nothing_raised do
-        obj = Datasets::EStatJapan::JSONAPI.new('test')
+        obj = Datasets::EStatJapan::StatsData.new('test')
         assert_equal('test_by_method', obj.app_id)
       end
       Datasets::EStatJapan.app_id = nil
@@ -35,7 +35,7 @@ class EStatJapanTest < Test::Unit::TestCase
       # ok if app_id is set by ENV
       ENV['ESTATJAPAN_APPID'] = 'test_by_env2'
       assert_nothing_raised do
-        obj = Datasets::EStatJapan::JSONAPI.new('test')
+        obj = Datasets::EStatJapan::StatsData.new('test')
         assert_equal('test_by_env2', obj.app_id)
       end
       ENV['ESTATJAPAN_APPID'] = nil
@@ -45,7 +45,7 @@ class EStatJapanTest < Test::Unit::TestCase
       app_id = 'abcdef'
       stats_data_id = '000000'
       base_url = 'http://testurl/rest/2.1/app/json/getStatsData'
-      url = Datasets::EStatJapan::JSONAPI.generate_url(base_url, app_id, stats_data_id)
+      url = Datasets::EStatJapan::StatsData.generate_url(base_url, app_id, stats_data_id)
       assert_equal(
         'http://testurl/rest/2.1/app/json/getStatsData' \
         '?appId=abcdef&lang=J&statsDataId=000000&' \
@@ -56,7 +56,7 @@ class EStatJapanTest < Test::Unit::TestCase
 
     test('raises when status is invalid') do
       ENV['ESTATJAPAN_APPID'] = 'test_appid_invalid'
-      estat_obj = Datasets::EStatJapan::JSONAPI.new('test')
+      estat_obj = Datasets::EStatJapan::StatsData.new('test')
       estat_obj.instance_eval do
         @data_path = Pathname('test/data/test-estat-japan-403-forbidden.json')
       end
@@ -72,7 +72,7 @@ class EStatJapanTest < Test::Unit::TestCase
       ENV['ESTATJAPAN_APPID'] = 'test_appid_correct'
       test_path = 'test/data/test-estat-japan-200-0000020201.json'
 
-      estat_obj = Datasets::EStatJapan::JSONAPI.new('test')
+      estat_obj = Datasets::EStatJapan::StatsData.new('test')
       estat_obj.instance_eval do
         @data_path = Pathname(test_path)
       end
@@ -88,7 +88,7 @@ class EStatJapanTest < Test::Unit::TestCase
       end
 
       estat_obj = \
-        Datasets::EStatJapan::JSONAPI.new('test',
+        Datasets::EStatJapan::StatsData.new('test',
                                        hierarchy_selection: 'parent')
       estat_obj.instance_eval do
         @data_path = Pathname(test_path)
@@ -105,7 +105,7 @@ class EStatJapanTest < Test::Unit::TestCase
       end
 
       estat_obj = \
-        Datasets::EStatJapan::JSONAPI.new('test',
+        Datasets::EStatJapan::StatsData.new('test',
                                        hierarchy_selection: 'both')
       estat_obj.instance_eval do
         @data_path = Pathname(test_path)

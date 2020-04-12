@@ -8,7 +8,7 @@ Datasets::EStatJapan.configure do |config|
   config.app_id = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 end
 
-estat = Datasets::EStatJapan::JSONAPI.new(
+estat = Datasets::EStatJapan::StatsData.new(
   '0000020201', # Ａ　人口・世帯
   hierarchy_selection: 'child',
   skip_nil_column: true,

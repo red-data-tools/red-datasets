@@ -31,7 +31,7 @@ module Datasets
     extend Configuration
 
     # wrapper class for e-Stat API service
-    class JSONAPI < Dataset
+    class StatsData < Dataset
       attr_accessor :app_id, :areas, :timetables, :schema
 
       def self.generate_url(base_url,
@@ -76,7 +76,7 @@ module Datasets
       end
 
       #
-      # generate accessor instance for e-Stat API.
+      # generate accessor instance for e-Stat API's endpoint `getStatsData`.
       # for detail spec : https://www.e-stat.go.jp/api/api-info/e-stat-manual
       # @param [String] api_version API Version (defaults to `'2.1'`)
       # @param [String] stats_data_id 統計表ID
@@ -88,7 +88,7 @@ module Datasets
       # @param [Boolean] skip_nil_column 1行でも欠損がある列をスキップする
       # @param [Boolean] skip_nil_row 1列でも欠損がある行をスキップする
       # @example
-      #   estat = Datasets::ESTATJAPAN::JSONAPI.new(
+      #   estat = Datasets::ESTATJAPAN::StatsData.new(
       #     "0000020201", # Ａ　人口・世帯
       #     category: ["A1101"], # A1101_人口総数
       #     area: ["01105", "01106"], # "北海道 札幌市 豊平区", "北海道 札幌市 南区"
@@ -140,7 +140,7 @@ module Datasets
         @skip_nil_row = skip_nil_row
         @time_range = time_range
 
-        @url = JSONAPI.generate_url(@base_url,
+        @url = StatsData.generate_url(@base_url,
                                     @app_id,
                                     @stats_data_id,
                                     area: @area,
@@ -216,15 +216,15 @@ module Datasets
         end
 
         # index data
-        ## table_def = JSONAPI.extract_def(json_data, "tab")
-        timetable_def = JSONAPI.extract_def(json_data, 'time')
-        column_def = JSONAPI.extract_def(json_data, 'cat01')
-        area_def = JSONAPI.extract_def(json_data, 'area')
+        ## table_def = StatsData.extract_def(json_data, "tab")
+        timetable_def = StatsData.extract_def(json_data, 'time')
+        column_def = StatsData.extract_def(json_data, 'cat01')
+        area_def = StatsData.extract_def(json_data, 'area')
 
         ## p table_def.map { |x| x["@name"] }
-        @timetables = JSONAPI.index_def(timetable_def)
-        @columns = JSONAPI.index_def(column_def)
-        @areas = JSONAPI.index_def(area_def)
+        @timetables = StatsData.index_def(timetable_def)
+        @columns = StatsData.index_def(column_def)
+        @areas = StatsData.index_def(area_def)
 
         ## apply time_range to timetables
         if @time_range.instance_of?(Range)
@@ -232,7 +232,7 @@ module Datasets
         end
 
         @indexed_data = Hash[*@timetables.keys.map { |x| [x, {}] }.flatten]
-        JSONAPI.get_values(json_data).each do |row|
+        StatsData.get_values(json_data).each do |row|
           next unless @timetables.key?(row['@time'])
 
           oldhash = @indexed_data[row['@time']][row['@area']]

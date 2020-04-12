@@ -2,13 +2,13 @@
 
 require 'datasets'
 
-Datasets::Estatjp.configure do |config|
+Datasets::EStatJapan.configure do |config|
   # put your App ID for e-Stat app_id
   # see detail at https://www.e-stat.go.jp/api/api-dev/how_to_use (Japanese only)
   config.app_id = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 end
 
-estat = Datasets::Estatjp::JSONAPI.new(
+estat = Datasets::EStatJapan::JSONAPI.new(
   '0000020201', # Ａ　人口・世帯
   hierarchy_selection: 'child',
   skip_nil_column: true,

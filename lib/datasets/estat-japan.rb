@@ -9,7 +9,7 @@ module Datasets
   Record = Struct.new(:id, :name, :values)
 
   # Estat module
-  module Estatjp
+  module EStatJapan
     # configuration injection
     module Configuration
       attr_accessor :app_id
@@ -86,7 +86,7 @@ module Datasets
       # @param [Boolean] skip_nil_column 1行でも欠損がある列をスキップする
       # @param [Boolean] skip_nil_row 1列でも欠損がある行をスキップする
       # @example
-      #   estat = Datasets::Estatjp::JSONAPI.new(
+      #   estat = Datasets::ESTATJAPAN::JSONAPI.new(
       #     "0000020201", # Ａ　人口・世帯
       #     cat: ["A1101"], # A1101_人口総数
       #     area: ["01105", "01106"], # "北海道 札幌市 豊平区", "北海道 札幌市 南区"
@@ -107,12 +107,12 @@ module Datasets
                      time_range: nil)
         @app_id = fetch_appid
         if @app_id.nil? || @app_id.empty?
-          raise ArgumentError, 'Please set app_id via `Datasets::Estatjp.configure` method or environment var `ESTATJP_APPID`'
+          raise ArgumentError, 'Please set app_id via `Datasets::EStatJapan.configure` method or environment var `ESTATJAPAN_APPID`'
         end
 
         super()
 
-        @base_url = "http://api.e-stat.go.jp/rest/#{api_version}/app/json/getStatsData"
+        @base_url = "https://api.e-stat.go.jp/rest/#{api_version}/app/json/getStatsData"
         @api_version = api_version
         @metadata.id = "estat-api-#{api_version}"
         @metadata.name = "e-Stat API #{api_version}"
@@ -193,7 +193,7 @@ module Datasets
       private
 
       def fetch_appid
-        defined?(Estatjp.app_id) && !Estatjp.app_id.nil? ? Estatjp.app_id : ENV.fetch('ESTATJP_APPID', nil)
+        defined?(EStatJapan.app_id) && !EStatJapan.app_id.nil? ? EStatJapan.app_id : ENV.fetch('ESTATJAPAN_APPID', nil)
       end
 
       def fetch_data

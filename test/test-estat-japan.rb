@@ -2,50 +2,50 @@
 
 require 'pathname'
 
-class EstatjpTest < Test::Unit::TestCase
+class EStatJapanTest < Test::Unit::TestCase
   sub_test_case('test') do
 
     test('raises api APPID is unset') do
       # error if app_id is undefined
-      ENV['ESTATJP_APPID'] = nil
+      ENV['ESTATJAPAN_APPID'] = nil
       assert_raise(ArgumentError) do
-        Datasets::Estatjp::JSONAPI.new('test')
+        Datasets::EStatJapan::JSONAPI.new('test')
       end
     end
 
     test('is ok when APPID is set') do
       # ok if app_id is set by ENV
-      ENV['ESTATJP_APPID'] = 'test_by_env'
+      ENV['ESTATJAPAN_APPID'] = 'test_by_env'
       assert_nothing_raised do
-        obj = Datasets::Estatjp::JSONAPI.new('test')
+        obj = Datasets::EStatJapan::JSONAPI.new('test')
         assert_equal('test_by_env', obj.app_id)
       end
-      ENV['ESTATJP_APPID'] = nil
+      ENV['ESTATJAPAN_APPID'] = nil
 
       # ok if app_id is set by configure method
-      Datasets::Estatjp.configure do |config|
+      Datasets::EStatJapan.configure do |config|
         config.app_id = 'test_by_method'
       end
       assert_nothing_raised do
-        obj = Datasets::Estatjp::JSONAPI.new('test')
+        obj = Datasets::EStatJapan::JSONAPI.new('test')
         assert_equal('test_by_method', obj.app_id)
       end
-      Datasets::Estatjp.app_id = nil
+      Datasets::EStatJapan.app_id = nil
 
       # ok if app_id is set by ENV
-      ENV['ESTATJP_APPID'] = 'test_by_env2'
+      ENV['ESTATJAPAN_APPID'] = 'test_by_env2'
       assert_nothing_raised do
-        obj = Datasets::Estatjp::JSONAPI.new('test')
+        obj = Datasets::EStatJapan::JSONAPI.new('test')
         assert_equal('test_by_env2', obj.app_id)
       end
-      ENV['ESTATJP_APPID'] = nil
+      ENV['ESTATJAPAN_APPID'] = nil
     end
 
     test('generates url correctly') do
       app_id = 'abcdef'
       stats_data_id = '000000'
       base_url = 'http://testurl/rest/2.1/app/json/getStatsData'
-      url = Datasets::Estatjp::JSONAPI.generate_url(base_url, app_id, stats_data_id)
+      url = Datasets::EStatJapan::JSONAPI.generate_url(base_url, app_id, stats_data_id)
       assert_equal(
         'http://testurl/rest/2.1/app/json/getStatsData' \
         '?appId=abcdef&lang=J&statsDataId=000000&' \
@@ -55,24 +55,24 @@ class EstatjpTest < Test::Unit::TestCase
     end
 
     test('raises when status is invalid') do
-      ENV['ESTATJP_APPID'] = 'test_appid_invalid'
-      estat_obj = Datasets::Estatjp::JSONAPI.new('test')
+      ENV['ESTATJAPAN_APPID'] = 'test_appid_invalid'
+      estat_obj = Datasets::EStatJapan::JSONAPI.new('test')
       estat_obj.instance_eval do
-        @data_path = Pathname('test/data/test-estatjp-403-forbidden.json')
+        @data_path = Pathname('test/data/test-estat-japan-403-forbidden.json')
       end
       assert_raise(Exception) do
         estat_obj.each do |record|
           record
         end
       end
-      ENV['ESTATJP_APPID'] = nil
+      ENV['ESTATJAPAN_APPID'] = nil
     end
 
     test('can parse api result correctly') do
-      ENV['ESTATJP_APPID'] = 'test_appid_correct'
-      test_path = 'test/data/test-estatjp-200-0000020201.json'
+      ENV['ESTATJAPAN_APPID'] = 'test_appid_correct'
+      test_path = 'test/data/test-estat-japan-200-0000020201.json'
 
-      estat_obj = Datasets::Estatjp::JSONAPI.new('test')
+      estat_obj = Datasets::EStatJapan::JSONAPI.new('test')
       estat_obj.instance_eval do
         @data_path = Pathname(test_path)
       end
@@ -88,7 +88,7 @@ class EstatjpTest < Test::Unit::TestCase
       end
 
       estat_obj = \
-        Datasets::Estatjp::JSONAPI.new('test',
+        Datasets::EStatJapan::JSONAPI.new('test',
                                        hierarchy_selection: 'parent')
       estat_obj.instance_eval do
         @data_path = Pathname(test_path)
@@ -105,7 +105,7 @@ class EstatjpTest < Test::Unit::TestCase
       end
 
       estat_obj = \
-        Datasets::Estatjp::JSONAPI.new('test',
+        Datasets::EStatJapan::JSONAPI.new('test',
                                        hierarchy_selection: 'both')
       estat_obj.instance_eval do
         @data_path = Pathname(test_path)
@@ -124,7 +124,7 @@ class EstatjpTest < Test::Unit::TestCase
       # skip_nil_column: true,
       # skip_nil_row: false,
 
-      ENV['ESTATJP_APPID'] = nil
+      ENV['ESTATJAPAN_APPID'] = nil
     end
   end
 end

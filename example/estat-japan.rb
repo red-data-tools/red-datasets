@@ -13,7 +13,7 @@ estat = Datasets::EStatJapan::JSONAPI.new(
   hierarchy_selection: 'child',
   skip_nil_column: true,
   skip_nil_row: false,
-  cat: ['A1101'] # A1101_人口総数
+  category: ['A1101'] # A1101_人口総数
 )
 
 # prepare for clustering

@@ -37,7 +37,7 @@ module Datasets
       def self.generate_url(base_url,
                             app_id,
                             stats_data_id,
-                            area: nil, cat: nil, time: nil)
+                            area: nil, category: nil, time: nil)
         # generates url for query
         params = {
           appId: app_id, lang: 'J',
@@ -48,7 +48,7 @@ module Datasets
         # cdArea: ["01105", "01106"].join(","), # 地域事項
         params['cdArea'] = area.join(',') if area.instance_of?(Array)
         # cdCat01: ["A2101", "A210101", "A210102", "A2201", "A2301", "A4101", "A4200", "A5101", "A5102"].join(","), # 分類事項
-        params['cdCat01'] = cat.join(',') if cat.instance_of?(Array)
+        params['cdCat01'] = category.join(',') if category.instance_of?(Array)
         # cdTime: ["1981100000", "1982100000" ,"1984100000"].join(","), # 時間軸事項
         params['cdTime'] = time.join(',') if time.instance_of?(Array)
 
@@ -56,8 +56,10 @@ module Datasets
       end
 
       def self.extract_def(data, id)
-        rec = data['GET_STATS_DATA']['STATISTICAL_DATA']\
-        ['CLASS_INF']['CLASS_OBJ']
+        rec = data.dig('GET_STATS_DATA',
+          'STATISTICAL_DATA',
+          'CLASS_INF',
+          'CLASS_OBJ')
         rec.select { |x| x['@id'] == id }
       end
 
@@ -78,7 +80,7 @@ module Datasets
       # for detail spec : https://www.e-stat.go.jp/api/api-info/e-stat-manual
       # @param [String] api_version API Version (defaults to `'2.1'`)
       # @param [String] stats_data_id 統計表ID
-      # @param [Array<String>] cat 分類事項 (省略時はすべて取得)
+      # @param [Array<String>] category 分類事項 (省略時はすべて取得)
       # @param [Array<String>] area 地域事項 (省略時はすべて取得)
       # @param [Array<String>] time 時間軸事項 (省略時はすべて取得)
       # @param [Array<Number>] skip_level 省略する階層レベル (defaults to `[1]`)
@@ -88,7 +90,7 @@ module Datasets
       # @example
       #   estat = Datasets::ESTATJAPAN::JSONAPI.new(
       #     "0000020201", # Ａ　人口・世帯
-      #     cat: ["A1101"], # A1101_人口総数
+      #     category: ["A1101"], # A1101_人口総数
       #     area: ["01105", "01106"], # "北海道 札幌市 豊平区", "北海道 札幌市 南区"
       #     time: ["1981100000", "1982100000"],
       #     hierarchy_selection: 'child' , # 例: 札幌市○○区があるときは札幌市をスキップ
@@ -98,8 +100,7 @@ module Datasets
       #   )
       #
       def initialize(stats_data_id,
-                     api_version: '2.1',
-                     area: nil, cat: nil, time: nil,
+                     area: nil, category: nil, time: nil,
                      skip_level: [1],
                      hierarchy_selection: 'child',
                      skip_nil_column: true,
@@ -112,16 +113,16 @@ module Datasets
 
         super()
 
-        @base_url = "https://api.e-stat.go.jp/rest/#{api_version}/app/json/getStatsData"
-        @api_version = api_version
-        @metadata.id = "estat-api-#{api_version}"
-        @metadata.name = "e-Stat API #{api_version}"
+        @api_version = '2.1'
+        @base_url = "https://api.e-stat.go.jp/rest/#{@api_version}/app/json/getStatsData"
+        @metadata.id = "estat-api-#{@api_version}"
+        @metadata.name = "e-Stat API #{@api_version}"
         @metadata.url = @base_url
-        @metadata.description = "e-Stat API #{api_version}"
+        @metadata.description = "e-Stat API #{@api_version}"
 
         @stats_data_id = stats_data_id
         @area = area
-        @cat = cat
+        @category = category
         @time = time
         @skip_level = skip_level
         case hierarchy_selection
@@ -143,7 +144,7 @@ module Datasets
                                     @app_id,
                                     @stats_data_id,
                                     area: @area,
-                                    cat: @cat,
+                                    category: @category,
                                     time: @time)
         option_hash = Digest::MD5.hexdigest(@url.to_s)
         base_name = "estat-#{option_hash}.json"
@@ -277,7 +278,6 @@ module Datasets
                 next
               end
               @columns.each do |c_key, c_value|
-                # p @indexed_data[st_key][a_key][c_key] == nil
                 unless @indexed_data[st_key][a_key].key?(c_key)
                   c_value[:skip] = true
                   next

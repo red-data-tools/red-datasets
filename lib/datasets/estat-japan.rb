@@ -41,15 +41,12 @@ module Datasets
         # generates url for query
         params = {
           appId: app_id, lang: 'J',
-          statsDataId: stats_data_id, # 統計表ID
+          statsDataId: stats_data_id,
           metaGetFlg: 'Y', cntGetFlg: 'N',
           sectionHeaderFlg: '1'
         }
-        # cdArea: ["01105", "01106"].join(","), # 地域事項
         params['cdArea'] = area.join(',') if area.instance_of?(Array)
-        # cdCat01: ["A2101", "A210101", "A210102", "A2201", "A2301", "A4101", "A4200", "A5101", "A5102"].join(","), # 分類事項
         params['cdCat01'] = category.join(',') if category.instance_of?(Array)
-        # cdTime: ["1981100000", "1982100000" ,"1984100000"].join(","), # 時間軸事項
         params['cdTime'] = time.join(',') if time.instance_of?(Array)
 
         URI.parse("#{base_url}?#{URI.encode_www_form(params)}")
@@ -57,9 +54,9 @@ module Datasets
 
       def self.extract_def(data, id)
         rec = data.dig('GET_STATS_DATA',
-          'STATISTICAL_DATA',
-          'CLASS_INF',
-          'CLASS_OBJ')
+                       'STATISTICAL_DATA',
+                       'CLASS_INF',
+                       'CLASS_OBJ')
         rec.select { |x| x['@id'] == id }
       end
 
@@ -79,24 +76,24 @@ module Datasets
       # generate accessor instance for e-Stat API's endpoint `getStatsData`.
       # for detail spec : https://www.e-stat.go.jp/api/api-info/e-stat-manual
       # @param [String] api_version API Version (defaults to `'2.1'`)
-      # @param [String] stats_data_id 統計表ID
-      # @param [Array<String>] category 分類事項 (省略時はすべて取得)
-      # @param [Array<String>] area 地域事項 (省略時はすべて取得)
-      # @param [Array<String>] time 時間軸事項 (省略時はすべて取得)
-      # @param [Array<Number>] skip_level 省略する階層レベル (defaults to `[1]`)
-      # @param [String] hierarchy_selection 階層関係の上位・末端のフィルタリングをする ('child', 'parent', 'both') (例: 札幌市○○区 -> 'child':札幌市○○区のみ; 'parent':札幌市のみ; 'both':フィルタリングしない)
-      # @param [Boolean] skip_nil_column 1行でも欠損がある列をスキップする
-      # @param [Boolean] skip_nil_row 1列でも欠損がある行をスキップする
+      # @param [String] stats_data_id Statistical data id
+      # @param [Array<String>] category Category IDs (fetch all if omitted)
+      # @param [Array<String>] area Target areas (fetch all if omitted)
+      # @param [Array<String>] time Time axes (fetch all if omitted)
+      # @param [Array<Number>] skip_level Skip levels for parsing (defaults to `[1]`)
+      # @param [String] hierarchy_selection Select target from 'child', 'parent', or 'both'. (Example: 札幌市○○区 -> 'child':札幌市○○区 only; 'parent':札幌市 only; 'both': Both selected) (defaults to `both`)
+      # @param [Boolean] skip_nil_column Skip column if contains nil
+      # @param [Boolean] skip_nil_row Skip row if contains nil
       # @example
       #   estat = Datasets::ESTATJAPAN::StatsData.new(
-      #     "0000020201", # Ａ　人口・世帯
-      #     category: ["A1101"], # A1101_人口総数
-      #     area: ["01105", "01106"], # "北海道 札幌市 豊平区", "北海道 札幌市 南区"
+      #     "0000020201", # A Population and household (key name: Ａ　人口・世帯)
+      #     category: ["A1101"], # Population (key name: A1101_人口総数)
+      #     area: ["01105", "01106"], # Toyohira-ku Sapporo-shi Hokkaido, Minami-ku Sapporo-shi Hokkaido
       #     time: ["1981100000", "1982100000"],
-      #     hierarchy_selection: 'child' , # 例: 札幌市○○区があるときは札幌市をスキップ
-      #     skip_child_area: true, # 例: 札幌市○○区をスキップして札幌市を残す TODO skip_(parent|child) を統合する
-      #     skip_nil_column: true, #  1行でも欠損があったら列をスキップする
-      #     skip_nil_row: false, # 1列でも欠損があったら行をスキップする
+      #     hierarchy_selection: 'child',
+      #     skip_child_area: true,
+      #     skip_nil_column: true,
+      #     skip_nil_row: false,
       #   )
       #
       def initialize(stats_data_id,
@@ -141,11 +138,11 @@ module Datasets
         @time_range = time_range
 
         @url = StatsData.generate_url(@base_url,
-                                    @app_id,
-                                    @stats_data_id,
-                                    area: @area,
-                                    category: @category,
-                                    time: @time)
+                                      @app_id,
+                                      @stats_data_id,
+                                      area: @area,
+                                      category: @category,
+                                      time: @time)
         option_hash = Digest::MD5.hexdigest(@url.to_s)
         base_name = "estat-#{option_hash}.json"
         @data_path = cache_dir_path + base_name
@@ -158,7 +155,7 @@ module Datasets
       #   rows = []
       #   map_id_name = {}
       #   estat.each do |record|
-      #     # 北海道に限定する
+      #     # Select Hokkaido prefecture only
       #     next unless record.id.to_s.start_with? '01'
       #     indices << record.id
       #     rows << record.values
@@ -177,11 +174,9 @@ module Datasets
           @timetables.reject { |_key, x| x[:skip] }.each do |st_key, _st_value|
             row = []
             @columns.reject { |_key, x| x[:skip] }.each do |c_key, _c_value|
-              begin
-                row << @indexed_data[st_key][a_key][c_key]
-              rescue NoMethodError
-                row << nil
-              end
+              row << @indexed_data[st_key][a_key][c_key]
+            rescue NoMethodError
+              row << nil
             end
             rows << row
           end
@@ -199,7 +194,7 @@ module Datasets
 
       def fetch_data
         download(@data_path, @url.to_s) unless @data_path.exist?
-         # TODO: check error
+        # TODO: check error
       end
 
       def index_data

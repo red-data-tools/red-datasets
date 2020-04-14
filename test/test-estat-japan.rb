@@ -4,7 +4,6 @@ require 'pathname'
 
 class EStatJapanTest < Test::Unit::TestCase
   sub_test_case('test') do
-
     test('raises api APPID is unset') do
       # error if app_id is undefined
       ENV['ESTATJAPAN_APPID'] = nil
@@ -62,7 +61,7 @@ class EStatJapanTest < Test::Unit::TestCase
       end
       assert_raise(Exception) do
         estat_obj.each do |record|
-          record
+          p record
         end
       end
       ENV['ESTATJAPAN_APPID'] = nil
@@ -89,7 +88,7 @@ class EStatJapanTest < Test::Unit::TestCase
 
       estat_obj = \
         Datasets::EStatJapan::StatsData.new('test',
-                                       hierarchy_selection: 'parent')
+                                            hierarchy_selection: 'parent')
       estat_obj.instance_eval do
         @data_path = Pathname(test_path)
       end
@@ -106,7 +105,7 @@ class EStatJapanTest < Test::Unit::TestCase
 
       estat_obj = \
         Datasets::EStatJapan::StatsData.new('test',
-                                       hierarchy_selection: 'both')
+                                            hierarchy_selection: 'both')
       estat_obj.instance_eval do
         @data_path = Pathname(test_path)
       end

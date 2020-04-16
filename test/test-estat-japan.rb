@@ -77,11 +77,14 @@ class EStatJapanTest < Test::Unit::TestCase
     assert_nothing_raised do
       records = []
       sapporo_records = []
+      value_num = 0
       estat_obj.each do |record|
         records << record
+        value_num += record.values.length
         sapporo_records << record if record.name.start_with? '北海道 札幌市'
       end
       assert_equal(1897, records.length)
+      assert_equal(1897 * 4, value_num)
       assert_equal(10, sapporo_records.length)
     end
 
@@ -119,8 +122,37 @@ class EStatJapanTest < Test::Unit::TestCase
       assert_equal(11, sapporo_records.length)
     end
 
-    # skip_nil_column: true,
-    # skip_nil_row: false,
+    estat_obj = \
+      Datasets::EStatJapan::StatsData.new('test',
+                                          skip_nil_column: false)
+    estat_obj.instance_eval do
+      @data_path = Pathname(test_path)
+    end
+    assert_nothing_raised do
+      records = []
+      value_num = 0
+      estat_obj.each do |record|
+        records << record
+        value_num += record.values.length
+      end
+      assert_equal(1897, records.length)
+      assert_equal(1897 * 38, value_num)
+    end
+
+    estat_obj = \
+      Datasets::EStatJapan::StatsData.new('test',
+                                          skip_nil_row: true,
+                                          skip_nil_column: false)
+    estat_obj.instance_eval do
+      @data_path = Pathname(test_path)
+    end
+    assert_nothing_raised do
+      records = []
+      estat_obj.each do |record|
+        records << record
+      end
+      assert_equal(0, records.length)
+    end
 
     ENV['ESTATJAPAN_APPID'] = nil
   end

@@ -180,8 +180,7 @@ module Datasets
             end
             rows << row
           end
-          next unless rows.count(nil).zero?
-
+          next if @skip_nil_row && rows.flatten.count(nil).positive?
           yield Record.new(a_key, a_value['@name'], rows.flatten)
         end
       end

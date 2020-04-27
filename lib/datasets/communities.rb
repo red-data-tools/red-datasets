@@ -154,7 +154,13 @@ module Datasets
             if column == "?"
               nil
             else
-              column = Float(column) unless i == 3
+              case i
+              when 3 # communityname
+              # when 124 # LemasGangUnitDeploy
+              # 0 means NO, 1 means YES, 0.5 means Part Time
+              else
+                column = Float(column)
+              end
               column
             end
           end

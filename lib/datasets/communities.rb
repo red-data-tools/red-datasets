@@ -165,9 +165,8 @@ module Datasets
     end
 
     private
-
     def base_url
-      "http://archive.ics.uci.edu/ml/machine-learning-databases/communities"
+      "https://archive.ics.uci.edu/ml/machine-learning-databases/communities"
     end
 
     def open_data

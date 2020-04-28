@@ -17,8 +17,6 @@ You can use datasets easily because you can access each dataset with multiple wa
 
 ## Available datasets
 
-TODO: Document them in source code to list in document: https://www.rubydoc.info/gems/red-datasets
-
 * Adult Dataset
 * CIFAR-10 Dataset
 * CIFAR-100 Dataset
@@ -28,6 +26,8 @@ TODO: Document them in source code to list in document: https://www.rubydoc.info
 * The Penn Treebank Project
 * Wikipedia
 * Wine Dataset
+
+Please see https://www.rubydoc.info/gems/red-datasets for the full list.
 
 ## Usage
 
@@ -133,10 +133,10 @@ end
 
 ## Extensions
 
-* [red-datasets-numo-narray](https://github.com/red-data-tools/red-datasets-numo-narray)
 * [red-datasets-arrow](https://github.com/red-data-tools/red-datasets-arrow)
 * [red-datasets-daru](https://github.com/red-data-tools/red-datasets-daru)
 * [red-datasets-gdk-pixbuf](https://github.com/red-data-tools/red-datasets-gdk-pixbuf)
+* [red-datasets-numo-narray](https://github.com/red-data-tools/red-datasets-numo-narray)
 
 ## License
 

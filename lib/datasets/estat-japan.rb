@@ -186,7 +186,7 @@ module Datasets
       private
 
       def fetch_appid
-        defined?(EStatJapan.app_id) && !EStatJapan.app_id.nil? ? EStatJapan.app_id : ENV.fetch('ESTATJAPAN_APPID', nil)
+        EStatJapan.app_id || ENV['ESTATJAPAN_APPID']
       end
 
       def fetch_data

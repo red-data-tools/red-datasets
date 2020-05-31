@@ -2,8 +2,6 @@ require 'zlib'
 
 require_relative "dataset"
 
-class SetTypeError < StandardError; end
-
 module Datasets
   class MNIST < Dataset
     BASE_URL = "http://yann.lecun.com/exdb/mnist/"

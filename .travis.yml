@@ -2,6 +2,8 @@ notifications:
   webhooks:
     - https://webhook.commit-email.info/
 
+dist: bionic
+
 language: ruby
 
 rvm:

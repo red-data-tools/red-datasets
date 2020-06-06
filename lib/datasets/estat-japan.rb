@@ -33,10 +33,10 @@ module Datasets
     class StatsData < Dataset
       attr_accessor :app_id, :areas, :timetables, :schema
 
-      def self.generate_url(base_url,
-                            app_id,
-                            id,
-                            areas: nil, categories: nil, times: nil)
+      def generate_url(base_url,
+                       app_id,
+                       id,
+                       areas: nil, categories: nil, times: nil)
         # generates url for query
         params = {
           appId: app_id, lang: 'J',
@@ -51,7 +51,7 @@ module Datasets
         URI.parse("#{base_url}?#{URI.encode_www_form(params)}")
       end
 
-      def self.extract_def(data, id)
+      def extract_def(data, id)
         rec = data.dig('GET_STATS_DATA',
                        'STATISTICAL_DATA',
                        'CLASS_INF',
@@ -59,7 +59,7 @@ module Datasets
         rec.select { |x| x['@id'] == id }
       end
 
-      def self.index_def(data_def)
+      def index_def(data_def)
         unless data_def.first['CLASS'].instance_of?(Array)
           # convert to array when number of element is 1
           data_def.first['CLASS'] = [data_def.first['CLASS']]
@@ -67,7 +67,7 @@ module Datasets
         Hash[*data_def.first['CLASS'].map { |x| [x['@code'], x] }.flatten]
       end
 
-      def self.get_values(data)
+      def get_values(data)
         data.dig('GET_STATS_DATA',
                  'STATISTICAL_DATA',
                  'DATA_INF',
@@ -138,7 +138,7 @@ module Datasets
         @skip_nil_row = skip_nil_row
         @time_range = time_range
 
-        @url = StatsData.generate_url(@base_url,
+        @url = generate_url(@base_url,
                                       @app_id,
                                       @id,
                                       areas: @areas,
@@ -209,21 +209,20 @@ module Datasets
         end
 
         # index data
-        ## table_def = StatsData.extract_def(raw_data, "tab")
-        timetable_def = StatsData.extract_def(raw_data, 'time')
-        column_def = StatsData.extract_def(raw_data, 'cat01')
-        area_def = StatsData.extract_def(raw_data, 'area')
+        ## table_def = extract_def(raw_data, "tab")
+        timetable_def = extract_def(raw_data, 'time')
+        column_def = extract_def(raw_data, 'cat01')
+        area_def = extract_def(raw_data, 'area')
 
-        ## p table_def.map { |x| x["@name"] }
-        @timetables = StatsData.index_def(timetable_def)
-        @columns = StatsData.index_def(column_def)
-        @areas = StatsData.index_def(area_def)
+        @timetables = index_def(timetable_def)
+        @columns = index_def(column_def)
+        @areas = index_def(area_def)
 
         ## apply time_range to timetables
         @timetables.select! { |k, _v| @timetables.keys[@time_range].include? k } if @time_range.instance_of?(Range)
 
         @indexed_data = Hash[*@timetables.keys.map { |x| [x, {}] }.flatten]
-        StatsData.get_values(raw_data).each do |row|
+        get_values(raw_data).each do |row|
           next unless @timetables.key?(row['@time'])
 
           oldhash = @indexed_data.dig(row['@time'], row['@area']) || {}

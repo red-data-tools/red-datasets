@@ -78,9 +78,11 @@ class EStatJapanTest < Test::Unit::TestCase
   end
 
   sub_test_case('parsing records') do
-    ENV['ESTATJAPAN_APPID'] = 'test_appid_correct'
-    Datasets::EStatJapan.app_id = nil
     test_path = 'test/data/test-estat-japan-200-0000020201.json'
+    def setup
+      ENV['ESTATJAPAN_APPID'] = 'test_appid_correct'
+      Datasets::EStatJapan.app_id = nil
+    end
 
     test('parsing records with default option') do
       stats_data = Datasets::EStatJapan::StatsData.new('test')
@@ -115,6 +117,21 @@ class EStatJapanTest < Test::Unit::TestCase
       end
       assert_equal(1722, records.length)
       assert_equal(1, sapporo_records.length)
+
+      stats_data = \
+        Datasets::EStatJapan::StatsData.new('test',
+                                            hierarchy_selection: 'child')
+      stats_data.instance_eval do
+        @data_path = Pathname(test_path)
+      end
+      records = []
+      sapporo_records = []
+      stats_data.each do |record|
+        records << record
+        sapporo_records << record if record.name.start_with? '北海道 札幌市'
+      end
+      assert_equal(1897, records.length)
+      assert_equal(10, sapporo_records.length)
 
       stats_data = \
         Datasets::EStatJapan::StatsData.new('test',

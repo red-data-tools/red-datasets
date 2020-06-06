@@ -11,18 +11,18 @@ class EStatJapanTest < Test::Unit::TestCase
 
     test('nothing') do
       assert_raise(Datasets::EStatJapan::ArgumentError) do
-        Datasets::EStatJapan::StatsData.new('test')
+        Datasets::EStatJapan::StatsData.new('test-data-id')
       end
     end
 
     test('constructor') do
-      stats_data = Datasets::EStatJapan::StatsData.new('test', app_id: 'test_by_constructor')
+      stats_data = Datasets::EStatJapan::StatsData.new('test-data-id', app_id: 'test_by_constructor')
       assert_equal('test_by_constructor', stats_data.app_id)
     end
 
     test('env') do
       ENV['ESTATJAPAN_APPID'] = 'test_by_env'
-      stats_data = Datasets::EStatJapan::StatsData.new('test')
+      stats_data = Datasets::EStatJapan::StatsData.new('test-data-id')
       assert_equal('test_by_env', stats_data.app_id)
     end
 
@@ -30,7 +30,7 @@ class EStatJapanTest < Test::Unit::TestCase
       Datasets::EStatJapan.configure do |config|
         config.app_id = 'test_by_configure'
       end
-      stats_data = Datasets::EStatJapan::StatsData.new('test')
+      stats_data = Datasets::EStatJapan::StatsData.new('test-data-id')
       assert_equal('test_by_configure', stats_data.app_id)
     end
 
@@ -39,7 +39,7 @@ class EStatJapanTest < Test::Unit::TestCase
       Datasets::EStatJapan.configure do |config|
         config.app_id = 'test_by_configure'
       end
-      stats_data = Datasets::EStatJapan::StatsData.new('test')
+      stats_data = Datasets::EStatJapan::StatsData.new('test-data-id')
       assert_equal('test_by_configure', stats_data.app_id)
     end
 
@@ -48,7 +48,7 @@ class EStatJapanTest < Test::Unit::TestCase
       Datasets::EStatJapan.configure do |config|
         config.app_id = 'test_by_configure'
       end
-      stats_data = Datasets::EStatJapan::StatsData.new('test', app_id: 'test_by_constructor')
+      stats_data = Datasets::EStatJapan::StatsData.new('test-data-id', app_id: 'test_by_constructor')
       assert_equal('test_by_constructor', stats_data.app_id)
     end
   end
@@ -61,7 +61,7 @@ class EStatJapanTest < Test::Unit::TestCase
 
     test('generates url correctly') do
       Datasets::EStatJapan.app_id = 'abcdef'
-      stats_data = Datasets::EStatJapan::StatsData.new('test')
+      stats_data = Datasets::EStatJapan::StatsData.new('test-data-id')
       stats_data_id = '000000'
       stats_data.instance_eval do
         @id = stats_data_id
@@ -85,7 +85,7 @@ class EStatJapanTest < Test::Unit::TestCase
     end
 
     test('parsing records with default option') do
-      stats_data = Datasets::EStatJapan::StatsData.new('test')
+      stats_data = Datasets::EStatJapan::StatsData.new('test-data-id')
       stats_data.instance_eval do
         @data_path = Pathname(test_path)
       end
@@ -104,7 +104,7 @@ class EStatJapanTest < Test::Unit::TestCase
 
     test('parsing records with hierarchy_selection') do
       stats_data = \
-        Datasets::EStatJapan::StatsData.new('test',
+        Datasets::EStatJapan::StatsData.new('test-data-id',
                                             hierarchy_selection: 'parent')
       stats_data.instance_eval do
         @data_path = Pathname(test_path)
@@ -119,7 +119,7 @@ class EStatJapanTest < Test::Unit::TestCase
       assert_equal(1, sapporo_records.length)
 
       stats_data = \
-        Datasets::EStatJapan::StatsData.new('test',
+        Datasets::EStatJapan::StatsData.new('test-data-id',
                                             hierarchy_selection: 'child')
       stats_data.instance_eval do
         @data_path = Pathname(test_path)
@@ -134,7 +134,7 @@ class EStatJapanTest < Test::Unit::TestCase
       assert_equal(10, sapporo_records.length)
 
       stats_data = \
-        Datasets::EStatJapan::StatsData.new('test',
+        Datasets::EStatJapan::StatsData.new('test-data-id',
                                             hierarchy_selection: 'both')
       stats_data.instance_eval do
         @data_path = Pathname(test_path)
@@ -151,7 +151,7 @@ class EStatJapanTest < Test::Unit::TestCase
 
     test('parsing records with skip_nil_(column|row)') do
       stats_data = \
-        Datasets::EStatJapan::StatsData.new('test',
+        Datasets::EStatJapan::StatsData.new('test-data-id',
                                             skip_nil_column: false)
       stats_data.instance_eval do
         @data_path = Pathname(test_path)
@@ -166,7 +166,7 @@ class EStatJapanTest < Test::Unit::TestCase
       assert_equal(1897 * 38, value_num)
 
       stats_data = \
-        Datasets::EStatJapan::StatsData.new('test',
+        Datasets::EStatJapan::StatsData.new('test-data-id',
                                             skip_nil_row: true,
                                             skip_nil_column: false)
       stats_data.instance_eval do
@@ -187,7 +187,7 @@ class EStatJapanTest < Test::Unit::TestCase
     end
     test('forbidden access with invalid app_id') do
       ENV['ESTATJAPAN_APPID'] = 'test_appid_invalid'
-      stats_data = Datasets::EStatJapan::StatsData.new('test')
+      stats_data = Datasets::EStatJapan::StatsData.new('test-data-id')
       stats_data.instance_eval do
         @data_path = Pathname('test/data/test-estat-japan-403-forbidden.json')
       end

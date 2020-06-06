@@ -204,7 +204,7 @@ module Datasets
         api_status = raw_data.dig('GET_STATS_DATA', 'RESULT', 'STATUS')
         if api_status != 0
           error_msg = raw_data.dig('GET_STATS_DATA', 'RESULT', 'ERROR_MSG')
-          raise Exception, "code #{api_status} : #{error_msg}"
+          raise APIError, "code #{api_status} : #{error_msg}"
         end
 
         # index data
@@ -283,6 +283,15 @@ module Datasets
         end
         schema
       end
+    end
+
+    class Error < StandardError
+    end
+
+    class ArgumentError < Error
+    end
+
+    class APIError < Error
     end
   end
 end

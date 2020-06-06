@@ -10,7 +10,7 @@ class EStatJapanTest < Test::Unit::TestCase
     end
 
     test('nothing') do
-      assert_raise(ArgumentError) do
+      assert_raise(Datasets::EStatJapan::ArgumentError) do
         Datasets::EStatJapan::StatsData.new('test')
       end
     end
@@ -157,7 +157,7 @@ class EStatJapanTest < Test::Unit::TestCase
       stats_data.instance_eval do
         @data_path = Pathname('test/data/test-estat-japan-403-forbidden.json')
       end
-      assert_raise(Exception) do
+      assert_raise(Datasets::EStatJapan::APIError) do
         # contains no data
         stats_data.each do |record|
           record

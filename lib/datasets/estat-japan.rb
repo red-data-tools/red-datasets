@@ -6,9 +6,8 @@ require 'uri'
 require 'json'
 
 module Datasets
-  Record = Struct.new(:id, :name, :values)
-
   module EStatJapan
+    Record = Struct.new(:id, :name, :values)
     # configuration injection
     module Configuration
       attr_accessor :app_id
@@ -139,11 +138,11 @@ module Datasets
         @time_range = time_range
 
         @url = generate_url(@base_url,
-                                      @app_id,
-                                      @id,
-                                      areas: @areas,
-                                      categories: @categories,
-                                      times: @times)
+                            @app_id,
+                            @id,
+                            areas: @areas,
+                            categories: @categories,
+                            times: @times)
         option_hash = Digest::MD5.hexdigest(@url.to_s)
         base_name = "estat-#{option_hash}.json"
         @data_path = cache_dir_path + base_name
@@ -225,9 +224,9 @@ module Datasets
         get_values(raw_data).each do |row|
           next unless @timetables.key?(row['@time'])
 
-          oldhash = @indexed_data.dig(row['@time'], row['@area']) || {}
-          newhash = oldhash.merge(row['@cat01'] => row['$'].to_f)
-          @indexed_data[row['@time']][row['@area']] = newhash
+          data = @indexed_data.dig(row['@time'], row['@area']) || {}
+          new_data = data.merge(row['@cat01'] => row['$'].to_f)
+          @indexed_data[row['@time']][row['@area']] = new_data
         end
 
         skip_areas
@@ -256,19 +255,19 @@ module Datasets
       end
 
       def skip_nil_column
+        return unless @skip_nil_column
+
         # filter timetables and columns
-        if @skip_nil_column
-          @areas.each do |a_key, _a_value|
-            @timetables.each do |st_key, st_value|
-              unless @indexed_data[st_key].key?(a_key)
-                st_value[:skip] = true
+        @areas.each do |a_key, _a_value|
+          @timetables.each do |st_key, st_value|
+            unless @indexed_data[st_key].key?(a_key)
+              st_value[:skip] = true
+              next
+            end
+            @columns.each do |c_key, c_value|
+              unless @indexed_data.dig(st_key, a_key).key?(c_key)
+                c_value[:skip] = true
                 next
-              end
-              @columns.each do |c_key, c_value|
-                unless @indexed_data.dig(st_key, a_key).key?(c_key)
-                  c_value[:skip] = true
-                  next
-                end
               end
             end
           end

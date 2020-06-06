@@ -39,7 +39,7 @@ class EStatJapanTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case('stats_data') do
+  sub_test_case('url generation') do
     def setup
       ENV['ESTATJAPAN_APPID'] = nil
       Datasets::EStatJapan.app_id = nil
@@ -58,32 +58,22 @@ class EStatJapanTest < Test::Unit::TestCase
         url.to_s
       )
     end
+  end
 
-    test('raises when status is invalid') do
-      ENV['ESTATJAPAN_APPID'] = 'test_appid_invalid'
-      estat_obj = Datasets::EStatJapan::StatsData.new('test')
-      estat_obj.instance_eval do
-        @data_path = Pathname('test/data/test-estat-japan-403-forbidden.json')
-      end
-      assert_raise(Exception) do
-        estat_obj.each do |record|
-          p record
-        end
-      end
-    end
+  sub_test_case('') do
+    ENV['ESTATJAPAN_APPID'] = 'test_appid_correct'
+    Datasets::EStatJapan.app_id = nil
+    test_path = 'test/data/test-estat-japan-200-0000020201.json'
 
-    test('can parse api result correctly') do
-      ENV['ESTATJAPAN_APPID'] = 'test_appid_correct'
-      test_path = 'test/data/test-estat-japan-200-0000020201.json'
-
-      estat_obj = Datasets::EStatJapan::StatsData.new('test')
-      estat_obj.instance_eval do
+    test('parsing records with default option') do
+      stats_data = Datasets::EStatJapan::StatsData.new('test')
+      stats_data.instance_eval do
         @data_path = Pathname(test_path)
       end
       records = []
       sapporo_records = []
       value_num = 0
-      estat_obj.each do |record|
+      stats_data.each do |record|
         records << record
         value_num += record.values.length
         sapporo_records << record if record.name.start_with? '北海道 札幌市'
@@ -91,64 +81,88 @@ class EStatJapanTest < Test::Unit::TestCase
       assert_equal(1897, records.length)
       assert_equal(1897 * 4, value_num)
       assert_equal(10, sapporo_records.length)
+    end
 
-      estat_obj = \
+    test('parsing records with hierarchy_selection') do
+      stats_data = \
         Datasets::EStatJapan::StatsData.new('test',
                                             hierarchy_selection: 'parent')
-      estat_obj.instance_eval do
+      stats_data.instance_eval do
         @data_path = Pathname(test_path)
       end
       records = []
       sapporo_records = []
-      estat_obj.each do |record|
+      stats_data.each do |record|
         records << record
         sapporo_records << record if record.name.start_with? '北海道 札幌市'
       end
       assert_equal(1722, records.length)
       assert_equal(1, sapporo_records.length)
 
-      estat_obj = \
+      stats_data = \
         Datasets::EStatJapan::StatsData.new('test',
                                             hierarchy_selection: 'both')
-      estat_obj.instance_eval do
+      stats_data.instance_eval do
         @data_path = Pathname(test_path)
       end
       records = []
       sapporo_records = []
-      estat_obj.each do |record|
+      stats_data.each do |record|
         records << record
         sapporo_records << record if record.name.start_with? '北海道 札幌市'
       end
       assert_equal(1917, records.length)
       assert_equal(11, sapporo_records.length)
+    end
 
-      estat_obj = \
+    test('parsing records with skip_nil_(column|row)') do
+      stats_data = \
         Datasets::EStatJapan::StatsData.new('test',
                                             skip_nil_column: false)
-      estat_obj.instance_eval do
+      stats_data.instance_eval do
         @data_path = Pathname(test_path)
       end
       records = []
       value_num = 0
-      estat_obj.each do |record|
+      stats_data.each do |record|
         records << record
         value_num += record.values.length
       end
       assert_equal(1897, records.length)
       assert_equal(1897 * 38, value_num)
 
-      estat_obj = \
+      stats_data = \
         Datasets::EStatJapan::StatsData.new('test',
                                             skip_nil_row: true,
                                             skip_nil_column: false)
-      estat_obj.instance_eval do
+      stats_data.instance_eval do
         @data_path = Pathname(test_path)
       end
       records = []
-      estat_obj.each do |record|
+      stats_data.each do |record|
         records << record
       end
       assert_equal(0, records.length)
+    end
+  end
+
+  sub_test_case('anomaly responces') do
+    def setup
+      ENV['ESTATJAPAN_APPID'] = nil
+      Datasets::EStatJapan.app_id = nil
+    end
+    test('forbidden access with invalid app_id') do
+      ENV['ESTATJAPAN_APPID'] = 'test_appid_invalid'
+      stats_data = Datasets::EStatJapan::StatsData.new('test')
+      stats_data.instance_eval do
+        @data_path = Pathname('test/data/test-estat-japan-403-forbidden.json')
+      end
+      assert_raise(Exception) do
+        # contains no data
+        stats_data.each do |record|
+          record
+        end
+      end
     end
   end
 end

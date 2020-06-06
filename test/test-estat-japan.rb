@@ -163,7 +163,7 @@ class EStatJapanTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case('anomaly responces') do
+  sub_test_case('anomaly responses') do
     def setup
       ENV['ESTATJAPAN_APPID'] = nil
       Datasets::EStatJapan.app_id = nil

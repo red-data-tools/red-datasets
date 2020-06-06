@@ -30,7 +30,7 @@ module Datasets
 
     # wrapper class for e-Stat API service
     class StatsData < Dataset
-      attr_accessor :app_id, :areas, :timetables, :schema
+      attr_accessor :app_id, :id
 
       #
       # generate accessor instance for e-Stat API's endpoint `getStatsData`.
@@ -120,8 +120,7 @@ module Datasets
       def each
         return to_enum(__method__) unless block_given?
 
-        fetch_data
-        index_data
+        load_data
 
         # create rows
         @areas.each do |a_key, a_value|
@@ -136,6 +135,26 @@ module Datasets
 
           yield Record.new(a_key, a_value['@name'], rows.flatten)
         end
+      end
+
+      def areas
+        load_data
+        @areas
+      end
+
+      def timetables
+        load_data
+        @timetables
+      end
+
+      def columns
+        load_data
+        @columns
+      end
+
+      def schema
+        load_data
+        @schema
       end
 
       private
@@ -182,9 +201,17 @@ module Datasets
         EStatJapan.app_id || ENV['ESTATJAPAN_APP_ID']
       end
 
+      def load_data
+        return if @loaded
+
+        fetch_data
+        index_data
+      end
+
       def fetch_data
         download(@data_path, @url.to_s) unless @data_path.exist?
-        # TODO: check error
+        # TODO: check response
+        # TODO don't save if error happens
       end
 
       def index_data
@@ -225,6 +252,7 @@ module Datasets
         skip_areas
         skip_nil_column
         @schema = create_header
+        @loaded = true
       end
 
       def skip_areas

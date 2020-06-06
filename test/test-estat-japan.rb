@@ -100,6 +100,11 @@ class EStatJapanTest < Test::Unit::TestCase
       assert_equal(1897, records.length)
       assert_equal(1897 * 4, value_num)
       assert_equal(10, sapporo_records.length)
+      assert_equal(1897, stats_data.areas.length)
+      assert_equal(38, stats_data.timetables.length)
+      assert_equal(4, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(1, stats_data.columns.length)
+      assert_equal(4, stats_data.schema.length)
     end
 
     test('parsing records with hierarchy_selection') do
@@ -117,6 +122,11 @@ class EStatJapanTest < Test::Unit::TestCase
       end
       assert_equal(1722, records.length)
       assert_equal(1, sapporo_records.length)
+      assert_equal(1722, stats_data.areas.length)
+      assert_equal(38, stats_data.timetables.length)
+      assert_equal(8, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(1, stats_data.columns.length)
+      assert_equal(8, stats_data.schema.length)
 
       stats_data = \
         Datasets::EStatJapan::StatsData.new('test-data-id',
@@ -132,6 +142,11 @@ class EStatJapanTest < Test::Unit::TestCase
       end
       assert_equal(1897, records.length)
       assert_equal(10, sapporo_records.length)
+      assert_equal(1897, stats_data.areas.length)
+      assert_equal(38, stats_data.timetables.length)
+      assert_equal(4, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(1, stats_data.columns.length)
+      assert_equal(4, stats_data.schema.length)
 
       stats_data = \
         Datasets::EStatJapan::StatsData.new('test-data-id',
@@ -147,6 +162,11 @@ class EStatJapanTest < Test::Unit::TestCase
       end
       assert_equal(1917, records.length)
       assert_equal(11, sapporo_records.length)
+      assert_equal(1917, stats_data.areas.length)
+      assert_equal(38, stats_data.timetables.length)
+      assert_equal(4, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(1, stats_data.columns.length)
+      assert_equal(4, stats_data.schema.length)
     end
 
     test('parsing records with skip_nil_(column|row)') do
@@ -164,6 +184,11 @@ class EStatJapanTest < Test::Unit::TestCase
       end
       assert_equal(1897, records.length)
       assert_equal(1897 * 38, value_num)
+      assert_equal(1897, stats_data.areas.length)
+      assert_equal(38, stats_data.timetables.length)
+      assert_equal(38, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(1, stats_data.columns.length)
+      assert_equal(38, stats_data.schema.length)
 
       stats_data = \
         Datasets::EStatJapan::StatsData.new('test-data-id',
@@ -177,6 +202,11 @@ class EStatJapanTest < Test::Unit::TestCase
         records << record
       end
       assert_equal(0, records.length)
+      assert_equal(1897, stats_data.areas.length)
+      assert_equal(38, stats_data.timetables.length)
+      assert_equal(38, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(1, stats_data.columns.length)
+      assert_equal(38, stats_data.schema.length)
     end
   end
 

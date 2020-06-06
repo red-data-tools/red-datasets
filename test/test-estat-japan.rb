@@ -46,11 +46,14 @@ class EStatJapanTest < Test::Unit::TestCase
     end
 
     test('generates url correctly') do
-      app_id = 'abcdef'
+      Datasets::EStatJapan.app_id = 'abcdef'
+      stats_data = Datasets::EStatJapan::StatsData.new('test')
       stats_data_id = '000000'
-      base_url = 'http://testurl/rest/2.1/app/json/getStatsData'
-      Datasets::EStatJapan.app_id = app_id
-      url = Datasets::EStatJapan::StatsData.new('test').generate_url(base_url, app_id, stats_data_id)
+      stats_data.instance_eval do
+        @id = stats_data_id
+        @base_url = 'http://testurl/rest/2.1/app/json/getStatsData'
+      end
+      url = stats_data.generate_url
       assert_equal(
         'http://testurl/rest/2.1/app/json/getStatsData' \
         '?appId=abcdef&lang=J&statsDataId=000000&' \

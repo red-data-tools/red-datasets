@@ -32,22 +32,19 @@ module Datasets
     class StatsData < Dataset
       attr_accessor :app_id, :areas, :timetables, :schema
 
-      def generate_url(base_url,
-                       app_id,
-                       id,
-                       areas: nil, categories: nil, times: nil)
+      def generate_url
         # generates url for query
         params = {
-          appId: app_id, lang: 'J',
-          statsDataId: id,
+          appId: @app_id, lang: 'J',
+          statsDataId: @id,
           metaGetFlg: 'Y', cntGetFlg: 'N',
           sectionHeaderFlg: '1'
         }
-        params['cdArea'] = areas.join(',') if areas.instance_of?(Array)
-        params['cdCat01'] = categories.join(',') if categories.instance_of?(Array)
-        params['cdTime'] = times.join(',') if times.instance_of?(Array)
+        params['cdArea'] = @areas.join(',') if @areas.instance_of?(Array)
+        params['cdCat01'] = @categories.join(',') if @categories.instance_of?(Array)
+        params['cdTime'] = @times.join(',') if @times.instance_of?(Array)
 
-        URI.parse("#{base_url}?#{URI.encode_www_form(params)}")
+        URI.parse("#{@base_url}?#{URI.encode_www_form(params)}")
       end
 
       def extract_def(data, id)
@@ -85,7 +82,7 @@ module Datasets
       # @param [Boolean] skip_nil_column Skip column if contains nil
       # @param [Boolean] skip_nil_row Skip row if contains nil
       # @example
-      #   estat = Datasets::EStatJapan::StatsData.new(
+      #   stats_data = Datasets::EStatJapan::StatsData.new(
       #     "0000020201", # A Population and household (key name: Ａ　人口・世帯)
       #     categories: ["A1101"], # Population (key name: A1101_人口総数)
       #     areas: ["01105", "01106"], # Toyohira-ku Sapporo-shi Hokkaido, Minami-ku Sapporo-shi Hokkaido
@@ -137,12 +134,7 @@ module Datasets
         @skip_nil_row = skip_nil_row
         @time_range = time_range
 
-        @url = generate_url(@base_url,
-                            @app_id,
-                            @id,
-                            areas: @areas,
-                            categories: @categories,
-                            times: @times)
+        @url = generate_url
         option_hash = Digest::MD5.hexdigest(@url.to_s)
         base_name = "estat-#{option_hash}.json"
         @data_path = cache_dir_path + base_name

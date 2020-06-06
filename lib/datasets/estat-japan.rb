@@ -56,13 +56,14 @@ module Datasets
       #   )
       #
       def initialize(id,
+                     app_id: nil,
                      areas: nil, categories: nil, times: nil,
                      skip_levels: [1],
                      hierarchy_selection: 'child',
                      skip_nil_column: true,
                      skip_nil_row: false,
                      time_range: nil)
-        @app_id = fetch_app_id
+        @app_id = app_id || fetch_app_id
         if @app_id.nil? || @app_id.empty?
           raise ArgumentError, 'Please set app_id via `Datasets::EStatJapan.configure` method or environment var `ESTATJAPAN_APPID`'
         end

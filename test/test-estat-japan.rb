@@ -15,27 +15,41 @@ class EStatJapanTest < Test::Unit::TestCase
       end
     end
 
+    test('constructor') do
+      stats_data = Datasets::EStatJapan::StatsData.new('test', app_id: 'test_by_constructor')
+      assert_equal('test_by_constructor', stats_data.app_id)
+    end
+
     test('env') do
       ENV['ESTATJAPAN_APPID'] = 'test_by_env'
-      data = Datasets::EStatJapan::StatsData.new('test')
-      assert_equal('test_by_env', data.app_id)
+      stats_data = Datasets::EStatJapan::StatsData.new('test')
+      assert_equal('test_by_env', stats_data.app_id)
     end
 
     test('configure') do
       Datasets::EStatJapan.configure do |config|
-        config.app_id = 'test_by_method'
+        config.app_id = 'test_by_configure'
       end
-      data = Datasets::EStatJapan::StatsData.new('test')
-      assert_equal('test_by_method', data.app_id)
+      stats_data = Datasets::EStatJapan::StatsData.new('test')
+      assert_equal('test_by_configure', stats_data.app_id)
     end
 
     test('env & configure') do
       ENV['ESTATJAPAN_APPID'] = 'test_by_env'
       Datasets::EStatJapan.configure do |config|
-        config.app_id = 'test_by_method'
+        config.app_id = 'test_by_configure'
       end
-      data = Datasets::EStatJapan::StatsData.new('test')
-      assert_equal('test_by_method', data.app_id)
+      stats_data = Datasets::EStatJapan::StatsData.new('test')
+      assert_equal('test_by_configure', stats_data.app_id)
+    end
+
+    test('env & configure & constructor') do
+      ENV['ESTATJAPAN_APPID'] = 'test_by_env'
+      Datasets::EStatJapan.configure do |config|
+        config.app_id = 'test_by_configure'
+      end
+      stats_data = Datasets::EStatJapan::StatsData.new('test', app_id: 'test_by_constructor')
+      assert_equal('test_by_constructor', stats_data.app_id)
     end
   end
 

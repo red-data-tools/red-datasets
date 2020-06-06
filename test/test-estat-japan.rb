@@ -77,7 +77,7 @@ class EStatJapanTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case('') do
+  sub_test_case('parsing records') do
     ENV['ESTATJAPAN_APPID'] = 'test_appid_correct'
     Datasets::EStatJapan.app_id = nil
     test_path = 'test/data/test-estat-japan-200-0000020201.json'

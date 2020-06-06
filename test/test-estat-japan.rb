@@ -3,40 +3,40 @@
 require 'pathname'
 
 class EStatJapanTest < Test::Unit::TestCase
-  test('raises api APPID is unset') do
-    # error if app_id is undefined
-    ENV['ESTATJAPAN_APPID'] = nil
-    assert_raise(ArgumentError) do
-      Datasets::EStatJapan::StatsData.new('test')
+  sub_test_case('app_id') do
+    def setup
+      ENV['ESTATJAPAN_APPID'] = nil
+      Datasets::EStatJapan.app_id = nil
     end
-  end
 
-  test('is ok when APPID is set') do
-    # ok if app_id is set by ENV
-    ENV['ESTATJAPAN_APPID'] = 'test_by_env'
-    assert_nothing_raised do
-      obj = Datasets::EStatJapan::StatsData.new('test')
-      assert_equal('test_by_env', obj.app_id)
+    test('nothing') do
+      assert_raise(ArgumentError) do
+        Datasets::EStatJapan::StatsData.new('test')
+      end
     end
-    ENV['ESTATJAPAN_APPID'] = nil
 
-    # ok if app_id is set by configure method
-    Datasets::EStatJapan.configure do |config|
-      config.app_id = 'test_by_method'
+    test('env') do
+      ENV['ESTATJAPAN_APPID'] = 'test_by_env'
+      data = Datasets::EStatJapan::StatsData.new('test')
+      assert_equal('test_by_env', data.app_id)
     end
-    assert_nothing_raised do
-      obj = Datasets::EStatJapan::StatsData.new('test')
-      assert_equal('test_by_method', obj.app_id)
-    end
-    Datasets::EStatJapan.app_id = nil
 
-    # ok if app_id is set by ENV
-    ENV['ESTATJAPAN_APPID'] = 'test_by_env2'
-    assert_nothing_raised do
-      obj = Datasets::EStatJapan::StatsData.new('test')
-      assert_equal('test_by_env2', obj.app_id)
+    test('configure') do
+      Datasets::EStatJapan.configure do |config|
+        config.app_id = 'test_by_method'
+      end
+      data = Datasets::EStatJapan::StatsData.new('test')
+      assert_equal('test_by_method', data.app_id)
     end
-    ENV['ESTATJAPAN_APPID'] = nil
+
+    test('env & configure') do
+      ENV['ESTATJAPAN_APPID'] = 'test_by_env'
+      Datasets::EStatJapan.configure do |config|
+        config.app_id = 'test_by_method'
+      end
+      data = Datasets::EStatJapan::StatsData.new('test')
+      assert_equal('test_by_env', data.app_id)
+    end
   end
 
   test('generates url correctly') do

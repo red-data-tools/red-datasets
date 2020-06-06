@@ -5,7 +5,7 @@ require 'pathname'
 class EStatJapanTest < Test::Unit::TestCase
   sub_test_case('app_id') do
     def setup
-      ENV['ESTATJAPAN_APPID'] = nil
+      ENV['ESTATJAPAN_APP_ID'] = nil
       Datasets::EStatJapan.app_id = nil
     end
 
@@ -21,7 +21,7 @@ class EStatJapanTest < Test::Unit::TestCase
     end
 
     test('env') do
-      ENV['ESTATJAPAN_APPID'] = 'test_by_env'
+      ENV['ESTATJAPAN_APP_ID'] = 'test_by_env'
       stats_data = Datasets::EStatJapan::StatsData.new('test-data-id')
       assert_equal('test_by_env', stats_data.app_id)
     end
@@ -35,7 +35,7 @@ class EStatJapanTest < Test::Unit::TestCase
     end
 
     test('env & configure') do
-      ENV['ESTATJAPAN_APPID'] = 'test_by_env'
+      ENV['ESTATJAPAN_APP_ID'] = 'test_by_env'
       Datasets::EStatJapan.configure do |config|
         config.app_id = 'test_by_configure'
       end
@@ -44,7 +44,7 @@ class EStatJapanTest < Test::Unit::TestCase
     end
 
     test('env & configure & constructor') do
-      ENV['ESTATJAPAN_APPID'] = 'test_by_env'
+      ENV['ESTATJAPAN_APP_ID'] = 'test_by_env'
       Datasets::EStatJapan.configure do |config|
         config.app_id = 'test_by_configure'
       end
@@ -55,7 +55,7 @@ class EStatJapanTest < Test::Unit::TestCase
 
   sub_test_case('url generation') do
     def setup
-      ENV['ESTATJAPAN_APPID'] = nil
+      ENV['ESTATJAPAN_APP_ID'] = nil
       Datasets::EStatJapan.app_id = nil
     end
 
@@ -80,7 +80,7 @@ class EStatJapanTest < Test::Unit::TestCase
   sub_test_case('parsing records') do
     test_path = 'test/data/test-estat-japan-200-0000020201.json'
     def setup
-      ENV['ESTATJAPAN_APPID'] = 'test_appid_correct'
+      ENV['ESTATJAPAN_APP_ID'] = 'test_appid_correct'
       Datasets::EStatJapan.app_id = nil
     end
 
@@ -182,11 +182,11 @@ class EStatJapanTest < Test::Unit::TestCase
 
   sub_test_case('anomaly responses') do
     def setup
-      ENV['ESTATJAPAN_APPID'] = nil
+      ENV['ESTATJAPAN_APP_ID'] = nil
       Datasets::EStatJapan.app_id = nil
     end
     test('forbidden access with invalid app_id') do
-      ENV['ESTATJAPAN_APPID'] = 'test_appid_invalid'
+      ENV['ESTATJAPAN_APP_ID'] = 'test_appid_invalid'
       stats_data = Datasets::EStatJapan::StatsData.new('test-data-id')
       stats_data.instance_eval do
         @data_path = Pathname('test/data/test-estat-japan-403-forbidden.json')

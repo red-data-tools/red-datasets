@@ -65,7 +65,7 @@ module Datasets
                      time_range: nil)
         @app_id = app_id || fetch_app_id
         if @app_id.nil? || @app_id.empty?
-          raise ArgumentError, 'Please set app_id via `Datasets::EStatJapan.configure` method or environment var `ESTATJAPAN_APPID`'
+          raise ArgumentError, 'Please set app_id via `Datasets::EStatJapan.configure` method or environment var `ESTATJAPAN_APP_ID`'
         end
 
         super()
@@ -179,7 +179,7 @@ module Datasets
       end
 
       def fetch_app_id
-        EStatJapan.app_id || ENV['ESTATJAPAN_APPID']
+        EStatJapan.app_id || ENV['ESTATJAPAN_APP_ID']
       end
 
       def fetch_data

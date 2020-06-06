@@ -32,44 +32,6 @@ module Datasets
     class StatsData < Dataset
       attr_accessor :app_id, :areas, :timetables, :schema
 
-      def generate_url
-        # generates url for query
-        params = {
-          appId: @app_id, lang: 'J',
-          statsDataId: @id,
-          metaGetFlg: 'Y', cntGetFlg: 'N',
-          sectionHeaderFlg: '1'
-        }
-        params['cdArea'] = @areas.join(',') if @areas.instance_of?(Array)
-        params['cdCat01'] = @categories.join(',') if @categories.instance_of?(Array)
-        params['cdTime'] = @times.join(',') if @times.instance_of?(Array)
-
-        URI.parse("#{@base_url}?#{URI.encode_www_form(params)}")
-      end
-
-      def extract_def(data, id)
-        rec = data.dig('GET_STATS_DATA',
-                       'STATISTICAL_DATA',
-                       'CLASS_INF',
-                       'CLASS_OBJ')
-        rec.select { |x| x['@id'] == id }
-      end
-
-      def index_def(data_def)
-        unless data_def.first['CLASS'].instance_of?(Array)
-          # convert to array when number of element is 1
-          data_def.first['CLASS'] = [data_def.first['CLASS']]
-        end
-        Hash[*data_def.first['CLASS'].map { |x| [x['@code'], x] }.flatten]
-      end
-
-      def get_values(data)
-        data.dig('GET_STATS_DATA',
-                 'STATISTICAL_DATA',
-                 'DATA_INF',
-                 'VALUE')
-      end
-
       #
       # generate accessor instance for e-Stat API's endpoint `getStatsData`.
       # for detail spec : https://www.e-stat.go.jp/api/api-info/e-stat-manual
@@ -100,7 +62,7 @@ module Datasets
                      skip_nil_column: true,
                      skip_nil_row: false,
                      time_range: nil)
-        @app_id = fetch_appid
+        @app_id = fetch_app_id
         if @app_id.nil? || @app_id.empty?
           raise ArgumentError, 'Please set app_id via `Datasets::EStatJapan.configure` method or environment var `ESTATJAPAN_APPID`'
         end
@@ -177,7 +139,45 @@ module Datasets
 
       private
 
-      def fetch_appid
+      def generate_url
+        # generates url for query
+        params = {
+          appId: @app_id, lang: 'J',
+          statsDataId: @id,
+          metaGetFlg: 'Y', cntGetFlg: 'N',
+          sectionHeaderFlg: '1'
+        }
+        params['cdArea'] = @areas.join(',') if @areas.instance_of?(Array)
+        params['cdCat01'] = @categories.join(',') if @categories.instance_of?(Array)
+        params['cdTime'] = @times.join(',') if @times.instance_of?(Array)
+
+        URI.parse("#{@base_url}?#{URI.encode_www_form(params)}")
+      end
+
+      def extract_def(data, id)
+        rec = data.dig('GET_STATS_DATA',
+                       'STATISTICAL_DATA',
+                       'CLASS_INF',
+                       'CLASS_OBJ')
+        rec.select { |x| x['@id'] == id }
+      end
+
+      def index_def(data_def)
+        unless data_def.first['CLASS'].instance_of?(Array)
+          # convert to array when number of element is 1
+          data_def.first['CLASS'] = [data_def.first['CLASS']]
+        end
+        Hash[*data_def.first['CLASS'].map { |x| [x['@code'], x] }.flatten]
+      end
+
+      def get_values(data)
+        data.dig('GET_STATS_DATA',
+                 'STATISTICAL_DATA',
+                 'DATA_INF',
+                 'VALUE')
+      end
+
+      def fetch_app_id
         EStatJapan.app_id || ENV['ESTATJAPAN_APPID']
       end
 

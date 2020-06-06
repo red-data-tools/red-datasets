@@ -53,7 +53,7 @@ class EStatJapanTest < Test::Unit::TestCase
         @id = stats_data_id
         @base_url = 'http://testurl/rest/2.1/app/json/getStatsData'
       end
-      url = stats_data.generate_url
+      url = stats_data.send(:generate_url)
       assert_equal(
         'http://testurl/rest/2.1/app/json/getStatsData' \
         '?appId=abcdef&lang=J&statsDataId=000000&' \

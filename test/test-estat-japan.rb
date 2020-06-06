@@ -74,19 +74,17 @@ class EStatJapanTest < Test::Unit::TestCase
     estat_obj.instance_eval do
       @data_path = Pathname(test_path)
     end
-    assert_nothing_raised do
-      records = []
-      sapporo_records = []
-      value_num = 0
-      estat_obj.each do |record|
-        records << record
-        value_num += record.values.length
-        sapporo_records << record if record.name.start_with? '北海道 札幌市'
-      end
-      assert_equal(1897, records.length)
-      assert_equal(1897 * 4, value_num)
-      assert_equal(10, sapporo_records.length)
+    records = []
+    sapporo_records = []
+    value_num = 0
+    estat_obj.each do |record|
+      records << record
+      value_num += record.values.length
+      sapporo_records << record if record.name.start_with? '北海道 札幌市'
     end
+    assert_equal(1897, records.length)
+    assert_equal(1897 * 4, value_num)
+    assert_equal(10, sapporo_records.length)
 
     estat_obj = \
       Datasets::EStatJapan::StatsData.new('test',
@@ -94,16 +92,14 @@ class EStatJapanTest < Test::Unit::TestCase
     estat_obj.instance_eval do
       @data_path = Pathname(test_path)
     end
-    assert_nothing_raised do
-      records = []
-      sapporo_records = []
-      estat_obj.each do |record|
-        records << record
-        sapporo_records << record if record.name.start_with? '北海道 札幌市'
-      end
-      assert_equal(1722, records.length)
-      assert_equal(1, sapporo_records.length)
+    records = []
+    sapporo_records = []
+    estat_obj.each do |record|
+      records << record
+      sapporo_records << record if record.name.start_with? '北海道 札幌市'
     end
+    assert_equal(1722, records.length)
+    assert_equal(1, sapporo_records.length)
 
     estat_obj = \
       Datasets::EStatJapan::StatsData.new('test',
@@ -111,16 +107,14 @@ class EStatJapanTest < Test::Unit::TestCase
     estat_obj.instance_eval do
       @data_path = Pathname(test_path)
     end
-    assert_nothing_raised do
-      records = []
-      sapporo_records = []
-      estat_obj.each do |record|
-        records << record
-        sapporo_records << record if record.name.start_with? '北海道 札幌市'
-      end
-      assert_equal(1917, records.length)
-      assert_equal(11, sapporo_records.length)
+    records = []
+    sapporo_records = []
+    estat_obj.each do |record|
+      records << record
+      sapporo_records << record if record.name.start_with? '北海道 札幌市'
     end
+    assert_equal(1917, records.length)
+    assert_equal(11, sapporo_records.length)
 
     estat_obj = \
       Datasets::EStatJapan::StatsData.new('test',
@@ -128,16 +122,14 @@ class EStatJapanTest < Test::Unit::TestCase
     estat_obj.instance_eval do
       @data_path = Pathname(test_path)
     end
-    assert_nothing_raised do
-      records = []
-      value_num = 0
-      estat_obj.each do |record|
-        records << record
-        value_num += record.values.length
-      end
-      assert_equal(1897, records.length)
-      assert_equal(1897 * 38, value_num)
+    records = []
+    value_num = 0
+    estat_obj.each do |record|
+      records << record
+      value_num += record.values.length
     end
+    assert_equal(1897, records.length)
+    assert_equal(1897 * 38, value_num)
 
     estat_obj = \
       Datasets::EStatJapan::StatsData.new('test',
@@ -146,13 +138,11 @@ class EStatJapanTest < Test::Unit::TestCase
     estat_obj.instance_eval do
       @data_path = Pathname(test_path)
     end
-    assert_nothing_raised do
-      records = []
-      estat_obj.each do |record|
-        records << record
-      end
-      assert_equal(0, records.length)
+    records = []
+    estat_obj.each do |record|
+      records << record
     end
+    assert_equal(0, records.length)
 
     ENV['ESTATJAPAN_APPID'] = nil
   end

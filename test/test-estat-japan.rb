@@ -217,9 +217,12 @@ class EStatJapanTest < Test::Unit::TestCase
     end
     test('forbidden access with invalid app_id') do
       ENV['ESTATJAPAN_APP_ID'] = 'test_appid_invalid'
+      test_file_path = Pathname('test/data/test-estat-japan-403-forbidden.json')
       stats_data = Datasets::EStatJapan::StatsData.new('test-data-id')
+      cache_file_path = nil
       stats_data.instance_eval do
-        @data_path = Pathname('test/data/test-estat-japan-403-forbidden.json')
+        cache_file_path = @data_path = cache_dir_path + '200-error.json'
+        FileUtils.cp(test_file_path, @data_path)
       end
       assert_raise(Datasets::EStatJapan::APIError) do
         # contains no data
@@ -227,6 +230,8 @@ class EStatJapanTest < Test::Unit::TestCase
           record
         end
       end
+      # ensure remove error response cache
+      assert_equal(cache_file_path.exist?, false)
     end
   end
 end

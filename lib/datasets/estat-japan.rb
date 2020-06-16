@@ -101,6 +101,7 @@ module Datasets
         option_hash = Digest::MD5.hexdigest(@url.to_s)
         base_name = "e-stat-japan-#{option_hash}.json"
         @data_path = cache_dir_path + base_name
+        @loaded = false
       end
 
       #
@@ -209,9 +210,12 @@ module Datasets
       end
 
       def fetch_data
+        # MEMO:
+        # The e-stat api always returns 200 (Ok)
+        # even if error happens dispite of its error mapping.
+        # So we can't avoid caching retrieved response from the api.
+        # ref: https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0
         download(@data_path, @url.to_s) unless @data_path.exist?
-        # TODO: check response
-        # TODO don't save if error happens
       end
 
       def index_data
@@ -223,6 +227,8 @@ module Datasets
         # check status
         api_status = raw_data.dig('GET_STATS_DATA', 'RESULT', 'STATUS')
         if api_status != 0
+          # remove error response cache manually
+          FileUtils.rm(@data_path)
           error_msg = raw_data.dig('GET_STATS_DATA', 'RESULT', 'ERROR_MSG')
           raise APIError, "code #{api_status} : #{error_msg}"
         end

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+# TODO rename this file to e-stat-japan.rb
 require 'digest/md5'
 require 'net/http'
 require 'uri'
@@ -65,14 +65,14 @@ module Datasets
                      time_range: nil)
         @app_id = app_id || fetch_app_id
         if @app_id.nil? || @app_id.empty?
-          raise ArgumentError, 'Please set app_id via `Datasets::EStatJapan.configure` method or environment var `ESTATJAPAN_APP_ID`'
+          raise ArgumentError, 'Please set app_id via `Datasets::EStatJapan.configure` method, environment var `ESTATJAPAN_APP_ID` or keyword argument `:app_id`'
         end
 
         super()
 
-        @api_version = '2.1'
+        @api_version = '3.0'
         @base_url = "https://api.e-stat.go.jp/rest/#{@api_version}/app/json/getStatsData"
-        @metadata.id = "estat-api-#{@api_version}"
+        @metadata.id = "e-stat-japan-#{@api_version}"
         @metadata.name = "e-Stat API #{@api_version}"
         @metadata.url = @base_url
         @metadata.description = "e-Stat API #{@api_version}"
@@ -99,7 +99,7 @@ module Datasets
 
         @url = generate_url
         option_hash = Digest::MD5.hexdigest(@url.to_s)
-        base_name = "estat-#{option_hash}.json"
+        base_name = "e-stat-japan-#{option_hash}.json"
         @data_path = cache_dir_path + base_name
       end
 

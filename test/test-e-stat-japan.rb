@@ -214,15 +214,24 @@ class EStatJapanTest < Test::Unit::TestCase
     def setup
       ENV['ESTATJAPAN_APP_ID'] = nil
       Datasets::EStatJapan.app_id = nil
+      @response_data = {
+        'GET_STATS_DATA' => {
+          'RESULT' => {
+            'STATUS' => 100,
+            'ERROR_MSG' => 'error message'
+          }
+        }
+      }
     end
     test('forbidden access with invalid app_id') do
       ENV['ESTATJAPAN_APP_ID'] = 'test_appid_invalid'
-      test_file_path = Pathname('test/data/test-estat-japan-403-forbidden.json')
       stats_data = Datasets::EStatJapan::StatsData.new('test-data-id')
       cache_file_path = nil
       stats_data.instance_eval do
         cache_file_path = @data_path = cache_dir_path + '200-error.json'
-        FileUtils.cp(test_file_path, @data_path)
+      end
+      File.open(cache_file_path, mode = 'w') do |f|
+        f.write(@response_data.to_json)
       end
       assert_raise(Datasets::EStatJapan::APIError) do
         # contains no data

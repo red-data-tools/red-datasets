@@ -82,29 +82,144 @@ class EStatJapanTest < Test::Unit::TestCase
     def setup
       ENV['ESTATJAPAN_APP_ID'] = 'test_appid_correct'
       Datasets::EStatJapan.app_id = nil
+      class_obj = [
+        {
+          "@name": 'table1',
+          "@id": 'tab',
+          "CLASS": {
+            "@level": '1',
+            "@code": '00001',
+            "@name": 'table1'
+          }
+        },
+        {
+          "@name": 'data1',
+          "@id": 'cat01',
+          "CLASS": {
+            "@level": '1',
+            "@code": 'data1',
+            "@name": 'data1_name'
+          }
+        },
+        {
+          "@name": 'area1',
+          "@id": 'area',
+          "CLASS": [
+            {
+              "@level": '2',
+              "@code": '01100',
+              "@name": 'test1 big-city',
+              "@parentCode": '01000'
+            },
+            {
+              "@level": '3',
+              "@code": '01101',
+              "@name": 'test1 big-city a-ku',
+              "@parentCode": '01100'
+            },
+            {
+              "@level": '3',
+              "@code": '01102',
+              "@name": 'test1 big-city b-ku',
+              "@parentCode": '01100'
+            },
+            {
+              "@level": '2',
+              "@code": '02555',
+              "@name": 'test2 a-city',
+              "@parentCode": '02000'
+            },
+            {
+              "@level": '2',
+              "@code": '02556',
+              "@name": 'test2 b-city',
+              "@parentCode": '02000'
+            }
+          ]
+        },
+        {
+          "@name": 'time',
+          "@id": 'time',
+          "CLASS": [
+            {
+              "@level": '1',
+              "@code": 'time1',
+              "@name": 'time1'
+            },
+            {
+              "@level": '1',
+              "@code": 'time2',
+              "@name": 'time2'
+            },
+            {
+              "@level": '1',
+              "@code": 'time3',
+              "@name": 'time3'
+            }
+          ]
+        }
+      ]
+      data_inf = class_obj[2][:CLASS].map do |entry|
+        [
+          {
+            "$": 1000,
+            "@area": entry[:@code],
+            "@cat01": 'data1',
+            "@tab": 'table1',
+            "@time": 'time1',
+            "@unit": 'person'
+          },
+          {
+            "$": 1000,
+            "@area": entry[:@code],
+            "@cat01": 'data1',
+            "@tab": 'table1',
+            "@time": 'time2',
+            "@unit": 'person'
+          }
+        ]
+      end.flatten
+      @response_data_default = {
+        'GET_STATS_DATA' => {
+          'RESULT' => {
+            'STATUS' => 0,
+            'ERROR_MSG' => 'succeeded'
+          },
+          'STATISTICAL_DATA' => {
+            'DATA_INF' => {
+              'VALUE' => data_inf
+            },
+            'CLASS_INF' => {
+              'CLASS_OBJ' => class_obj
+            }
+          }
+        }
+      }
     end
 
     test('parsing records with default option') do
       stats_data = Datasets::EStatJapan::StatsData.new('test-data-id')
+      cache_file_path = nil
       stats_data.instance_eval do
-        @data_path = Pathname(test_path)
+        cache_file_path = @data_path = cache_dir_path + '0-success.json' # TODO: tmpdir
       end
+      File.open(cache_file_path, mode = 'w') do |f|
+        f.write(@response_data_default.to_json)
+      end
+
       records = []
-      sapporo_records = []
       value_num = 0
       stats_data.each do |record|
         records << record
         value_num += record.values.length
-        sapporo_records << record if record.name.start_with? '北海道 札幌市'
       end
-      assert_equal(1897, records.length)
-      assert_equal(1897 * 4, value_num)
-      assert_equal(10, sapporo_records.length)
-      assert_equal(1897, stats_data.areas.length)
-      assert_equal(38, stats_data.timetables.length)
-      assert_equal(4, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(4, records.length)
+      assert_equal(4 * 2, value_num)
+      assert_equal(4, stats_data.areas.length)
+      assert_equal(3, stats_data.timetables.length)
+      assert_equal(2, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
       assert_equal(1, stats_data.columns.length)
-      assert_equal(4, stats_data.schema.length)
+      assert_equal(2, stats_data.schema.length)
     end
 
     test('parsing records with hierarchy_selection') do
@@ -112,21 +227,19 @@ class EStatJapanTest < Test::Unit::TestCase
         Datasets::EStatJapan::StatsData.new('test-data-id',
                                             hierarchy_selection: 'parent')
       stats_data.instance_eval do
+        test_path = cache_dir_path + '0-success.json' # TODO: integrate
         @data_path = Pathname(test_path)
       end
       records = []
-      sapporo_records = []
       stats_data.each do |record|
         records << record
-        sapporo_records << record if record.name.start_with? '北海道 札幌市'
       end
-      assert_equal(1722, records.length)
-      assert_equal(1, sapporo_records.length)
-      assert_equal(1722, stats_data.areas.length)
-      assert_equal(38, stats_data.timetables.length)
-      assert_equal(8, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(3, records.length)
+      assert_equal(3, stats_data.areas.length)
+      assert_equal(3, stats_data.timetables.length)
+      assert_equal(2, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
       assert_equal(1, stats_data.columns.length)
-      assert_equal(8, stats_data.schema.length)
+      assert_equal(2, stats_data.schema.length)
 
       stats_data = \
         Datasets::EStatJapan::StatsData.new('test-data-id',
@@ -135,18 +248,15 @@ class EStatJapanTest < Test::Unit::TestCase
         @data_path = Pathname(test_path)
       end
       records = []
-      sapporo_records = []
       stats_data.each do |record|
         records << record
-        sapporo_records << record if record.name.start_with? '北海道 札幌市'
       end
-      assert_equal(1897, records.length)
-      assert_equal(10, sapporo_records.length)
-      assert_equal(1897, stats_data.areas.length)
-      assert_equal(38, stats_data.timetables.length)
-      assert_equal(4, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(4, records.length)
+      assert_equal(4, stats_data.areas.length)
+      assert_equal(3, stats_data.timetables.length)
+      assert_equal(2, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
       assert_equal(1, stats_data.columns.length)
-      assert_equal(4, stats_data.schema.length)
+      assert_equal(2, stats_data.schema.length)
 
       stats_data = \
         Datasets::EStatJapan::StatsData.new('test-data-id',
@@ -155,59 +265,56 @@ class EStatJapanTest < Test::Unit::TestCase
         @data_path = Pathname(test_path)
       end
       records = []
-      sapporo_records = []
       stats_data.each do |record|
         records << record
-        sapporo_records << record if record.name.start_with? '北海道 札幌市'
       end
-      assert_equal(1917, records.length)
-      assert_equal(11, sapporo_records.length)
-      assert_equal(1917, stats_data.areas.length)
-      assert_equal(38, stats_data.timetables.length)
-      assert_equal(4, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(5, records.length)
+      assert_equal(5, stats_data.areas.length)
+      assert_equal(3, stats_data.timetables.length)
+      assert_equal(2, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
       assert_equal(1, stats_data.columns.length)
-      assert_equal(4, stats_data.schema.length)
+      assert_equal(2, stats_data.schema.length)
     end
 
-    test('parsing records with skip_nil_(column|row)') do
-      stats_data = \
-        Datasets::EStatJapan::StatsData.new('test-data-id',
-                                            skip_nil_column: false)
-      stats_data.instance_eval do
-        @data_path = Pathname(test_path)
-      end
-      records = []
-      value_num = 0
-      stats_data.each do |record|
-        records << record
-        value_num += record.values.length
-      end
-      assert_equal(1897, records.length)
-      assert_equal(1897 * 38, value_num)
-      assert_equal(1897, stats_data.areas.length)
-      assert_equal(38, stats_data.timetables.length)
-      assert_equal(38, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
-      assert_equal(1, stats_data.columns.length)
-      assert_equal(38, stats_data.schema.length)
+    # test('parsing records with skip_nil_(column|row)') do
+    #   stats_data = \
+    #     Datasets::EStatJapan::StatsData.new('test-data-id',
+    #                                         skip_nil_column: false)
+    #   stats_data.instance_eval do
+    #     @data_path = Pathname(test_path)
+    #   end
+    #   records = []
+    #   value_num = 0
+    #   stats_data.each do |record|
+    #     records << record
+    #     value_num += record.values.length
+    #   end
+    #   assert_equal(1897, records.length)
+    #   assert_equal(1897 * 38, value_num)
+    #   assert_equal(1897, stats_data.areas.length)
+    #   assert_equal(38, stats_data.timetables.length)
+    #   assert_equal(38, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+    #   assert_equal(1, stats_data.columns.length)
+    #   assert_equal(38, stats_data.schema.length)
 
-      stats_data = \
-        Datasets::EStatJapan::StatsData.new('test-data-id',
-                                            skip_nil_row: true,
-                                            skip_nil_column: false)
-      stats_data.instance_eval do
-        @data_path = Pathname(test_path)
-      end
-      records = []
-      stats_data.each do |record|
-        records << record
-      end
-      assert_equal(0, records.length)
-      assert_equal(1897, stats_data.areas.length)
-      assert_equal(38, stats_data.timetables.length)
-      assert_equal(38, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
-      assert_equal(1, stats_data.columns.length)
-      assert_equal(38, stats_data.schema.length)
-    end
+    #   stats_data = \
+    #     Datasets::EStatJapan::StatsData.new('test-data-id',
+    #                                         skip_nil_row: true,
+    #                                         skip_nil_column: false)
+    #   stats_data.instance_eval do
+    #     @data_path = Pathname(test_path)
+    #   end
+    #   records = []
+    #   stats_data.each do |record|
+    #     records << record
+    #   end
+    #   assert_equal(0, records.length)
+    #   assert_equal(1897, stats_data.areas.length)
+    #   assert_equal(38, stats_data.timetables.length)
+    #   assert_equal(38, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+    #   assert_equal(1, stats_data.columns.length)
+    #   assert_equal(38, stats_data.schema.length)
+    # end
   end
 
   sub_test_case('anomaly responses') do
@@ -228,7 +335,7 @@ class EStatJapanTest < Test::Unit::TestCase
       stats_data = Datasets::EStatJapan::StatsData.new('test-data-id')
       cache_file_path = nil
       stats_data.instance_eval do
-        cache_file_path = @data_path = cache_dir_path + '200-error.json'
+        cache_file_path = @data_path = cache_dir_path + '200-error.json' # TODO: tmpdir
       end
       File.open(cache_file_path, mode = 'w') do |f|
         f.write(@response_data.to_json)

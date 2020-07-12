@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'pathname'
+require 'tmpdir'
 
 class EStatJapanTest < Test::Unit::TestCase
   sub_test_case('app_id') do
@@ -78,9 +79,7 @@ class EStatJapanTest < Test::Unit::TestCase
   end
 
   sub_test_case('parsing records') do
-    test_path = 'test/data/test-estat-japan-200-0000020201.json'
     def setup
-      ENV['ESTATJAPAN_APP_ID'] = 'test_appid_correct'
       Datasets::EStatJapan.app_id = nil
       class_obj = [
         {
@@ -195,16 +194,25 @@ class EStatJapanTest < Test::Unit::TestCase
           }
         }
       }
+
+      @tmp_dir = Dir.mktmpdir
+      @test_data_path = Pathname(File.join(@tmp_dir, '200-ok.json'))
+      ENV['ESTATJAPAN_APP_ID'] = 'test_appid_correct'
+      File.open(@test_data_path, 'w') do |f|
+        f.write(@response_data_default.to_json)
+      end
+    end
+
+    def teardown
+      FileUtils.remove_entry_secure(@test_data_path)
+      FileUtils.remove_entry_secure(@tmp_dir)
     end
 
     test('parsing records with default option') do
-      stats_data = Datasets::EStatJapan::StatsData.new('test-data-id')
-      cache_file_path = nil
+      test_data_path = @test_data_path
+      stats_data = Datasets::EStatJapan::StatsData.new('test-data-id', app_id: 'valid')
       stats_data.instance_eval do
-        cache_file_path = @data_path = cache_dir_path + '0-success.json' # TODO: tmpdir
-      end
-      File.open(cache_file_path, mode = 'w') do |f|
-        f.write(@response_data_default.to_json)
+        @data_path = test_data_path
       end
 
       records = []
@@ -223,12 +231,13 @@ class EStatJapanTest < Test::Unit::TestCase
     end
 
     test('parsing records with hierarchy_selection') do
+      test_data_path = @test_data_path
       stats_data = \
         Datasets::EStatJapan::StatsData.new('test-data-id',
                                             hierarchy_selection: 'parent')
       stats_data.instance_eval do
-        test_path = cache_dir_path + '0-success.json' # TODO: integrate
-        @data_path = Pathname(test_path)
+        test_data_path = cache_dir_path + '0-success.json' # TODO: integrate
+        @data_path = test_data_path
       end
       records = []
       stats_data.each do |record|
@@ -245,7 +254,7 @@ class EStatJapanTest < Test::Unit::TestCase
         Datasets::EStatJapan::StatsData.new('test-data-id',
                                             hierarchy_selection: 'child')
       stats_data.instance_eval do
-        @data_path = Pathname(test_path)
+        @data_path = test_data_path
       end
       records = []
       stats_data.each do |record|
@@ -262,7 +271,7 @@ class EStatJapanTest < Test::Unit::TestCase
         Datasets::EStatJapan::StatsData.new('test-data-id',
                                             hierarchy_selection: 'both')
       stats_data.instance_eval do
-        @data_path = Pathname(test_path)
+        @data_path = test_data_path
       end
       records = []
       stats_data.each do |record|
@@ -281,7 +290,7 @@ class EStatJapanTest < Test::Unit::TestCase
     #     Datasets::EStatJapan::StatsData.new('test-data-id',
     #                                         skip_nil_column: false)
     #   stats_data.instance_eval do
-    #     @data_path = Pathname(test_path)
+    #     @data_path = test_data_path
     #   end
     #   records = []
     #   value_num = 0
@@ -302,7 +311,7 @@ class EStatJapanTest < Test::Unit::TestCase
     #                                         skip_nil_row: true,
     #                                         skip_nil_column: false)
     #   stats_data.instance_eval do
-    #     @data_path = Pathname(test_path)
+    #     @data_path = test_data_path
     #   end
     #   records = []
     #   stats_data.each do |record|
@@ -329,16 +338,24 @@ class EStatJapanTest < Test::Unit::TestCase
           }
         }
       }
+      @tmp_dir = Dir.mktmpdir
+      @test_data_path = Pathname(File.join(@tmp_dir, '200-error.json'))
+      File.open(@test_data_path, 'w') do |f|
+        f.write(@response_data.to_json)
+      end
     end
+
+    def teardown
+      FileUtils.remove_entry_secure(@tmp_dir)
+    end
+
     test('forbidden access with invalid app_id') do
+      test_data_path = @test_data_path
       ENV['ESTATJAPAN_APP_ID'] = 'test_appid_invalid'
       stats_data = Datasets::EStatJapan::StatsData.new('test-data-id')
       cache_file_path = nil
       stats_data.instance_eval do
-        cache_file_path = @data_path = cache_dir_path + '200-error.json' # TODO: tmpdir
-      end
-      File.open(cache_file_path, mode = 'w') do |f|
-        f.write(@response_data.to_json)
+        cache_file_path = @data_path = test_data_path
       end
       assert_raise(Datasets::EStatJapan::APIError) do
         # contains no data

@@ -246,7 +246,6 @@ class EStatJapanTest < Test::Unit::TestCase
         Datasets::EStatJapan::StatsData.new('test-data-id',
                                             hierarchy_selection: 'parent')
       stats_data.instance_eval do
-        test_data_path = cache_dir_path + '0-success.json' # TODO: integrate
         @data_path = test_data_path
       end
       records = []

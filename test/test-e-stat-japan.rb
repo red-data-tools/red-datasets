@@ -81,6 +81,7 @@ class EStatJapanTest < Test::Unit::TestCase
   sub_test_case('parsing records') do
     def setup
       Datasets::EStatJapan.app_id = nil
+      # prepare test data
       class_obj = [
         {
           "@name": 'table1',
@@ -169,7 +170,7 @@ class EStatJapanTest < Test::Unit::TestCase
             "@unit": 'person'
           },
           {
-            "$": 1000,
+            "$": 2000,
             "@area": entry[:@code],
             "@cat01": 'data1',
             "@tab": 'table1',
@@ -178,6 +179,15 @@ class EStatJapanTest < Test::Unit::TestCase
           }
         ]
       end.flatten
+      ## test record for `skip_nil_row: true`
+      data_inf << {
+        "$": 3000,
+        "@area": '02556',
+        "@cat01": 'data1',
+        "@tab": 'table1',
+        "@time": 'time3',
+        "@unit": 'person'
+      }
       @response_data_default = {
         'GET_STATS_DATA' => {
           'RESULT' => {
@@ -285,45 +295,49 @@ class EStatJapanTest < Test::Unit::TestCase
       assert_equal(2, stats_data.schema.length)
     end
 
-    # test('parsing records with skip_nil_(column|row)') do
-    #   stats_data = \
-    #     Datasets::EStatJapan::StatsData.new('test-data-id',
-    #                                         skip_nil_column: false)
-    #   stats_data.instance_eval do
-    #     @data_path = test_data_path
-    #   end
-    #   records = []
-    #   value_num = 0
-    #   stats_data.each do |record|
-    #     records << record
-    #     value_num += record.values.length
-    #   end
-    #   assert_equal(1897, records.length)
-    #   assert_equal(1897 * 38, value_num)
-    #   assert_equal(1897, stats_data.areas.length)
-    #   assert_equal(38, stats_data.timetables.length)
-    #   assert_equal(38, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
-    #   assert_equal(1, stats_data.columns.length)
-    #   assert_equal(38, stats_data.schema.length)
+    test('parsing records with skip_nil_(column|row)') do
+      test_data_path = @test_data_path
+      stats_data = \
+        Datasets::EStatJapan::StatsData.new('test-data-id',
+                                            skip_nil_column: false)
+      stats_data.instance_eval do
+        @data_path = test_data_path
+      end
+      records = []
+      value_num = 0
+      stats_data.each do |record|
+        records << record
+        value_num += record.values.length
+      end
+      assert_equal(4, records.length)
+      assert_equal(4 * 3, value_num)
+      assert_equal(4, stats_data.areas.length)
+      assert_equal(3, stats_data.timetables.length)
+      assert_equal(3, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(1, stats_data.columns.length)
+      assert_equal(3, stats_data.schema.length)
 
-    #   stats_data = \
-    #     Datasets::EStatJapan::StatsData.new('test-data-id',
-    #                                         skip_nil_row: true,
-    #                                         skip_nil_column: false)
-    #   stats_data.instance_eval do
-    #     @data_path = test_data_path
-    #   end
-    #   records = []
-    #   stats_data.each do |record|
-    #     records << record
-    #   end
-    #   assert_equal(0, records.length)
-    #   assert_equal(1897, stats_data.areas.length)
-    #   assert_equal(38, stats_data.timetables.length)
-    #   assert_equal(38, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
-    #   assert_equal(1, stats_data.columns.length)
-    #   assert_equal(38, stats_data.schema.length)
-    # end
+      stats_data = \
+        Datasets::EStatJapan::StatsData.new('test-data-id',
+                                            skip_nil_row: true,
+                                            skip_nil_column: false)
+      stats_data.instance_eval do
+        @data_path = test_data_path
+      end
+      records = []
+      value_num = 0
+      stats_data.each do |record|
+        records << record
+        value_num += record.values.length
+      end
+      assert_equal(1, records.length)
+      assert_equal(1 * 3, value_num)
+      assert_equal(4, stats_data.areas.length)
+      assert_equal(3, stats_data.timetables.length)
+      assert_equal(3, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(1, stats_data.columns.length)
+      assert_equal(3, stats_data.schema.length)
+    end
   end
 
   sub_test_case('anomaly responses') do

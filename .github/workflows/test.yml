@@ -1,0 +1,54 @@
+name: Test
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    name: "Ruby ${{ matrix.ruby-version }}: ${{ matrix.runs-on }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version:
+          - "2.5"
+          - "2.6"
+          - "2.7"
+          - "3.0"
+        runs-on:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+      - uses: actions/cache@v2
+        if: |
+          runner.os == "Linux"
+        with:
+          path: |
+            ~/.cache/red-datasets
+          key: ${{ runner.os }}
+      - uses: actions/cache@v2
+        if: |
+          runner.os == "macOS"
+        with:
+          path: |
+            ~/Library/Caches/red-datasets
+          key: ${{ runner.os }}
+      - uses: actions/cache@v2
+        if: |
+          runner.os == "Windows"
+        with:
+          path: |
+            ~/AppData/red-datasets
+          key: ${{ runner.os }}
+      - name: Install dependencies
+        run: |
+          bundle install
+      - name: Test
+        run: |
+          bundle exec rake

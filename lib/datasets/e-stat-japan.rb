@@ -8,7 +8,7 @@ module Datasets
   module EStatJapan
     Record = Struct.new(:id, :name, :values)
     # configuration injection
-    module Configuration
+    module Configurable
       attr_accessor :app_id
 
       #
@@ -25,7 +25,7 @@ module Datasets
       end
     end
 
-    extend Configuration
+    extend Configurable
 
     # wrapper class for e-Stat API service
     class StatsData < Dataset

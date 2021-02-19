@@ -125,7 +125,7 @@ module Datasets
         # create rows
         @areas.each do |a_key, a_value|
           rows = []
-          @timetables.reject { |_key, x| x[:skip] }.each do |st_key, _st_value|
+          @time_tables.reject { |_key, x| x[:skip] }.each do |st_key, _st_value|
             row = @columns.reject { |_key, x| x[:skip] }.map do |c_key, _c_value|
               @indexed_data.dig(st_key, a_key, c_key)
             end
@@ -142,9 +142,9 @@ module Datasets
         @areas
       end
 
-      def timetables
+      def time_tables
         load_data
-        @timetables
+        @time_tables
       end
 
       def columns
@@ -238,16 +238,16 @@ module Datasets
         column_def = extract_def(raw_data, 'cat01')
         area_def = extract_def(raw_data, 'area')
 
-        @timetables = index_def(timetable_def)
+        @time_tables = index_def(timetable_def)
         @columns = index_def(column_def)
         @areas = index_def(area_def)
 
-        ## apply time_range to timetables
-        @timetables.select! { |k, _v| @timetables.keys[@time_range].include? k } if @time_range.instance_of?(Range)
+        ## apply time_range to time_tables
+        @time_tables.select! { |k, _v| @time_tables.keys[@time_range].include? k } if @time_range.instance_of?(Range)
 
-        @indexed_data = Hash[*@timetables.keys.map { |x| [x, {}] }.flatten]
+        @indexed_data = Hash[*@time_tables.keys.map { |x| [x, {}] }.flatten]
         get_values(raw_data).each do |row|
-          next unless @timetables.key?(row['@time'])
+          next unless @time_tables.key?(row['@time'])
 
           data = @indexed_data.dig(row['@time'], row['@area']) || {}
           new_data = data.merge(row['@cat01'] => row['$'].to_f)
@@ -283,9 +283,9 @@ module Datasets
       def skip_nil_column
         return unless @skip_nil_column
 
-        # filter timetables and columns
+        # filter time_tables and columns
         @areas.each do |a_key, _a_value|
-          @timetables.each do |st_key, st_value|
+          @time_tables.each do |st_key, st_value|
             unless @indexed_data[st_key].key?(a_key)
               st_value[:skip] = true
               next
@@ -302,7 +302,7 @@ module Datasets
 
       def create_header
         schema = []
-        @timetables.reject { |_key, x| x[:skip] }.each do |_st_key, st_value|
+        @time_tables.reject { |_key, x| x[:skip] }.each do |_st_key, st_value|
           @columns.reject { |_key, x| x[:skip] }.each do |_c_key, c_value|
             schema << "#{st_value['@name']}_#{c_value['@name']}"
           end

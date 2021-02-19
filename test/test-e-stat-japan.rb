@@ -234,8 +234,8 @@ class EStatJapanTest < Test::Unit::TestCase
       assert_equal(4, records.length)
       assert_equal(4 * 2, value_num)
       assert_equal(4, stats_data.areas.length)
-      assert_equal(3, stats_data.timetables.length)
-      assert_equal(2, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(3, stats_data.time_tables.length)
+      assert_equal(2, stats_data.time_tables.reject { |_k, v| v[:skip] }.to_h.length)
       assert_equal(1, stats_data.columns.length)
       assert_equal(2, stats_data.schema.length)
     end
@@ -254,8 +254,8 @@ class EStatJapanTest < Test::Unit::TestCase
       end
       assert_equal(3, records.length)
       assert_equal(3, stats_data.areas.length)
-      assert_equal(3, stats_data.timetables.length)
-      assert_equal(2, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(3, stats_data.time_tables.length)
+      assert_equal(2, stats_data.time_tables.reject { |_k, v| v[:skip] }.to_h.length)
       assert_equal(1, stats_data.columns.length)
       assert_equal(2, stats_data.schema.length)
 
@@ -271,8 +271,8 @@ class EStatJapanTest < Test::Unit::TestCase
       end
       assert_equal(4, records.length)
       assert_equal(4, stats_data.areas.length)
-      assert_equal(3, stats_data.timetables.length)
-      assert_equal(2, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(3, stats_data.time_tables.length)
+      assert_equal(2, stats_data.time_tables.reject { |_k, v| v[:skip] }.to_h.length)
       assert_equal(1, stats_data.columns.length)
       assert_equal(2, stats_data.schema.length)
 
@@ -288,8 +288,8 @@ class EStatJapanTest < Test::Unit::TestCase
       end
       assert_equal(5, records.length)
       assert_equal(5, stats_data.areas.length)
-      assert_equal(3, stats_data.timetables.length)
-      assert_equal(2, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(3, stats_data.time_tables.length)
+      assert_equal(2, stats_data.time_tables.reject { |_k, v| v[:skip] }.to_h.length)
       assert_equal(1, stats_data.columns.length)
       assert_equal(2, stats_data.schema.length)
     end
@@ -311,8 +311,8 @@ class EStatJapanTest < Test::Unit::TestCase
       assert_equal(4, records.length)
       assert_equal(4 * 3, value_num)
       assert_equal(4, stats_data.areas.length)
-      assert_equal(3, stats_data.timetables.length)
-      assert_equal(3, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(3, stats_data.time_tables.length)
+      assert_equal(3, stats_data.time_tables.reject { |_k, v| v[:skip] }.to_h.length)
       assert_equal(1, stats_data.columns.length)
       assert_equal(3, stats_data.schema.length)
 
@@ -332,8 +332,8 @@ class EStatJapanTest < Test::Unit::TestCase
       assert_equal(1, records.length)
       assert_equal(1 * 3, value_num)
       assert_equal(4, stats_data.areas.length)
-      assert_equal(3, stats_data.timetables.length)
-      assert_equal(3, stats_data.timetables.reject { |_k, v| v[:skip] }.to_h.length)
+      assert_equal(3, stats_data.time_tables.length)
+      assert_equal(3, stats_data.time_tables.reject { |_k, v| v[:skip] }.to_h.length)
       assert_equal(1, stats_data.columns.length)
       assert_equal(3, stats_data.schema.length)
     end

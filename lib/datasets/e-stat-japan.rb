@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# TODO rename this file to e-stat-japan.rb
 require 'digest/md5'
 require 'net/http'
 require 'uri'

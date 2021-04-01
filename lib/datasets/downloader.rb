@@ -31,41 +31,56 @@ module Datasets
         headers["Range"] = "bytes=#{start}-"
       end
 
-      Net::HTTP.start(@url.hostname,
-                      @url.port,
-                      :use_ssl => (@url.scheme == "https")) do |http|
-        path = @url.path
-        path += "?#{@url.query}" if @url.query
-        request = Net::HTTP::Get.new(path, headers)
-        http.request(request) do |response|
-          case response
-          when Net::HTTPPartialContent
-            mode = "ab"
-          when Net::HTTPSuccess
-            start = nil
-            mode = "wb"
-          else
-            break
-          end
+      start_http(@url, headers) do |response|
+        case response
+        when Net::HTTPPartialContent
+          mode = "ab"
+        when Net::HTTPSuccess
+          start = nil
+          mode = "wb"
+        else
+          break
+        end
 
-          base_name = @url.path.split("/").last
-          size_current = 0
-          size_max = response.content_length
-          if start
-            size_current += start
-            size_max += start
-          end
-          progress_reporter = ProgressReporter.new(base_name, size_max)
-          partial_output_path.open(mode) do |output|
-            response.read_body do |chunk|
-              size_current += chunk.bytesize
-              progress_reporter.report(size_current)
-              output.write(chunk)
-            end
+        base_name = @url.path.split("/").last
+        size_current = 0
+        size_max = response.content_length
+        if start
+          size_current += start
+          size_max += start
+        end
+        progress_reporter = ProgressReporter.new(base_name, size_max)
+        partial_output_path.open(mode) do |output|
+          response.read_body do |chunk|
+            size_current += chunk.bytesize
+            progress_reporter.report(size_current)
+            output.write(chunk)
           end
         end
       end
       FileUtils.mv(partial_output_path, output_path)
+    end
+
+    private def start_http(url, headers, limit = 10, &block)
+      Net::HTTP.start(url.hostname,
+                      url.port,
+                      :use_ssl => (url.scheme == "https")) do |http|
+        path = url.path
+        path += "?#{url.query}" if url.query
+        request = Net::HTTP::Get.new(url.path, headers)
+        http.request(request) do |response|
+          case response
+          when Net::HTTPSuccess, Net::HTTPPartialContent
+            return block.call(response)
+          when Net::HTTPRedirection
+            url = URI.parse(response[:location])
+            $stderr.puts "Redirect to #{url}"
+            return start_http(url, headers, limit - 1, &block)
+          else
+            response.error!
+          end
+        end
+      end
     end
 
     class ProgressReporter

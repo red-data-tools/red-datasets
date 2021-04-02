@@ -61,7 +61,7 @@ module Datasets
     private
 
     def parse_data(data_path, &block)
-      open_tar(data_path) do |tar|
+      open_tar_gz(data_path) do |tar|
         target_file_names.each do |target_file_name|
           tar.seek(target_file_name) do |entry|
             parse_entry(entry, &block)

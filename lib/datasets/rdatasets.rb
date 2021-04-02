@@ -60,7 +60,7 @@ module Datasets
     end
 
     def open_dataset_file(path)
-      open_tar(data_path) do |tar|
+      open_tar_gz(data_path) do |tar|
         tar.seek("Rdatasets-master/#{path}") do |entry|
           return yield(entry)
         end

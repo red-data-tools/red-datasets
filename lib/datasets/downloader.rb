@@ -58,11 +58,14 @@ module Datasets
         end
       end
       FileUtils.mv(partial_output_path, output_path)
+    rescue TooManyRedirects => error
+      last_url = error.message[/\Atoo many redirections: (.+)\z/, 1]
+      raise TooManyRedirects, "too many redirections: #{@url} .. #{last_url}"
     end
 
     private def start_http(url, headers, limit = 10, &block)
       if limit == 0
-        raise TooManyRedirects, "too many redirections"
+        raise TooManyRedirects, "too many redirections: #{url}"
       end
       Net::HTTP.start(url.hostname,
                       url.port,

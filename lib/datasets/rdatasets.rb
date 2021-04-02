@@ -91,9 +91,11 @@ module Datasets
       end
 
       super()
-      @metadata.id = "rdatasets-#{package_name}-#{dataset_name}"
 
       info = master.dataset_info(package_name, dataset_name)
+      @metadata.id = "rdatasets-#{package_name}-#{dataset_name}"
+      @metadata.name = "Rdatasets: #{package_name}: #{dataset_name}"
+      @metadata.licenses = ["GPL-3"]
       @metadata.description = info[:title]
 
       @package_name = package_name

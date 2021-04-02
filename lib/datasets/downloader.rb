@@ -34,14 +34,11 @@ module Datasets
       end
 
       start_http(@url, headers) do |response|
-        case response
-        when Net::HTTPPartialContent
+        if response.is_a?(Net::HTTPPartialContent)
           mode = "ab"
-        when Net::HTTPSuccess
+        else
           start = nil
           mode = "wb"
-        else
-          break
         end
 
         base_name = @url.path.split("/").last

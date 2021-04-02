@@ -91,7 +91,7 @@ module Datasets
       end
 
       super()
-      @metadata.id = "RDatasets/#{package_name}/#{dataset_name}"
+      @metadata.id = "rdatasets-#{package_name}-#{dataset_name}"
 
       info = master.dataset_info(package_name, dataset_name)
       @metadata.description = info[:title]

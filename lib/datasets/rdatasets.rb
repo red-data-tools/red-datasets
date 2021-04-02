@@ -3,19 +3,28 @@ require_relative "tar_gz_readable"
 
 module Datasets
   class RdatasetsList < Dataset
-    include TarGzReadable
+    Record = Struct.new(:package,
+                        :dataset,
+                        :title,
+                        :rows,
+                        :cols,
+                        :n_binary,
+                        :n_character,
+                        :n_factor,
+                        :n_logical,
+                        :n_numeric,
+                        :csv,
+                        :doc)
 
     def initialize
       super
-      @metadata.id = "Rdatasets"
+      @metadata.id = "rdatasets"
       @metadata.name = "Rdatasets"
       @metadata.url = "https://vincentarelbundock.github.io/Rdatasets/"
       @metadata.licenses = ["GPL-3"]
-      @data_url = "https://github.com/vincentarelbundock/Rdatasets/archive/refs/heads/master.tar.gz"
-      @data_path = cache_dir_path + "rdatasets.tar.gz"
+      @data_url = "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/datasets.csv"
+      @data_path = cache_dir_path + "datasets.csv"
     end
-
-    attr_reader :data_path
 
     def download(force: false)
       if force || !@data_path.exist?
@@ -33,94 +42,68 @@ module Datasets
       end
     end
 
-    def exist?(package_name, dataset_name = nil)
-      if dataset_name.nil?
-        each_dataset(package_name) { return true }
-        return false
-      else
-        each_dataset(package_name).any? {|row| row["Item"] == dataset_name }
-      end
-    end
-
-    def each_dataset(package_name = nil)
+    def each(package_name = nil)
       return to_enum(__method__, package_name) unless block_given?
 
       download
-      open_dataset_file("datasets.csv") do |entry|
-        csv = CSV.parse(entry.read, col_sep: ",", row_sep: :auto, headers: :first_row, quote_char: '"')
+      CSV.open(@data_path, headers: :first_row, converters: :all) do |csv|
         csv.each do |row|
           if package_name.nil? || row["Package"] == package_name
-            yield row
+            yield Record.new(*row.fields)
           end
         end
-      end
-    rescue FileNotFound
-      raise "Unable to find datasets.csv. " +
-            "Please try Datasets::Rdatasets.update to update the data source."
-    end
-
-    def open_dataset_file(path)
-      open_tar_gz(data_path) do |tar|
-        tar.seek("Rdatasets-master/#{path}") do |entry|
-          return yield(entry)
-        end
-        raise FileNotFound, "File not found in Rdatasets: #{path}"
       end
     end
   end
 
   class Rdatasets < Dataset
-    def self.update
-      RdatasetsList.new.download(force: true)
-    end
-
-    def self.datasets(package_name = nil)
-      RdatasetsList.new.each_dataset(package_name).to_a
-    end
-
     def self.exist?(package_name, dataset_name = nil)
-      RdatsetsList.new.exist?(package_name, dataset_name)
+      list = RdatsetsList.new
+      if dataset_name.nil?
+        list.each(package_name).any?
+      else
+        list.each(package_name).any? {|r| r.dataset == dataset_name }
+      end
     end
 
     def initialize(package_name, dataset_name)
-      master = RdatasetsList.new
-      unless master.exist?(package_name, dataset_name)
+      list = RdatasetsList.new
+
+      info = list.each(package_name).find {|r| r.dataset == dataset_name }
+      unless info
         raise ArgumentError, "Unable to locate dataset #{package_name}/#{dataset_name}"
       end
 
       super()
-
-      info = master.dataset_info(package_name, dataset_name)
       @metadata.id = "rdatasets-#{package_name}-#{dataset_name}"
       @metadata.name = "Rdatasets: #{package_name}: #{dataset_name}"
+      @metadata.url = info.csv
       @metadata.licenses = ["GPL-3"]
-      @metadata.description = info[:title]
+      @metadata.description = info.title
+
+      # Follow the original directory structure in the cache directory
+      @data_path = list.send(:cache_dir_path) + "csv" + package_name + (dataset_name + ".csv")
 
       @package_name = package_name
       @dataset_name = dataset_name
     end
 
-    private def check_availability(package_name, dataset_name)
-    end
-
     def each(&block)
       return to_enum(__method__) unless block_given?
 
-      csv_name = File.join(@package_name, @dataset_name) + ".csv"
-      RdatasetsList.new.open_dataset_file("csv/#{csv_name}") do |entry|
-        read_csv_entry(entry.read, &block)
+      download
+      CSV.open(@data_path, headers: :first_row, converters: :all) do |csv|
+        csv.each do |row|
+          record = row.to_h
+          record.delete("")
+          record.transform_keys!(&:to_sym)
+          yield record
+        end
       end
     end
 
-    private def read_csv_entry(data, &block)
-      csv = CSV.new(data, col_sep: ",", row_sep: :auto, headers: :first_row,
-                    quote_char: '"', converters: :all)
-      csv.each do |row|
-        record = row.to_h
-        record.delete("")
-        record.transform_keys!(&:to_sym)
-        yield record
-      end
+    private def download
+      super(@data_path, @metadata.url) unless @data_path.exist?
     end
   end
 end

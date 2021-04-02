@@ -57,7 +57,7 @@ module Datasets
             end
           end
         end
-      rescue FileNotFOund
+      rescue FileNotFound
         raise "Unable to find datasets.csv. " +
               "Please try Datasets::RDatasets.update to update the data source."
       end

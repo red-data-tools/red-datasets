@@ -2,7 +2,7 @@ require_relative "dataset"
 require_relative "tar_gz_readable"
 
 module Datasets
-  class RDatasets < Dataset
+  class Rdatasets < Dataset
     class FileNotFound < StandardError; end
 
     class Master < Dataset
@@ -10,8 +10,8 @@ module Datasets
 
       def initialize
         super
-        @metadata.id = "RDatasets"
-        @metadata.name = "RDatasets"
+        @metadata.id = "Rdatasets"
+        @metadata.name = "Rdatasets"
         @metadata.url = "https://vincentarelbundock.github.io/Rdatasets/"
         @metadata.licenses = ["GPL-3"]
         @data_url = "https://github.com/vincentarelbundock/Rdatasets/archive/refs/heads/master.tar.gz"
@@ -59,7 +59,7 @@ module Datasets
         end
       rescue FileNotFound
         raise "Unable to find datasets.csv. " +
-              "Please try Datasets::RDatasets.update to update the data source."
+              "Please try Datasets::Rdatasets.update to update the data source."
       end
 
       def open_dataset_file(path)
@@ -67,7 +67,7 @@ module Datasets
           tar.seek("Rdatasets-master/#{path}") do |entry|
             return yield(entry)
           end
-          raise FileNotFound, "File not found in RDatasets: #{path}"
+          raise FileNotFound, "File not found in Rdatasets: #{path}"
         end
       end
     end

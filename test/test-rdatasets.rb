@@ -1,8 +1,8 @@
-class RDatasetsTest < Test::Unit::TestCase
+class RdatasetsTest < Test::Unit::TestCase
   sub_test_case("datasets") do
     sub_test_case("AirPassengers") do
       def setup
-        @dataset = Datasets::RDatasets.new("datasets", "AirPassengers")
+        @dataset = Datasets::Rdatasets.new("datasets", "AirPassengers")
       end
 
       test("#each") do
@@ -33,14 +33,14 @@ class RDatasetsTest < Test::Unit::TestCase
 
     test("invalid dataset name") do
       assert_raise(ArgumentError) do
-        Datasets::RDatasets.new("datasets", "invalid datasets name")
+        Datasets::Rdatasets.new("datasets", "invalid datasets name")
       end
     end
   end
 
   test("invalid package name") do
     assert_raise(ArgumentError) do
-      Datasets::RDatasets.new("invalid package name", "AirPassengers")
+      Datasets::Rdatasets.new("invalid package name", "AirPassengers")
     end
   end
 end

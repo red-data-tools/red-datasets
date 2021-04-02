@@ -8,6 +8,8 @@ require "pathname"
 
 module Datasets
   class Downloader
+    class TooManyRedirects < StandardError; end
+
     def initialize(url)
       if url.is_a?(URI::Generic)
         url = url.dup
@@ -62,6 +64,9 @@ module Datasets
     end
 
     private def start_http(url, headers, limit = 10, &block)
+      if limit == 0
+        raise TooManyRedirects, "too many redirections"
+      end
       Net::HTTP.start(url.hostname,
                       url.port,
                       :use_ssl => (url.scheme == "https")) do |http|

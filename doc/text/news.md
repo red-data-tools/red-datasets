@@ -1,5 +1,30 @@
 # News
 
+## 0.1.1 - 2021-04-11
+
+### Improvements
+
+  * Added support for Ruby 3.0.
+
+  * `Datasets::Communities`: Added.
+    [GitHub#64][Patch by Yasuo Honda]
+
+  * `Datasets::EStatJapan`: Added.
+    [GitHub#90][Patch by Kunihiko Miyoshi]
+
+  * `Datasets::Penguins`: Added.
+    [GitHub#100][Patch by Kenta Murata]
+
+  * `Datasets::CLDRPlurals`: Added.
+
+### Thanks
+
+  * Yasuo Honda
+
+  * Kunihiko Miyoshi
+
+  * Kenta Murata
+
 ## 0.1.0 - 2020-02-04
 
 ### Improvements

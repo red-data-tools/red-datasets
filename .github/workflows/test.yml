@@ -8,6 +8,8 @@ jobs:
   test:
     name: "Ruby ${{ matrix.ruby-version }}: ${{ matrix.runs-on }}"
     strategy:
+      # To avoid high frequency datasets download in a short time.
+      max-parallel: 1
       fail-fast: false
       matrix:
         ruby-version:

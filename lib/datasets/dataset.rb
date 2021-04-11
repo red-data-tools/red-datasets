@@ -1,6 +1,7 @@
 require "pathname"
 
 require_relative "downloader"
+require_relative "error"
 require_relative "metadata"
 require_relative "table"
 

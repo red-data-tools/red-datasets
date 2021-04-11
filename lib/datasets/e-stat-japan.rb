@@ -311,9 +311,6 @@ module Datasets
       end
     end
 
-    class Error < StandardError
-    end
-
     class ArgumentError < Error
     end
 

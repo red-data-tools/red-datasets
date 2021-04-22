@@ -26,12 +26,6 @@ module Datasets
       @data_path = cache_dir_path + "datasets.csv"
     end
 
-    def download(force: false)
-      if force || !@data_path.exist?
-        super(@data_path, @data_url)
-      end
-    end
-
     def dataset_info(package_name, dataset_name)
       each_dataset(package_name) do |row|
         if row["Item"] == dataset_name
@@ -45,7 +39,7 @@ module Datasets
     def each(package_name = nil)
       return to_enum(__method__, package_name) unless block_given?
 
-      download
+      download(@data_path, @data_url) unless @data_path.exist?
       CSV.open(@data_path, headers: :first_row, converters: :all) do |csv|
         csv.each do |row|
           if package_name.nil? || row["Package"] == package_name
@@ -91,7 +85,7 @@ module Datasets
     def each(&block)
       return to_enum(__method__) unless block_given?
 
-      download
+      download(@data_path, @metadata.url) unless @data_path.exist?
       CSV.open(@data_path, headers: :first_row, converters: :all) do |csv|
         csv.each do |row|
           record = row.to_h
@@ -100,10 +94,6 @@ module Datasets
           yield record
         end
       end
-    end
-
-    private def download
-      super(@data_path, @metadata.url) unless @data_path.exist?
     end
   end
 end

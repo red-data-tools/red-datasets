@@ -41,15 +41,6 @@ module Datasets
   end
 
   class Rdatasets < Dataset
-    def self.exist?(package_name, dataset_name = nil)
-      list = RdatsetsList.new
-      if dataset_name.nil?
-        list.each(package_name).any?
-      else
-        list.each(package_name).any? {|r| r.dataset == dataset_name }
-      end
-    end
-
     def initialize(package_name, dataset_name)
       list = RdatasetsList.new
 

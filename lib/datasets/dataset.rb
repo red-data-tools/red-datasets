@@ -18,6 +18,12 @@ module Datasets
       Table.new(self)
     end
 
+    def clear_cache!
+      if cache_dir_path.exist?
+        FileUtils.rmtree(cache_dir_path.to_s, secure: true)
+      end
+    end
+
     private
     def cache_dir_path
       case RUBY_PLATFORM

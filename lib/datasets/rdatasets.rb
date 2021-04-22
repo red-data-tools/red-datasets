@@ -76,7 +76,7 @@ module Datasets
       @metadata.description = info.title
 
       # Follow the original directory structure in the cache directory
-      @data_path = list.send(:cache_dir_path) + "csv" + package_name + (dataset_name + ".csv")
+      @data_path = cache_dir_path + (dataset_name + ".csv")
 
       @package_name = package_name
       @dataset_name = dataset_name

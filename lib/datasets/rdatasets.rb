@@ -26,16 +26,31 @@ module Datasets
       @data_path = cache_dir_path + "datasets.csv"
     end
 
-    def each(package_name = nil)
-      return to_enum(__method__, package_name) unless block_given?
+    def filter(package: nil, dataset: nil)
+      return to_enum(__method__, package: package, dataset: dataset) unless block_given?
 
-      download(@data_path, @data_url) unless @data_path.exist?
-      CSV.open(@data_path, headers: :first_row, converters: :all) do |csv|
-        csv.each do |row|
-          if package_name.nil? || row["Package"] == package_name
+      conds = {}
+      conds["Package"] = package if package
+      conds["Item"]    = dataset if dataset
+      if conds.empty?
+        each_row {|row| yield Record.new(*row.fields) }
+      else
+        each_row do |row|
+          if conds.all? {|k, v| row[k] == v }
             yield Record.new(*row.fields)
           end
         end
+      end
+    end
+
+    def each(&block)
+      filter(&block)
+    end
+
+    private def each_row(&block)
+      download(@data_path, @data_url) unless @data_path.exist?
+      CSV.open(@data_path, headers: :first_row, converters: :all) do |csv|
+        csv.each(&block)
       end
     end
   end
@@ -44,7 +59,7 @@ module Datasets
     def initialize(package_name, dataset_name)
       list = RdatasetsList.new
 
-      info = list.each(package_name).find {|r| r.dataset == dataset_name }
+      info = list.filter(package: package_name, dataset: dataset_name).first
       unless info
         raise ArgumentError, "Unable to locate dataset #{package_name}/#{dataset_name}"
       end

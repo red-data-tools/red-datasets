@@ -6,7 +6,7 @@ class RdatasetsTest < Test::Unit::TestCase
 
     sub_test_case("#each") do
       test("with package_name") do
-        records = @dataset.each("datasets").to_a
+        records = @dataset.filter(package: "datasets").to_a
         assert_equal([
                        84,
                        {

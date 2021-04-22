@@ -26,16 +26,6 @@ module Datasets
       @data_path = cache_dir_path + "datasets.csv"
     end
 
-    def dataset_info(package_name, dataset_name)
-      each_dataset(package_name) do |row|
-        if row["Item"] == dataset_name
-          record = row.to_h
-          record.transform_keys! {|key| key.downcase.to_sym }
-          return record
-        end
-      end
-    end
-
     def each(package_name = nil)
       return to_enum(__method__, package_name) unless block_given?
 

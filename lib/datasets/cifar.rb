@@ -1,10 +1,10 @@
-require "rubygems/package"
-require "zlib"
-
+require_relative "tar_gz_readable"
 require_relative "dataset"
 
 module Datasets
   class CIFAR < Dataset
+    include TarGzReadable
+
     module Pixelable
       def pixels
         data.unpack("C*")
@@ -61,7 +61,7 @@ module Datasets
     private
 
     def parse_data(data_path, &block)
-      open_tar(data_path) do |tar|
+      open_tar_gz(data_path) do |tar|
         target_file_names.each do |target_file_name|
           tar.seek(target_file_name) do |entry|
             parse_entry(entry, &block)
@@ -121,14 +121,6 @@ module Datasets
           fine_label = entry.read(1).unpack("C")[0]
           data = entry.read(3072)
           yield Record100.new(data, coarse_label, fine_label)
-        end
-      end
-    end
-
-    def open_tar(data_path)
-      Zlib::GzipReader.open(data_path) do |f|
-        Gem::Package::TarReader.new(f) do |tar|
-          yield(tar)
         end
       end
     end

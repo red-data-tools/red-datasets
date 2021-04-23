@@ -82,7 +82,12 @@ module Datasets
             $stderr.puts "Redirect to #{url}"
             return start_http(url, headers, limit - 1, &block)
           else
-            response.error!
+            message = response.code
+            if response.message and not response.message.empty?
+              message += ": #{response.message}"
+            end
+            message += ": #{url}"
+            raise response.error_type.new(message, response)
           end
         end
       end

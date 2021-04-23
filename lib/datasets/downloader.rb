@@ -67,12 +67,13 @@ module Datasets
       if limit == 0
         raise TooManyRedirects, "too many redirections: #{url}"
       end
-      Net::HTTP.start(url.hostname,
-                      url.port,
-                      :use_ssl => (url.scheme == "https")) do |http|
+      http = Net::HTTP.new(url.hostname, url.port)
+      # http.set_debug_output($stderr)
+      http.use_ssl = (url.scheme == "https")
+      http.start do
         path = url.path
         path += "?#{url.query}" if url.query
-        request = Net::HTTP::Get.new(url.path, headers)
+        request = Net::HTTP::Get.new(path, headers)
         http.request(request) do |response|
           case response
           when Net::HTTPSuccess, Net::HTTPPartialContent

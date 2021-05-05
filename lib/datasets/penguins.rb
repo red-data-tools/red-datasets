@@ -19,7 +19,6 @@ module Datasets
                         :delta_15_n_permil,
                         :delta_13_c_permil,
                         :comments)
-
     class SpeciesBase < Dataset
       def initialize
         super
@@ -62,16 +61,16 @@ module Datasets
       URL = "https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-pal.219.3&entityid=002f3893385f710df69eeebe893144ff".freeze
     end
 
-    # Gentoo penguin data from: https://doi.org/10.6073/pasta/2b1cff60f81640f182433d23e68541ce
-    class Gentoo < SpeciesBase
-      DOI = "doi.org/10.6073/pasta/2b1cff60f81640f182433d23e68541ce".freeze
-      URL = "https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-pal.220.3&entityid=e03b43c924f226486f2f0ab6709d2381".freeze
-    end
-
     # Chinstrap penguin data from: https://doi.org/10.6073/pasta/409c808f8fc9899d02401bdb04580af7
     class Chinstrap < SpeciesBase
       DOI = "doi.org/10.6073/pasta/409c808f8fc9899d02401bdb04580af7".freeze
       URL = "https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-pal.221.2&entityid=fe853aa8f7a59aa84cdd3197619ef462".freeze
+    end
+
+    # Gentoo penguin data from: https://doi.org/10.6073/pasta/2b1cff60f81640f182433d23e68541ce
+    class Gentoo < SpeciesBase
+      DOI = "doi.org/10.6073/pasta/2b1cff60f81640f182433d23e68541ce".freeze
+      URL = "https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-pal.220.3&entityid=e03b43c924f226486f2f0ab6709d2381".freeze
     end
   end
 
@@ -100,8 +99,8 @@ module Datasets
 
       species_classes = [
         PenguinsRawData::Adelie,
+        PenguinsRawData::Chinstrap,
         PenguinsRawData::Gentoo,
-        PenguinsRawData::Chinstrap
       ]
 
       species_classes.each do |species_class|
@@ -112,14 +111,36 @@ module Datasets
     end
 
     private def convert_record(raw_record)
-      Record.new(raw_record.species.split(' ')[0],
-                 raw_record.island,
-                 raw_record.culmen_length_mm,
-                 raw_record.culmen_depth_mm,
-                 raw_record.flipper_length_mm&.to_i,
-                 raw_record.body_mass_g&.to_i,
-                 raw_record.sex&.downcase,
-                 raw_record.date_egg&.year)
+      Record.new(*cleanse_fields(raw_record))
+    end
+
+    private def cleanse_fields(raw_record)
+      species = raw_record.species.split(' ')[0]
+      flipper_length_mm = raw_record.flipper_length_mm&.to_i
+      body_mass_g = raw_record.body_mass_g&.to_i
+      sex = normalize_sex(raw_record.sex)
+      year = raw_record.date_egg&.year
+
+      [
+        species,
+        raw_record.island,
+        raw_record.culmen_length_mm,
+        raw_record.culmen_depth_mm,
+        flipper_length_mm,
+        body_mass_g,
+        sex,
+        year
+      ]
+    end
+
+    private def normalize_sex(val)
+      val = val&.downcase
+      case val
+      when "female", "male", nil
+        val
+      else
+        nil
+      end
     end
   end
 end

@@ -182,6 +182,18 @@ class PenguinsTest < Test::Unit::TestCase
       @dataset = Datasets::Penguins.new
     end
 
+    test("order of species") do
+      species_values = @dataset.map {|r| r.species }.uniq
+      assert_equal(["Adelie", "Chinstrap", "Gentoo"],
+                   species_values)
+    end
+
+    test("data cleansing") do
+      sex_values = @dataset.map {|r| r.sex }.uniq.compact.sort
+      assert_equal(["female", "male"],
+                   sex_values)
+    end
+
     test("#each") do
       records = @dataset.each.to_a
       assert_equal([
@@ -197,16 +209,6 @@ class PenguinsTest < Test::Unit::TestCase
                        year: 2007
                      },
                      {
-                       species: "Gentoo",
-                       island: "Biscoe",
-                       bill_length_mm: 46.1,
-                       bill_depth_mm: 13.2,
-                       flipper_length_mm: 211,
-                       body_mass_g: 4500,
-                       sex: "female",
-                       year: 2007
-                     },
-                     {
                        species: "Chinstrap",
                        island: "Dream",
                        bill_length_mm: 46.5,
@@ -217,13 +219,23 @@ class PenguinsTest < Test::Unit::TestCase
                        year: 2007
                      },
                      {
-                       species: "Chinstrap",
-                       island: "Dream",
-                       bill_length_mm: 50.2,
-                       bill_depth_mm: 18.7,
-                       flipper_length_mm: 198,
-                       body_mass_g: 3775,
+                       species: "Gentoo",
+                       island: "Biscoe",
+                       bill_length_mm: 46.1,
+                       bill_depth_mm: 13.2,
+                       flipper_length_mm: 211,
+                       body_mass_g: 4500,
                        sex: "female",
+                       year: 2007
+                     },
+                     {
+                       species: "Gentoo",
+                       island: "Biscoe",
+                       bill_length_mm: 49.9,
+                       bill_depth_mm: 16.1,
+                       flipper_length_mm: 213,
+                       body_mass_g: 5400,
+                       sex: "male",
                        year: 2009
                      }
                    ],
@@ -231,7 +243,7 @@ class PenguinsTest < Test::Unit::TestCase
                      records.size,
                      records[0].to_h,
                      records[152].to_h,
-                     records[276].to_h,
+                     records[220].to_h,
                      records[-1].to_h,
                    ])
     end

@@ -33,7 +33,8 @@ jobs:
           path: |
             ~/.cache/red-datasets
           key: ${{ runner.os }}-${{ hashFiles('lib/**') }}
-          restore-keys: ${{ runner.os }}-
+          restore-keys: |
+            ${{ runner.os }}-
       - uses: actions/cache@v2
         if: |
           runner.os == 'macOS'
@@ -41,7 +42,8 @@ jobs:
           path: |
             ~/Library/Caches/red-datasets
           key: ${{ runner.os }}-${{ hashFiles('lib/**') }}
-          restore-keys: ${{ runner.os }}-
+          restore-keys: |
+            ${{ runner.os }}-
       - uses: actions/cache@v2
         if: |
           runner.os == 'Windows'
@@ -49,7 +51,8 @@ jobs:
           path: |
             ~/AppData/Local/red-datasets
           key: ${{ runner.os }}-${{ hashFiles('lib/**') }}
-          restore-keys: ${{ runner.os }}-
+          restore-keys: |
+            ${{ runner.os }}-
       - name: Install dependencies
         run: |
           bundle install

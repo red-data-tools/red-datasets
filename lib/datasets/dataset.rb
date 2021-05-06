@@ -28,7 +28,7 @@ module Datasets
     def cache_dir_path
       case RUBY_PLATFORM
       when /mswin/, /mingw/
-        base_dir = ENV["LOCALAPPDATA"] || "~/AppData"
+        base_dir = ENV["LOCALAPPDATA"] || "~/AppData/Local"
       when /darwin/
         base_dir = "~/Library/Caches"
       else

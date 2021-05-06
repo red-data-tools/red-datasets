@@ -47,7 +47,7 @@ jobs:
           runner.os == 'Windows'
         with:
           path: |
-            ~/AppData/red-datasets
+            ~/AppData/Local/red-datasets
           key: ${{ runner.os }}-${{ hashFiles('lib/**') }}
           restore-keys: ${{ runner.os }}-
       - name: Install dependencies

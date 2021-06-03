@@ -1,5 +1,14 @@
 # News
 
+## 0.1.2 - 2021-06-03
+
+### Improvements
+
+  * `Datasets::Rdatasets` and `Datasets::RdatasetsList`: Added.
+
+  * `Datasets::Penguins`: Changed for compatibility with seaborn's
+    penguins dataset.
+
 ## 0.1.1 - 2021-04-11
 
 ### Improvements

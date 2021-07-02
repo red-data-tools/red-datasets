@@ -30,7 +30,7 @@ module Datasets
 
       # Perform the same preprocessing as seaborn's load_dataset function
       preprocessor = :"preprocess_#{@name}_record"
-      send(preprocessor, record) if respond_to?(preprocessor, true)
+      __send__(preprocessor, record) if respond_to?(preprocessor, true)
 
       record
     end

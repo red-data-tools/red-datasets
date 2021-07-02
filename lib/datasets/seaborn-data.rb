@@ -30,7 +30,7 @@ module Datasets
 
       # Perform the same preprocessing as seaborn's load_dataset function
       preprocessor = :"preprocess_#{@name}_record"
-      send(preprocessor, record) if respond_to?(preprocessor)
+      send(preprocessor, record) if respond_to?(preprocessor, true)
 
       record
     end
@@ -39,12 +39,12 @@ module Datasets
 
     # The same preprocessing as seaborn.load_dataset
     def preprocess_flights_record(record)
-      record[:month] = record[:month][0,3]
+      record[:month] &&= record[:month][0,3]
     end
 
     # The same preprocessing as seaborn.load_dataset
     def preprocess_penguins_record(record)
-      record[:sex] = record[:sex].capitalize
+      record[:sex] &&= record[:sex].capitalize
     end
   end
 end

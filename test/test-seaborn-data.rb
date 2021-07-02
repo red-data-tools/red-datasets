@@ -30,4 +30,68 @@ class SeabornDataTest < Test::Unit::TestCase
                    ])
     end
   end
+
+  sub_test_case("flights") do
+    def setup
+      @dataset = Datasets::SeabornData.new("flights")
+    end
+
+    def test_each
+      records = @dataset.each.to_a
+      assert_equal([
+                     144,
+                     {
+                       year: 1949,
+                       month: "Feb",
+                       passengers: 118
+                     },
+                     {
+                       year: 1960,
+                       month: "Dec",
+                       passengers: 432
+                     }
+                   ],
+                   [
+                     records.size,
+                     records[1].to_h,
+                     records[-1].to_h
+                   ])
+    end
+  end
+
+  sub_test_case("penguins") do
+    def setup
+      @dataset = Datasets::SeabornData.new("penguins")
+    end
+
+    def test_each
+      records = @dataset.each.to_a
+      assert_equal([
+                     344,
+                     {
+                       species: "Adelie",
+                       island: "Torgersen",
+                       bill_length_mm: 39.5,
+                       bill_depth_mm: 17.4,
+                       flipper_length_mm: 186,
+                       body_mass_g: 3800,
+                       sex: "Female"
+                     },
+                     {
+                       species: "Gentoo",
+                       island: "Biscoe",
+                       bill_length_mm: 49.9,
+                       bill_depth_mm: 16.1,
+                       flipper_length_mm: 213,
+                       body_mass_g: 5400,
+                       sex: "Male"
+                     }
+                   ],
+                   [
+                     records.size,
+                     records[1].to_h,
+                     records[-1].to_h
+                   ])
+    end
+  end
 end

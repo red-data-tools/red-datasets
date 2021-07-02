@@ -14,7 +14,7 @@ class CLDRPluralsTest < Test::Unit::TestCase
   test("#each") do
     locales = @dataset.each.to_a
     assert_equal([
-                   215,
+                   218,
                    locale("bm",
                           [
                             rule("other",

@@ -1,4 +1,4 @@
-require_relative "tar_gz_readable"
+require_relative "tar-gz-readable"
 require_relative "dataset"
 
 module Datasets

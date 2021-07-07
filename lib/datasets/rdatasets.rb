@@ -1,5 +1,5 @@
 require_relative "dataset"
-require_relative "tar_gz_readable"
+require_relative "tar-gz-readable"
 
 module Datasets
   class RdatasetsList < Dataset

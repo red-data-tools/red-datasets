@@ -24,6 +24,7 @@ module Datasets
       end
     end
 
+    private
     def prepare_record(csv_row)
       record = csv_row.to_h
       record.transform_keys!(&:to_sym)
@@ -34,8 +35,6 @@ module Datasets
 
       record
     end
-
-    private
 
     # The same preprocessing as seaborn.load_dataset
     def preprocess_flights_record(record)

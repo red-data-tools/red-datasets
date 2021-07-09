@@ -1,5 +1,13 @@
 # News
 
+## 0.1.3 - 2021-07-09
+
+### Improvements
+
+  * `Datasets::SeabornData`: Added.
+
+  * `Datasets::SudachiSynonymDictionary`: Added.
+
 ## 0.1.2 - 2021-06-03
 
 ### Improvements

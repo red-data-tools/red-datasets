@@ -92,7 +92,7 @@ module Datasets
       when "2"
         :never
       else
-        raise Error.new("unknown expansion type: #{type.inspect}")
+        raise Error, "unknown expansion type: #{type.inspect}"
       end
     end
 
@@ -123,7 +123,7 @@ module Datasets
       when "4"
         :misnomer
       else
-        raise Error.new("unknown form type: #{type.inspect}")
+        raise Error, "unknown form type: #{type.inspect}"
       end
     end
 
@@ -136,7 +136,7 @@ module Datasets
       when "2"
         :others
       else
-        raise Error.new("unknown acronym type: #{type.inspect}")
+        raise Error, "unknown acronym type: #{type.inspect}"
       end
     end
 
@@ -151,7 +151,7 @@ module Datasets
       when "3"
         :misspelled
       else
-        raise Error.new("unknown variant type: #{type.inspect}")
+        raise Error, "unknown variant type: #{type.inspect}"
       end
     end
 
@@ -162,7 +162,7 @@ module Datasets
       when /\A\((.*)\)\z/
         $1.split("/")
       else
-        raise Error.new("invalid categories: #{categories.inspect}")
+        raise Error, "invalid categories: #{categories.inspect}"
       end
     end
   end

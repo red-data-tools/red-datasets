@@ -183,7 +183,7 @@ module Datasets
         end
         value = parse_value
         if value.nil?
-          raise Error.new("no value for #{operator}: #{@scanner.inspect}")
+          raise Error, "no value for #{operator}: #{@scanner.inspect}"
         end
         [operator, expr, value]
       end
@@ -267,7 +267,7 @@ module Datasets
         if operator
           value = parse_value
           if value.nil?
-            raise Error.new("no value for #{operator}: #{@scanner.inspect}")
+            raise Error, "no value for #{operator}: #{@scanner.inspect}"
           end
           [operator, operand, value]
         else
@@ -336,7 +336,7 @@ module Datasets
           skip_whitespaces
           # U+2026 HORIZONTAL ELLIPSIS
           unless @scanner.scan(/\u2026|\.\.\./)
-            raise "no ellipsis: #{@scanner.inspect}"
+            raise Error, "no ellipsis: #{@scanner.inspect}"
           end
           samples << :elipsis
         end
@@ -362,7 +362,7 @@ module Datasets
           skip_whitespaces
           decimal = @scanner.scan(/[0-9]+/)
           if decimal.nil?
-            raise "no decimal: #{@scanner.inspect}"
+            raise Error, "no decimal: #{@scanner.inspect}"
           end
           value += Float("0.#{decimal}")
           skip_whitespaces

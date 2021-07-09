@@ -65,7 +65,9 @@ module Datasets
         n_bytes = n_uint32s * 4
         mnist_magic_number = 2051
         magic, n_images, n_rows, n_cols = f.read(n_bytes).unpack("N*")
-        raise "This is not #{dataset_name} image file" if magic != mnist_magic_number
+        if magic != mnist_magic_number
+          raise Error, "This is not #{dataset_name} image file"
+        end
         n_images.times do |i|
           data = f.read(n_rows * n_cols)
           label = labels[i]
@@ -99,7 +101,9 @@ module Datasets
         n_bytes = n_uint32s * 2
         mnist_magic_number = 2049
         magic, n_labels = f.read(n_bytes).unpack('N2')
-        raise "This is not #{dataset_name} label file" if magic != mnist_magic_number
+        if magic != mnist_magic_number
+          raise Error, "This is not #{dataset_name} label file"
+        end
         f.read(n_labels).unpack('C*')
       end
     end

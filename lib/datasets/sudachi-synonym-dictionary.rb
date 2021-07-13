@@ -69,7 +69,9 @@ module Datasets
         data_url = "https://raw.githubusercontent.com/WorksApplications/SudachiDict/develop/src/main/text/synonyms.txt"
         download(data_path, data_url)
       end
-      CSV.open(data_path, skip_blanks: true) do |csv|
+      CSV.open(data_path,
+               encoding: "UTF-8",
+               skip_blanks: true) do |csv|
         yield(csv)
       end
     end

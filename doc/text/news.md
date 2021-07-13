@@ -1,5 +1,11 @@
 # News
 
+## 0.1.4 - 2021-07-13
+
+### Improvements
+
+  * `Datasets::SudachiSynonymDictionary`: Stopped depending on `LANG`.
+
 ## 0.1.3 - 2021-07-09
 
 ### Improvements

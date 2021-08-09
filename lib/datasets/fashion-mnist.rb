@@ -8,5 +8,9 @@ module Datasets
     def dataset_name
       "Fashion-MNIST"
     end
+
+    def licenses
+      ["MIT"]
+    end
   end
 end

@@ -35,6 +35,7 @@ module Datasets
       @metadata.id = "mushroom"
       @metadata.name = "Mushroom"
       @metadata.url = "https://archive.ics.uci.edu/ml/datasets/mushroom"
+      @metadata.licenses = ["CC-BY-4.0"]
       @metadata.description = lambda do
         read_names
       end

@@ -21,9 +21,7 @@ module Datasets
       @metadata.id = "sudachi-synonym-dictionary"
       @metadata.name = "Sudachi synonym dictionary"
       @metadata.url = "https://github.com/WorksApplications/SudachiDict/blob/develop/docs/synonyms.md"
-      @metadata.licenses = [
-        "Apache-2.0",
-      ]
+      @metadata.licenses = ["Apache-2.0"]
       @metadata.description = lambda do
         download_description
       end

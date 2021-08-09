@@ -163,6 +163,7 @@ module Datasets
       @metadata.id = "hepatitis"
       @metadata.name = "Hepatitis"
       @metadata.url = "https://archive.ics.uci.edu/ml/datasets/hepatitis"
+      @metadata.licenses = ["CC-BY-4.0"]
       @metadata.description = lambda do
         read_names
       end

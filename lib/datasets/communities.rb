@@ -140,6 +140,7 @@ module Datasets
       @metadata.id = "communities"
       @metadata.name = "Communities"
       @metadata.url = "https://archive.ics.uci.edu/ml/datasets/communities+and+crime"
+      @metadata.licenses = ["CC-BY-4.0"]
       @metadata.description = lambda do
         read_names
       end

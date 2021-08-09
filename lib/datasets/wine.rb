@@ -23,7 +23,8 @@ module Datasets
       super
       @metadata.id = 'wine'
       @metadata.name = 'Wine'
-      @metadata.url = 'http://archive.ics.uci.edu/ml/datasets/wine'
+      @metadata.url = 'https://archive.ics.uci.edu/ml/datasets/wine'
+      @metadata.licenses = ["CC-BY-4.0"]
       @metadata.description = -> { read_names }
     end
 
@@ -44,7 +45,7 @@ module Datasets
     def read_names
       names_path = cache_dir_path + 'wine.names'
       unless names_path.exist?
-        names_url = 'http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.names'
+        names_url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.names'
         download(names_path, names_url)
       end
       names_path.read
@@ -53,7 +54,7 @@ module Datasets
     def open_data
       data_path = cache_dir_path + 'wine.data'
       unless data_path.exist?
-        data_url = 'http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data'
+        data_url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data'
         download(data_path, data_url)
       end
       CSV.open(data_path, converters: %i[numeric]) do |csv|

@@ -74,6 +74,7 @@ module Datasets
         @metadata.id = "e-stat-japan-#{@api_version}"
         @metadata.name = "e-Stat API #{@api_version}"
         @metadata.url = @base_url
+        @metadata.licenses = ["CC-BY-4.0"]
         @metadata.description = "e-Stat API #{@api_version}"
 
         @id = id

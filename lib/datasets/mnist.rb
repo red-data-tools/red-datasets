@@ -28,6 +28,7 @@ module Datasets
       @metadata.id = "#{dataset_name.downcase}-#{type}"
       @metadata.name = "#{dataset_name}: #{type}"
       @metadata.url = self.class::BASE_URL
+      @metadata.licenses = licenses
       @type = type
 
       case type
@@ -57,6 +58,10 @@ module Datasets
     end
 
     private
+    def licenses
+      []
+    end
+
     def open_data(image_path, label_path, &block)
       labels = parse_labels(label_path)
 

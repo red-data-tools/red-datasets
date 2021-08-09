@@ -31,7 +31,8 @@ module Datasets
       @type = type
       @metadata.id = "adult-#{@type}"
       @metadata.name = "Adult: #{@type}"
-      @metadata.url = "http://archive.ics.uci.edu/ml/datasets/adult"
+      @metadata.url = "https://archive.ics.uci.edu/ml/datasets/adult"
+      @metadata.licenses = ["CC-BY-4.0"]
       @metadata.description = lambda do
         read_names
       end

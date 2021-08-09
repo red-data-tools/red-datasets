@@ -28,6 +28,7 @@ module Datasets
       @metadata.id = "libsvm-dataset-list"
       @metadata.name = "LIBSVM dataset list"
       @metadata.url = "https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/"
+      @metadata.licenses = ["BSD-3-Clause"]
       @metadata.description = lambda do
         extract_description
       end

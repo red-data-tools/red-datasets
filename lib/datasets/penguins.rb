@@ -23,10 +23,10 @@ module Datasets
       def initialize
         super
         species = self.class.name.split("::").last.downcase
-        @metadata.id = "palmerpenguins-raw-#{species}"
+        @metadata.id = "palmerpenguins-#{species}"
         @metadata.url = self.class::URL
         @metadata.licenses = ["CC0-1.0"]
-        @data_path = cache_dir_path + "penguins" + (species + ".csv")
+        @data_path = cache_dir_path + "#{species}.csv"
       end
 
       attr_reader :data_path

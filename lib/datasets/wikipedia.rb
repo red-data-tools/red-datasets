@@ -1,6 +1,7 @@
 require "rexml/streamlistener"
 require "rexml/parsers/baseparser"
 require "rexml/parsers/streamparser"
+require "time"
 
 require_relative "dataset"
 

@@ -1,3 +1,5 @@
+require_relative "dataset"
+
 module Datasets
   class PMJTDatasetList < Dataset
     Record = Struct.new(:unit,

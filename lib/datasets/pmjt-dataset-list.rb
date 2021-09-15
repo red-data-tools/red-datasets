@@ -1,5 +1,5 @@
 module Datasets
-  class PmjtDatasetList < Dataset
+  class PMJTDatasetList < Dataset
     LATEST_VERSION = '201901'
     URL_FORMAT = "http://codh.rois.ac.jp/pmjt/list/pmjt-dataset-list-%{version}.csv".freeze
 

@@ -1,8 +1,5 @@
 module Datasets
   class PMJTDatasetList < Dataset
-    LATEST_VERSION = '201901'
-    URL_FORMAT = "http://codh.rois.ac.jp/pmjt/list/pmjt-dataset-list-%{version}.csv".freeze
-
     Record = Struct.new(:unit,
                         :open_data_category,
                         :tag,
@@ -19,9 +16,9 @@ module Datasets
 
     def initialize
       super()
-      @metadata.id = "pmjt-dataset-list-#{LATEST_VERSION}"
+      @metadata.id = "pmjt-dataset-list"
       @metadata.name = "List of pre-modern Japanese text dataset"
-      @metadata.url = URL_FORMAT % {version: LATEST_VERSION}
+      @metadata.url = "http://codh.rois.ac.jp/pmjt/"
       @metadata.licenses = ["CC-BY-SA-4.0"]
       @metadata.description = <<~DESCRIPTION
         Pre-Modern Japanese Text, owned by National Institute of Japanese Literature, is released image and text data as open data.
@@ -34,7 +31,12 @@ module Datasets
     def each(&block)
       return to_enum(__method__) unless block_given?
 
-      download(@data_path, @metadata.url) unless @data_path.exist?
+      unless @data_path.exist?
+        latest_version = "201901"
+        url = "http://codh.rois.ac.jp/pmjt/list/pmjt-dataset-list-#{latest_version}.csv"
+
+        download(@data_path, url)
+      end
       CSV.open(@data_path, headers: :first_row, encoding: "Windows-31J:UTF-8") do |csv|
         csv.each do |row|
           record = create_record(row)

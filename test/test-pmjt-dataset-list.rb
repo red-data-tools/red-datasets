@@ -1,47 +1,50 @@
-class PmjtDatasetListTest < Test::Unit::TestCase
+class PMJTDatasetListTest < Test::Unit::TestCase
   def setup
-    @dataset = Datasets:: PmjtDatasetList.new(version: '201901')
+    @dataset = Datasets:: PMJTDatasetList.new
   end
 
   test("#each") do
     records = @dataset.each.to_a
+
+    record_first = Datasets::PMJTDatasetList::Record.new
+    record_first.unit = '冊'
+    record_first.open_data_category = '総記'
+    record_first.tag = nil
+    record_first.release_time = 'H31.1'
+    record_first.number = '2'
+    record_first.pubished_or_copied = '刊'
+    record_first.publication_year = '元禄９'
+    record_first.original_number = '９９－３７－１～２'
+    record_first.id = '200003090'
+    record_first.title = '人倫重宝記'
+    record_first.text = nil
+    record_first.bibliographical_introduction = nil
+    record_first.year = nil
+
+    record_last = Datasets::PMJTDatasetList::Record.new
+    record_last.unit = '冊'
+    record_last.open_data_category = '総記'
+    record_last.tag = nil
+    record_last.release_time = 'H27.11'
+    record_last.number = '1'
+    record_last.pubished_or_copied = '刊'
+    record_last.publication_year = '慶応2'
+    record_last.original_number = '４９－１７３'
+    record_last.id = '200021837'
+    record_last.title = '洋学便覧'
+    record_last.text = nil
+    record_last.bibliographical_introduction = '○'
+    record_last.year = '1866'
+
     assert_equal([
                     3126,
-                    {
-                      "(単位)": "冊",
-                      オープンデータ分類: "総記",
-                      タグ: nil,
-                      公開時期: "H31.1",
-                      冊数等: "2",
-                      刊・写: "刊",
-                      刊年・書写年: "元禄９",
-                      原本請求記号: "９９－３７－１～２",
-                      国文研書誌ID: "200003090",
-                      書名（統一書名）: "人倫重宝記",
-                      本文: nil,
-                      解題: nil,
-                      （西暦）: nil
-                    },
-                    {
-                      "(単位)": "冊",
-                      オープンデータ分類: "総記",
-                      タグ: nil,
-                      公開時期: "H27.11",
-                      冊数等: "1",
-                      刊・写: "刊",
-                      刊年・書写年: "慶応2",
-                      原本請求記号: "４９－１７３",
-                      国文研書誌ID: "200021837",
-                      書名（統一書名）: "洋学便覧",
-                      本文: nil,
-                      解題: "○",
-                      （西暦）: "1866"
-                    },
+                    record_first,
+                    record_last
                   ],
                   [
                     records.size,
-                    records[1].to_h,
-                    records[-1].to_h
+                    records[1],
+                    records[-1]
                   ])
   end
 end

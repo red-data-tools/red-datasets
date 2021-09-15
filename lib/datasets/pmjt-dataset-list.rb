@@ -7,10 +7,10 @@ module Datasets
                         :open_data_category,
                         :tag,
                         :release_time,
-                        :number,
-                        :pubished_or_copied,
+                        :n_volumes,
+                        :type,
                         :publication_year,
-                        :original_number,
+                        :original_request_code,
                         :id,
                         :title,
                         :text,
@@ -37,30 +37,28 @@ module Datasets
       download(@data_path, @metadata.url) unless @data_path.exist?
       CSV.open(@data_path, headers: :first_row, encoding: "Windows-31J:UTF-8") do |csv|
         csv.each do |row|
-          record = prepare_record(row)
+          record = create_record(row)
           yield record
         end
       end
     end
 
     private
-    def prepare_record(csv_row)
-      row_hash = csv_row.to_h
-
+    def create_record(csv_row)
       record = Record.new
-      record.unit = row_hash["(単位)"]
-      record.open_data_category = row_hash["オープンデータ分類"]
-      record.tag = row_hash["タグ"]
-      record.release_time = row_hash["公開時期"]
-      record.number = row_hash["冊数等"]
-      record.pubished_or_copied = row_hash["刊・写"]
-      record.publication_year = row_hash["刊年・書写年"]
-      record.original_number = row_hash["原本請求記号"]
-      record.id = row_hash["国文研書誌ID"]
-      record.title = row_hash["書名（統一書名）"]
-      record.text = row_hash["本文"]
-      record.bibliographical_introduction = row_hash["解題"]
-      record.year = row_hash["（西暦）"]
+      record.unit = csv_row["(単位)"]
+      record.open_data_category = csv_row["オープンデータ分類"]
+      record.tag = csv_row["タグ"]
+      record.release_time = csv_row["公開時期"]
+      record.n_volumes = csv_row["冊数等"]
+      record.type = csv_row["刊・写"]
+      record.publication_year = csv_row["刊年・書写年"]
+      record.original_request_code = csv_row["原本請求記号"]
+      record.id = csv_row["国文研書誌ID"]
+      record.title = csv_row["書名（統一書名）"]
+      record.text = csv_row["本文"]
+      record.bibliographical_introduction = csv_row["解題"]
+      record.year = csv_row["（西暦）"]
 
       record
     end

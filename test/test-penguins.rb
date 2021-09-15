@@ -7,7 +7,7 @@ class PenguinsTest < Test::Unit::TestCase
                        dataset = cls.new
                        dataset.data_path.relative_path_from(dataset.send(:cache_dir_path)).to_s
                      }
-      assert_equal(["penguins/adelie.csv", "penguins/gentoo.csv", "penguins/chinstrap.csv"],
+      assert_equal(["adelie.csv", "gentoo.csv", "chinstrap.csv"],
                    data_paths)
     end
   end

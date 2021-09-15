@@ -6,7 +6,7 @@ module Datasets
     def initialize(version: LATEST_VERSION)
       super()
       @metadata.id = "pmjt-dataset-list-#{version}"
-      @metadata.name = "PmjtDatasetList #{version}"
+      @metadata.name = "List of pre-modern Japanese text dataset"
       @metadata.url = URL_FORMAT % {version: version}
       @metadata.licenses = ["CC-BY-SA-4.0"]
       @metadata.description = "Japanese Classic Book #{version}"

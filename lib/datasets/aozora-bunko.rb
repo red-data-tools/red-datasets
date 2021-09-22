@@ -98,7 +98,7 @@ module Datasets
       @metadata.id = 'aozora-bunko'
       @metadata.name = 'Novelists from Aozora Bunko'
       @metadata.url = 'https://www.aozora.gr.jp/'
-      @metadata.licenses = 'CC BY 2.1 JP'
+      @metadata.licenses = 'CC-BY-2.1-JP'
       @metadata.description = <<~DESCRIPTION
         Aozora Bunko is an activity to collect free electronic books that anyone can access
         on the Internet like a library. The copyrighted works and the works that are said to be

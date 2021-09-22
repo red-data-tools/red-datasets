@@ -1,0 +1,85 @@
+class AozoraBunkoTest < Test::Unit::TestCase
+  test(':type is :normal') do
+    datasets = Datasets::AozoraBunko.new
+    assert_equal({
+                   novelist_id: '001257',
+                   novelist: 'アーヴィング ワシントン',
+                   title_id: '059898',
+                   title: 'ウェストミンスター寺院',
+                   syllabary_spelling_type: '新字新仮名',
+                   translator_name: '吉田 甲子太郎',
+                   registered_person_name: 'えにしだ',
+                   proofreader_name: '砂場清隆',
+                   status: '公開',
+                   status_specified_date: '2020-04-03',
+                   original_book_name: 'スケッチ・ブック',
+                   original_book_publisher_name: '新潮文庫、新潮社',
+                   used_version_for_registration: '2000（平成12）年2月20日33刷改版',
+                   used_version_for_proofreading: '2000（平成12）年2月20日33刷改版'
+                 },
+                 datasets.first.to_h)
+  end
+
+  test(':type is extended') do
+    datasets = Datasets::AozoraBunko.new(type: :extended)
+    assert_equal({
+                   title_id: '059898',
+                   title: 'ウェストミンスター寺院',
+                   title_reading: 'ウェストミンスターじいん',
+                   title_reading_collation: 'うえすとみんすたあしいん',
+                   sub_title: '',
+                   sub_title_reading: '',
+                   original_title: '',
+                   first_appearance: '',
+                   ndc_code: 'NDC 933',
+                   syllabary_spelling_type: '新字新仮名',
+                   copyright_for_title: 'なし',
+                   published_date: '2020-04-03',
+                   latest_updated_date: '2020-03-28',
+                   detail_url: 'https://www.aozora.gr.jp/cards/001257/card59898.html',
+                   novelist_id: '001257',
+                   novelist_family_name: 'アーヴィング',
+                   novelist_first_name: 'ワシントン',
+                   novelist_family_name_reading: 'アーヴィング',
+                   novelist_first_name_reading: 'ワシントン',
+                   novelist_family_name_collation: 'ああういんく',
+                   novelist_first_name_collation: 'わしんとん',
+                   novelist_family_name_roman: 'Irving',
+                   novelist_first_name_roman: 'Washington',
+                   novelist_type: '著者',
+                   novelist_birthday: '1783-04-03',
+                   novelist_death_day: '1859-11-28',
+                   copyright_for_novelist: 'なし',
+                   original_book_name1: 'スケッチ・ブック',
+                   original_book_publisher_name1: '新潮文庫、新潮社',
+                   original_book_first_published_date1: '1957（昭和32）年5月20日',
+                   used_version_for_registration1: '2000（平成12）年2月20日33刷改版',
+                   used_version_for_proofreading1: '2000（平成12）年2月20日33刷改版',
+                   base_of_original_book_name1: '',
+                   base_of_original_book_publisher_name1: '',
+                   base_of_original_book_first_published_date1: '',
+                   original_book_name2: '',
+                   original_book_publisher_name2: '',
+                   original_book_first_published_date2: '',
+                   used_version_for_registration2: '',
+                   used_version_for_proofreading2: '',
+                   base_of_original_book_name2: '',
+                   base_of_original_book_publisher_name2: '',
+                   base_of_original_book_first_published_date2: '',
+                   registered_person_name: 'えにしだ',
+                   proofreader_name: '砂場清隆',
+                   text_file_url: 'https://www.aozora.gr.jp/cards/001257/files/59898_ruby_70679.zip',
+                   latest_text_file_updated_date: '2020-03-28',
+                   text_file_character_encoding: 'ShiftJIS',
+                   text_character_set: 'JIS X 0208',
+                   text_file_updating_count: '0',
+                   html_file_url: 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html',
+                   latest_html_file_updated_date: '2020-03-28',
+                   html_file_character_encoding: 'ShiftJIS',
+                   html_character_set: 'JIS X 0208',
+                   html_file_updating_count: '0'
+
+                 },
+                 datasets.first.to_h)
+  end
+end

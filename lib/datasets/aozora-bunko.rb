@@ -68,6 +68,48 @@ module Datasets
       :html_file_updating_count
     )
 
+    class Record
+      def text
+        return @text unless @text.nil?
+        return '' if text_file_url.nil? || text_file_url.empty?
+
+        # when url is not zip file, it needs to open web page by brower and has to download
+        # e.g. https://mega.nz/file/6tMxgAjZ#PglDDyJL0syRhnULqK0qhTMC7cktsgqwObj5fY_knpE
+        return '' unless text_file_url.end_with?('.zip')
+
+        downloader = Datasets::Downloader.new(text_file_url)
+        downloader.download(output_path)
+
+        Zip::File.open(output_path) do |zip_file|
+          zip_file.each do |entry|
+            next unless entry.file?
+
+            entry.get_input_stream do |stream|
+              @text = stream.read.encode(Encoding::UTF_8, Encoding::SHIFT_JIS)
+            end
+          end
+        end
+
+        FileUtils.rmtree(output_path.to_s, secure: true) if output_path.exist?
+
+        @text
+      end
+
+      private
+
+      def output_path
+        base_dir = case RUBY_PLATFORM
+                   when /mswin/, /mingw/
+                     ENV['LOCALAPPDATA'] || '~/AppData/Local'
+                   when /darwin/
+                     '~/Library/Caches'
+                   else
+                     ENV['XDG_CACHE_HOME'] || '~/.cache'
+                   end
+        Pathname(base_dir).expand_path + 'red-datasets' + 'aozora-bunko' + text_file_url.split('/').last
+      end
+    end
+
     def initialize
       super()
 

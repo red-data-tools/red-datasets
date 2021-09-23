@@ -1,27 +1,6 @@
 class AozoraBunkoTest < Test::Unit::TestCase
-  test(':type is :normal') do
+  test('#new') do
     datasets = Datasets::AozoraBunko.new
-    assert_equal({
-                   novelist_id: '001257',
-                   novelist: 'アーヴィング ワシントン',
-                   title_id: '059898',
-                   title: 'ウェストミンスター寺院',
-                   syllabary_spelling_type: '新字新仮名',
-                   translator_name: '吉田 甲子太郎',
-                   registered_person_name: 'えにしだ',
-                   proofreader_name: '砂場清隆',
-                   status: '公開',
-                   status_specified_date: '2020-04-03',
-                   original_book_name: 'スケッチ・ブック',
-                   original_book_publisher_name: '新潮文庫、新潮社',
-                   used_version_for_registration: '2000（平成12）年2月20日33刷改版',
-                   used_version_for_proofreading: '2000（平成12）年2月20日33刷改版'
-                 },
-                 datasets.first.to_h)
-  end
-
-  test(':type is extended') do
-    datasets = Datasets::AozoraBunko.new(type: :extended)
     assert_equal({
                    title_id: '059898',
                    title: 'ウェストミンスター寺院',
@@ -37,19 +16,19 @@ class AozoraBunkoTest < Test::Unit::TestCase
                    published_date: '2020-04-03',
                    latest_updated_date: '2020-03-28',
                    detail_url: 'https://www.aozora.gr.jp/cards/001257/card59898.html',
-                   novelist_id: '001257',
-                   novelist_family_name: 'アーヴィング',
-                   novelist_first_name: 'ワシントン',
-                   novelist_family_name_reading: 'アーヴィング',
-                   novelist_first_name_reading: 'ワシントン',
-                   novelist_family_name_collation: 'ああういんく',
-                   novelist_first_name_collation: 'わしんとん',
-                   novelist_family_name_roman: 'Irving',
-                   novelist_first_name_roman: 'Washington',
-                   novelist_type: '著者',
-                   novelist_birthday: '1783-04-03',
-                   novelist_death_day: '1859-11-28',
-                   copyright_for_novelist: 'なし',
+                   person_id: '001257',
+                   person_family_name: 'アーヴィング',
+                   person_first_name: 'ワシントン',
+                   person_family_name_reading: 'アーヴィング',
+                   person_first_name_reading: 'ワシントン',
+                   person_family_name_collation: 'ああういんく',
+                   person_first_name_collation: 'わしんとん',
+                   person_family_name_roman: 'Irving',
+                   person_first_name_roman: 'Washington',
+                   person_type: '著者',
+                   person_birthday: '1783-04-03',
+                   person_death_day: '1859-11-28',
+                   copyright_for_person: 'なし',
                    original_book_name1: 'スケッチ・ブック',
                    original_book_publisher_name1: '新潮文庫、新潮社',
                    original_book_first_published_date1: '1957（昭和32）年5月20日',
@@ -81,5 +60,31 @@ class AozoraBunkoTest < Test::Unit::TestCase
 
                  },
                  datasets.first.to_h)
+  end
+
+  sub_test_case(:Record) do
+    test('#text method can read from text_file_url') do
+      source_text = '"059898","ウェストミンスター寺院","ウェストミンスターじいん","うえすとみんすたあしいん","","","","","NDC 933","新字新仮名","なし",2020-04-03,2020-03-28,"https://www.aozora.gr.jp/cards/001257/card59898.html","001257","アーヴィング","ワシントン","アーヴィング","ワシントン","ああういんく","わしんとん","Irving","Washington","著者","1783-04-03","1859-11-28","なし","スケッチ・ブック","新潮文庫、新潮社","1957（昭和32）年5月20日","2000（平成12）年2月20日33刷改版","2000（平成12）年2月20日33刷改版","","","","","","","","","","","","えにしだ","砂場清隆","https://www.aozora.gr.jp/cards/001257/files/59898_ruby_70679.zip","2020-03-28","ShiftJIS","JIS X 0208","0","https://www.aozora.gr.jp/cards/001257/files/59898_70731.html","2020-03-28","ShiftJIS","JIS X 0208","0"'
+      csv = CSV.parse(source_text)
+      record = Datasets::AozoraBunko::Record.new(*csv.first)
+
+      assert_equal(
+        true,
+        record.text.start_with?('ウェストミンスター寺院')
+      )
+
+      assert_equal(
+        true,
+        record.text.chomp.end_with?('制作にあたったのは、ボランティアの皆さんです。')
+      )
+    end
+
+    test('#text method cannot read from text_file_url') do
+      source_text = '"060543","Ｊ・Ｆ・ケネディ大統領就任演説　1961年１月20日","ジェー・エフ・ケネディだいとうりょうしゅうにんえんぜつ　せんきゅうひゃくろくじゅういちねんいちがつはつか","しえええふけねていたいとうりようしゆうにんえんせつせんきゆうひやくろくしゆういちねんいちかつはつか","","","","","","新字新仮名","あり",2021-01-20,2020-12-26,"https://www.aozora.gr.jp/cards/000892/card60543.html","002160","加藤","光一","かとう","こういち","かとう","こういち","Kato","Koichi","翻訳者","","","あり","","","","","","","","","","","","","","","","","加藤　光一","","https://mega.nz/file/6tMxgAjZ#PglDDyJL0syRhnULqK0qhTMC7cktsgqwObj5fY_knpE","2020-04-13","UTF-8","Unicode","0","","","","",""'
+      csv = CSV.parse(source_text)
+      record = Datasets::AozoraBunko::Record.new(*csv.first)
+
+      assert_equal('', record.text)
+    end
   end
 end

@@ -115,8 +115,7 @@ module Datasets
         text = csv_file_stream.read.force_encoding(Encoding::UTF_8) # file has Byte Order Mark
 
         CSV.parse(text, headers: true) do |row|
-          columns = row.to_a.map { |e| e[1] }
-          yield(record_class.new(*columns))
+          yield(record_class.new(*row.fields))
         end
       end
     end

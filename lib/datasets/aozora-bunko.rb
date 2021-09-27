@@ -14,7 +14,7 @@ module Datasets
       :original_title,
       :first_appearance,
       :ndc_code, # 分類番号(日本十進分類法の番号)
-      :syllabary_spelling_type, # 文字遣い種別, Recordの仮名遣い種別 と同じ値になっている
+      :syllabary_spelling_type,
       :copyright_for_title,
       :published_date,
       :latest_updated_date,

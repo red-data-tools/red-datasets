@@ -4,6 +4,7 @@ require_relative "downloader"
 require_relative "error"
 require_relative "metadata"
 require_relative "table"
+require_relative "cache-path"
 
 module Datasets
   class Dataset
@@ -19,22 +20,17 @@ module Datasets
     end
 
     def clear_cache!
-      if cache_dir_path.exist?
-        FileUtils.rmtree(cache_dir_path.to_s, secure: true)
-      end
+      cache_path.remove
     end
 
     private
+
     def cache_dir_path
-      case RUBY_PLATFORM
-      when /mswin/, /mingw/
-        base_dir = ENV["LOCALAPPDATA"] || "~/AppData/Local"
-      when /darwin/
-        base_dir = "~/Library/Caches"
-      else
-        base_dir = ENV["XDG_CACHE_HOME"] || "~/.cache"
-      end
-      Pathname(base_dir).expand_path + "red-datasets" + metadata.id
+      cache_path.base_dir
+    end
+
+    def cache_path
+      @cache_path ||= CachePath.new(@metadata.id)
     end
 
     def download(output_path, url)

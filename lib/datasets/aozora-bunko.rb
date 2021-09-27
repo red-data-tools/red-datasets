@@ -90,7 +90,7 @@ module Datasets
           end
         end
 
-        FileUtils.rmtree(output_path.to_s, secure: true) if output_path.exist?
+        clear_cache!
 
         @text
       end
@@ -98,15 +98,15 @@ module Datasets
       private
 
       def output_path
-        base_dir = case RUBY_PLATFORM
-                   when /mswin/, /mingw/
-                     ENV['LOCALAPPDATA'] || '~/AppData/Local'
-                   when /darwin/
-                     '~/Library/Caches'
-                   else
-                     ENV['XDG_CACHE_HOME'] || '~/.cache'
-                   end
-        Pathname(base_dir).expand_path + 'red-datasets' + 'aozora-bunko' + text_file_url.split('/').last
+        cache_path.base_dir + text_file_url.split('/').last
+      end
+
+      def clear_cache!
+        cache_path.remove
+      end
+
+      def cache_path
+        @cache_path ||= CachePath.new("aozora-bunko/#{title_id}")
       end
     end
 

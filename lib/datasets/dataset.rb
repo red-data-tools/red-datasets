@@ -1,10 +1,10 @@
 require "pathname"
 
+require_relative "cache-path"
 require_relative "downloader"
 require_relative "error"
 require_relative "metadata"
 require_relative "table"
-require_relative "cache-path"
 
 module Datasets
   class Dataset

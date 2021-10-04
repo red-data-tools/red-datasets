@@ -69,13 +69,18 @@ module Datasets
     )
 
     class Record
+      def initialize(*args)
+        super
+        @text = nil
+      end
+
       def text
         return @text unless @text.nil?
-        return '' if text_file_url.nil? || text_file_url.empty?
+        return @text if text_file_url.nil? || text_file_url.empty?
 
         # when url is not zip file, it needs to open web page by brower and has to download
         # e.g. https://mega.nz/file/6tMxgAjZ#PglDDyJL0syRhnULqK0qhTMC7cktsgqwObj5fY_knpE
-        return '' unless text_file_url.end_with?('.zip')
+        return @text unless text_file_url.end_with?('.zip')
 
         downloader = Datasets::Downloader.new(text_file_url)
         downloader.download(output_path)

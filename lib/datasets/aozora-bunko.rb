@@ -73,6 +73,7 @@ module Datasets
       def initialize(*args)
         super
         @text = nil
+        @html = nil
       end
 
       def text
@@ -93,10 +94,25 @@ module Datasets
         @text
       end
 
+      def html
+        return @html unless @html.nil?
+        return @html if html_file_url.nil? || html_file_url.empty?
+
+        downloader = Downloader.new(html_file_url)
+        downloader.download(html_file_output_path)
+        @html = IO.read(html_file_output_path).encode(Encoding::UTF_8, normalize_encoding(html_file_character_encoding))
+
+        @html
+      end
+
       private
 
       def text_file_output_path
         cache_path.base_dir + text_file_url.split('/').last
+      end
+
+      def html_file_output_path
+        cache_path.base_dir + html_file_url.split('/').last
       end
 
       def clear_cache!
@@ -111,6 +127,15 @@ module Datasets
         case encoding
         when 'ShiftJIS'
           'Shift_JIS'
+        when 'EUC'
+          # EUC is setted at only :html_file_character_encoding
+          # :html_file_character_encoding value is EUC but the actual condition of encoding is UTF_8 in all case.
+          # e.g. html_file_url is 'http://literature.hanagasumi.net/YoungGoodmanBrownJP.html'
+          #      html_file_character_encoding is 'EUC'
+          #      the actual condition of encoding is UTF_8
+          Encoding::UTF_8
+        when 'UTF-8'
+          Encoding::UTF_8
         else
           encoding
         end

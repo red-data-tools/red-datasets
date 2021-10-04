@@ -65,3 +65,7 @@ p [
 # text API can read from text_file_url field's url
 p record.text
 #=> "ウェストミンスター寺院\r\nワシントン・アーヴィング..."
+
+# html API can read from html_file_url field's url
+p record.html
+#=> "<?xml version=\"1.0\" encoding=\"Shift_JIS\"?>\r\n..."

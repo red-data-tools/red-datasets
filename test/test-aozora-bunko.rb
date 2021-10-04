@@ -86,5 +86,45 @@ class AozoraBunkoTest < Test::Unit::TestCase
 
       assert_equal(nil, record.text)
     end
+
+    test('#html method can read from html_file_url when encoding is ShiftJIS') do
+      record = Datasets::AozoraBunko::Record.new
+      record.title_id = '059898'
+      record.person_id = '001257'
+      record.html_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html'
+      record.html_file_character_encoding = 'ShiftJIS'
+
+      assert_equal("\t<title>ワシントン・アーヴィング　Washington Irving 吉田甲子太郎訳 ウェストミンスター寺院</title>",
+                   record.html.split("\r\n")[8])
+    end
+
+    test('#html method can read from html_file_url when encoding is EUC') do
+      record = Datasets::AozoraBunko::Record.new
+      record.title_id = '048219'
+      record.person_id = '001329'
+      record.html_file_url = 'http://literature.hanagasumi.net/DRHEIDEGGERSEXPERIMENTJP.html'
+      record.html_file_character_encoding = 'EUC'
+
+      assert_equal('<title>ハイデガー博士の実験 </title>',
+                   record.html.split("\r\n")[9])
+    end
+
+    test('#html method can read from html_file_url when encoding is UTF-8') do
+      record = Datasets::AozoraBunko::Record.new
+      record.title_id = '000750'
+      record.person_id = '000146'
+      record.html_file_url = 'http://www.lcv.ne.jp/~ibs52086/fire/'
+      record.html_file_character_encoding = 'UTF-8'
+
+      assert_equal('<title>種田山頭火句集 | 『草木塔抄』他　FIRE ON THE MOUNTAIN</title>',
+                   record.html.split("\n")[7])
+    end
+
+    test('#html method cannot read from html_file_url') do
+      record = Datasets::AozoraBunko::Record.new
+      record.html_file_url = ''
+
+      assert_equal(nil, record.html)
+    end
   end
 end

@@ -1,4 +1,5 @@
 require_relative 'dataset'
+require_relative 'zip-extractor'
 
 module Datasets
   # Dataset for AozoraBunko
@@ -83,16 +84,10 @@ module Datasets
         return @text unless text_file_url.end_with?('.zip')
 
         downloader = Datasets::Downloader.new(text_file_url)
-        downloader.download(output_path)
+        downloader.download(text_file_output_path)
 
-        Zip::File.open(output_path) do |zip_file|
-          zip_file.each do |entry|
-            next unless entry.file?
-
-            entry.get_input_stream do |stream|
-              @text = stream.read.encode(Encoding::UTF_8, Encoding::SHIFT_JIS)
-            end
-          end
+        ZipExtractor.new(text_file_output_path).extract_one_file do |input|
+          @text = input.read.encode(Encoding::UTF_8, Encoding::SHIFT_JIS)
         end
 
         @text
@@ -100,7 +95,7 @@ module Datasets
 
       private
 
-      def output_path
+      def text_file_output_path
         cache_path.base_dir + text_file_url.split('/').last
       end
 

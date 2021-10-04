@@ -112,7 +112,7 @@ module Datasets
       super()
 
       @metadata.id = 'aozora-bunko'
-      @metadata.name = 'Novelists from Aozora Bunko'
+      @metadata.name = 'Aozora Bunko'
       @metadata.url = 'https://www.aozora.gr.jp/'
       @metadata.licenses = 'CC-BY-2.1-JP'
       @metadata.description = <<~DESCRIPTION

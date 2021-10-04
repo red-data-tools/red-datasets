@@ -84,7 +84,7 @@ module Datasets
         # e.g. https://mega.nz/file/6tMxgAjZ#PglDDyJL0syRhnULqK0qhTMC7cktsgqwObj5fY_knpE
         return @text unless text_file_url.end_with?('.zip')
 
-        downloader = Datasets::Downloader.new(text_file_url)
+        downloader = Downloader.new(text_file_url)
         downloader.download(text_file_output_path)
 
         ZipExtractor.new(text_file_output_path).extract_one_file do |input|
@@ -134,7 +134,7 @@ module Datasets
       def normalize_encoding(encoding)
         case encoding
         when 'ShiftJIS'
-          'Shift_JIS'
+          Encoding::Shift_JIS
         when 'EUC'
           # EUC is setted at only :html_file_character_encoding
           # :html_file_character_encoding value is EUC but the actual condition of encoding is UTF_8 in all case.

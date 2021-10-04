@@ -104,7 +104,7 @@ module Datasets
       end
 
       def cache_path
-        @cache_path ||= CachePath.new("aozora-bunko/#{title_id}")
+        @cache_path ||= CachePath.new("aozora-bunko-#{title_id}-#{person_id}")
       end
     end
 

@@ -90,8 +90,6 @@ module Datasets
           end
         end
 
-        clear_cache!
-
         @text
       end
 

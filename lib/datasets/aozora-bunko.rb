@@ -16,7 +16,7 @@ module Datasets
       :first_appearance,
       :ndc_code, # 分類番号(日本十進分類法の番号)
       :syllabary_spelling_type,
-      :title_copyrighted,
+      :copyrighted,
       :published_date,
       :last_updated_date,
       :detail_url,
@@ -103,6 +103,14 @@ module Datasets
         @html = IO.read(html_file_output_path).encode(Encoding::UTF_8, normalize_encoding(html_file_character_encoding))
 
         @html
+      end
+
+      def person_copyrighted
+        self[:person_copyrighted] == 'あり'
+      end
+
+      def copyrighted
+        self[:copyrighted] == 'あり'
       end
 
       private

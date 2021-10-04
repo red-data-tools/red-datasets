@@ -15,7 +15,7 @@ p [
   record.first_appearance,
   record.ndc_code,
   record.syllabary_spelling_type,
-  record.title_copyrighted,
+  record.copyrighted,
   record.published_date,
   record.last_updated_date,
   record.detail_url,

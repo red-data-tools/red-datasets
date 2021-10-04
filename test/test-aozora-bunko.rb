@@ -12,7 +12,7 @@ class AozoraBunkoTest < Test::Unit::TestCase
                    first_appearance: '',
                    ndc_code: 'NDC 933',
                    syllabary_spelling_type: '新字新仮名',
-                   title_copyrighted: 'なし',
+                   copyrighted: 'なし',
                    published_date: '2020-04-03',
                    last_updated_date: '2020-03-28',
                    detail_url: 'https://www.aozora.gr.jp/cards/001257/card59898.html',
@@ -125,6 +125,24 @@ class AozoraBunkoTest < Test::Unit::TestCase
       record.html_file_url = ''
 
       assert_equal(nil, record.html)
+    end
+
+    test('#person_copyrighted returns boolean type') do
+      record = Datasets::AozoraBunko::Record.new
+      record.person_copyrighted = 'あり'
+      assert_equal(true, record.person_copyrighted)
+
+      record.person_copyrighted = 'なし'
+      assert_equal(false, record.person_copyrighted)
+    end
+
+    test('#copyrighted returns boolean type') do
+      record = Datasets::AozoraBunko::Record.new
+      record.copyrighted = 'あり'
+      assert_equal(true, record.copyrighted)
+
+      record.copyrighted = 'なし'
+      assert_equal(false, record.copyrighted)
     end
   end
 end

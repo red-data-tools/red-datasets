@@ -12,6 +12,10 @@ module Datasets
       FileUtils.rmtree(base_dir.to_s, secure: true) if base_dir.exist?
     end
 
+    def remove_file(file)
+      FileUtils.rm(base_dir + file) if (base_dir + file).exist?
+    end
+
     private
 
     def system_cache_dir

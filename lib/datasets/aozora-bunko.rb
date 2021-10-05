@@ -113,18 +113,34 @@ module Datasets
         self[:copyrighted] == 'あり'
       end
 
-      private
-
-      def text_file_output_path
-        cache_path.base_dir + text_file_url.split('/').last
+      def clear_text_file!
+        cache_path.remove_file(text_file_name)
       end
 
-      def html_file_output_path
-        cache_path.base_dir + html_file_url.split('/').last
+      def clear_html_file!
+        cache_path.remove_file(html_file_name)
       end
 
       def clear_cache!
         cache_path.remove
+      end
+
+      private
+
+      def text_file_output_path
+        cache_path.base_dir + text_file_name
+      end
+
+      def html_file_output_path
+        cache_path.base_dir + html_file_name
+      end
+
+      def text_file_name
+        text_file_url.split('/').last
+      end
+
+      def html_file_name
+        html_file_url.split('/').last
       end
 
       def cache_path

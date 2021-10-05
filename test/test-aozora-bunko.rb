@@ -144,5 +144,65 @@ class AozoraBunkoTest < Test::Unit::TestCase
       record.copyrighted = 'なし'
       assert_equal(false, record.copyrighted)
     end
+
+    test('#clear_cache! removes all cache files') do
+      record = Datasets::AozoraBunko::Record.new
+      record.title_id = '059898'
+      record.person_id = '001257'
+      record.text_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_ruby_70679.zip'
+      record.text_file_character_encoding = 'ShiftJIS'
+      record.html_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html'
+      record.html_file_character_encoding = 'ShiftJIS'
+      record.clear_cache!
+
+      assert_equal(false, record.send(:cache_path).base_dir.exist?)
+
+      record.text
+      record.html
+      assert_equal(true, record.send(:cache_path).base_dir.exist?)
+      assert_equal(true, record.send(:text_file_output_path).exist?)
+      assert_equal(true, record.send(:html_file_output_path).exist?)
+
+      record.clear_cache!
+      assert_equal(false, record.send(:html_file_output_path).exist?)
+      assert_equal(false, record.send(:text_file_output_path).exist?)
+      assert_equal(false, record.send(:cache_path).base_dir.exist?)
+    end
+
+    test('#clear_text_file! removes text file cache') do
+      record = Datasets::AozoraBunko::Record.new
+      record.title_id = '059898'
+      record.person_id = '001257'
+      record.text_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_ruby_70679.zip'
+      record.text_file_character_encoding = 'ShiftJIS'
+      record.clear_cache!
+
+      path = record.send(:text_file_output_path)
+      assert_equal(false, path.exist?)
+
+      record.text
+      assert_equal(true, path.exist?)
+
+      record.clear_text_file!
+      assert_equal(false, path.exist?)
+    end
+
+    test('#clear_html_file! removes html file cache') do
+      record = Datasets::AozoraBunko::Record.new
+      record.title_id = '059898'
+      record.person_id = '001257'
+      record.html_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html'
+      record.html_file_character_encoding = 'ShiftJIS'
+      record.clear_cache!
+
+      path = record.send(:html_file_output_path)
+      assert_equal(false, path.exist?)
+
+      record.html
+      assert_equal(true, path.exist?)
+
+      record.clear_html_file!
+      assert_equal(false, path.exist?)
+    end
   end
 end

@@ -190,7 +190,7 @@ module Datasets
     def download
       return if data_path.exist?
 
-      data_url = 'https://www.aozora.gr.jp/index_pages/list_person_all_extended_utf8.zip'
+      data_url = "https://www.aozora.gr.jp/index_pages/#{data_path.basename}"
       super(data_path, data_url)
     end
 

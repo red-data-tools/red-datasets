@@ -103,7 +103,8 @@ module Datasets
 
         downloader = Downloader.new(html_file_url)
         downloader.download(html_file_output_path)
-        @html = IO.read(html_file_output_path).encode(Encoding::UTF_8, normalize_encoding(html_file_character_encoding))
+        @html = File.read(html_file_output_path).encode(Encoding::UTF_8,
+                                                        normalize_encoding(html_file_character_encoding))
 
         @html
       end

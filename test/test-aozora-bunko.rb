@@ -65,6 +65,7 @@ class AozoraBunkoTest < Test::Unit::TestCase
   sub_test_case(:Record) do
     test('#text method can read from text_file_url') do
       record = Datasets::AozoraBunko::Record.new
+      record.cache_path = Datasets::CachePath.new('test')
       record.title_id = '059898'
       record.person_id = '001257'
       record.text_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_ruby_70679.zip'
@@ -89,6 +90,7 @@ class AozoraBunkoTest < Test::Unit::TestCase
 
     test('#html method can read from html_file_url when encoding is ShiftJIS') do
       record = Datasets::AozoraBunko::Record.new
+      record.cache_path = Datasets::CachePath.new('test')
       record.title_id = '059898'
       record.person_id = '001257'
       record.html_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html'
@@ -100,6 +102,8 @@ class AozoraBunkoTest < Test::Unit::TestCase
 
     test('#html method can read from html_file_url when encoding is EUC') do
       record = Datasets::AozoraBunko::Record.new
+      record.cache_path = Datasets::CachePath.new('test')
+
       record.title_id = '048219'
       record.person_id = '001329'
       record.html_file_url = 'http://literature.hanagasumi.net/DRHEIDEGGERSEXPERIMENTJP.html'
@@ -111,6 +115,8 @@ class AozoraBunkoTest < Test::Unit::TestCase
 
     test('#html method can read from html_file_url when encoding is UTF-8') do
       record = Datasets::AozoraBunko::Record.new
+      record.cache_path = Datasets::CachePath.new('test')
+
       record.title_id = '000750'
       record.person_id = '000146'
       record.html_file_url = 'http://www.lcv.ne.jp/~ibs52086/fire/'
@@ -146,63 +152,31 @@ class AozoraBunkoTest < Test::Unit::TestCase
     end
 
     test('#clear_cache! removes all cache files') do
+      aozora = Datasets::AozoraBunko.new
+      cache_path = aozora.send(:cache_path)
       record = Datasets::AozoraBunko::Record.new
+      record.cache_path = cache_path
+
       record.title_id = '059898'
       record.person_id = '001257'
       record.text_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_ruby_70679.zip'
       record.text_file_character_encoding = 'ShiftJIS'
       record.html_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html'
       record.html_file_character_encoding = 'ShiftJIS'
-      record.clear_cache!
+      aozora.clear_cache!
 
-      assert_equal(false, record.send(:cache_path).base_dir.exist?)
+      assert_equal(false, cache_path.base_dir.exist?)
 
       record.text
       record.html
-      assert_equal(true, record.send(:cache_path).base_dir.exist?)
+      assert_equal(true, cache_path.base_dir.exist?)
       assert_equal(true, record.send(:text_file_output_path).exist?)
       assert_equal(true, record.send(:html_file_output_path).exist?)
 
-      record.clear_cache!
+      aozora.clear_cache!
       assert_equal(false, record.send(:html_file_output_path).exist?)
       assert_equal(false, record.send(:text_file_output_path).exist?)
-      assert_equal(false, record.send(:cache_path).base_dir.exist?)
-    end
-
-    test('#clear_text_file! removes text file cache') do
-      record = Datasets::AozoraBunko::Record.new
-      record.title_id = '059898'
-      record.person_id = '001257'
-      record.text_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_ruby_70679.zip'
-      record.text_file_character_encoding = 'ShiftJIS'
-      record.clear_cache!
-
-      path = record.send(:text_file_output_path)
-      assert_equal(false, path.exist?)
-
-      record.text
-      assert_equal(true, path.exist?)
-
-      record.clear_text_file!
-      assert_equal(false, path.exist?)
-    end
-
-    test('#clear_html_file! removes html file cache') do
-      record = Datasets::AozoraBunko::Record.new
-      record.title_id = '059898'
-      record.person_id = '001257'
-      record.html_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html'
-      record.html_file_character_encoding = 'ShiftJIS'
-      record.clear_cache!
-
-      path = record.send(:html_file_output_path)
-      assert_equal(false, path.exist?)
-
-      record.html
-      assert_equal(true, path.exist?)
-
-      record.clear_html_file!
-      assert_equal(false, path.exist?)
+      assert_equal(false, cache_path.base_dir.exist?)
     end
   end
 end

@@ -70,10 +70,13 @@ module Datasets
     )
 
     class Record
+      attr_writer :cache_path
+
       def initialize(*args)
         super
         @text = nil
         @html = nil
+        @cache_path = nil
       end
 
       def text
@@ -113,26 +116,14 @@ module Datasets
         self[:copyrighted] == 'あり'
       end
 
-      def clear_text_file!
-        cache_path.remove_file(text_file_name)
-      end
-
-      def clear_html_file!
-        cache_path.remove_file(html_file_name)
-      end
-
-      def clear_cache!
-        cache_path.remove
-      end
-
       private
 
       def text_file_output_path
-        cache_path.base_dir + text_file_name
+        cache_base_dir + text_file_name
       end
 
       def html_file_output_path
-        cache_path.base_dir + html_file_name
+        cache_base_dir + html_file_name
       end
 
       def text_file_name
@@ -143,8 +134,8 @@ module Datasets
         html_file_url.split('/').last
       end
 
-      def cache_path
-        @cache_path ||= CachePath.new("aozora-bunko-#{title_id}-#{person_id}")
+      def cache_base_dir
+        @cache_path.base_dir + title_id + person_id
       end
 
       def normalize_encoding(encoding)
@@ -187,7 +178,9 @@ module Datasets
         text = csv_file_stream.read.force_encoding(Encoding::UTF_8) # file has Byte Order Mark
 
         CSV.parse(text, headers: true) do |row|
-          yield(Record.new(*row.fields))
+          record = Record.new(*row.fields)
+          record.cache_path = cache_path
+          yield(record)
         end
       end
     end

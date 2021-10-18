@@ -12,7 +12,7 @@ class AozoraBunkoTest < Test::Unit::TestCase
                    first_appearance: '',
                    ndc_code: 'NDC 933',
                    syllabary_spelling_type: '新字新仮名',
-                   copyrighted: 'なし',
+                   copyrighted: false,
                    published_date: '2020-04-03',
                    last_updated_date: '2020-03-28',
                    detail_url: 'https://www.aozora.gr.jp/cards/001257/card59898.html',
@@ -28,7 +28,7 @@ class AozoraBunkoTest < Test::Unit::TestCase
                    person_type: '著者',
                    person_birthday: '1783-04-03',
                    person_date_of_death: '1859-11-28',
-                   person_copyrighted: 'なし',
+                   person_copyrighted: false,
                    original_book_name1: 'スケッチ・ブック',
                    original_book_publisher_name1: '新潮文庫、新潮社',
                    original_book_first_published_date1: '1957（昭和32）年5月20日',
@@ -134,21 +134,17 @@ class AozoraBunkoTest < Test::Unit::TestCase
     end
 
     test('#person_copyrighted returns boolean type') do
-      record = Datasets::AozoraBunko::Record.new
-      record.person_copyrighted = 'あり'
-      assert_equal(true, record.person_copyrighted)
-
-      record.person_copyrighted = 'なし'
+      aozora = Datasets::AozoraBunko.new
+      record = aozora.first
       assert_equal(false, record.person_copyrighted)
+      assert_equal(false, record.to_h[:person_copyrighted])
     end
 
     test('#copyrighted returns boolean type') do
-      record = Datasets::AozoraBunko::Record.new
-      record.copyrighted = 'あり'
-      assert_equal(true, record.copyrighted)
-
-      record.copyrighted = 'なし'
+      aozora = Datasets::AozoraBunko.new
+      record = aozora.first
       assert_equal(false, record.copyrighted)
+      assert_equal(false, record.to_h[:copyrighted])
     end
 
     test('#clear_cache! removes all cache files') do

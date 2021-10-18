@@ -108,14 +108,6 @@ module Datasets
         @html
       end
 
-      def person_copyrighted
-        self[:person_copyrighted] == 'あり'
-      end
-
-      def copyrighted
-        self[:copyrighted] == 'あり'
-      end
-
       private
 
       def text_file_output_path
@@ -178,8 +170,12 @@ module Datasets
         text = csv_file_stream.read.force_encoding(Encoding::UTF_8) # file has Byte Order Mark
 
         CSV.parse(text, headers: true) do |row|
+          %w[作品著作権フラグ 人物著作権フラグ].each do |boolean_column_name|
+            row[boolean_column_name] = normalize_boolean(row[boolean_column_name])
+          end
           record = Record.new(*row.fields)
           record.cache_path = cache_path
+
           yield(record)
         end
       end
@@ -208,6 +204,10 @@ module Datasets
           entry.get_input_stream(&block)
         end
       end
+    end
+
+    def normalize_boolean(column_value)
+      column_value == 'あり'
     end
   end
 end

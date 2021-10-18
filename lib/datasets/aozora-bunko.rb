@@ -198,12 +198,8 @@ module Datasets
     def open_data(&block)
       download
 
-      Zip::File.open(data_path) do |zip_file|
-        zip_file.each do |entry|
-          next unless entry.file?
-
-          entry.get_input_stream(&block)
-        end
+      ZipExtractor.new(data_path).extract_one_file do |input|
+        block.call(input)
       end
     end
 

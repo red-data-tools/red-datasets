@@ -63,88 +63,96 @@ class AozoraBunkoTest < Test::Unit::TestCase
   end
 
   sub_test_case(:Record) do
-    test('#text method can read from text_file_url') do
-      record = Datasets::AozoraBunko::Record.new
-      record.cache_path = Datasets::CachePath.new('test')
-      record.title_id = '059898'
-      record.person_id = '001257'
-      record.text_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_ruby_70679.zip'
-      record.text_file_character_encoding = 'ShiftJIS'
+    sub_test_case('#text') do
+      test('#readable') do
+        record = Datasets::AozoraBunko::Record.new
+        record.cache_path = Datasets::CachePath.new('test')
+        record.title_id = '059898'
+        record.person_id = '001257'
+        record.text_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_ruby_70679.zip'
+        record.text_file_character_encoding = 'ShiftJIS'
 
-      assert_equal([
-                     'ウェストミンスター寺',
-                     "アの皆さんです。\r\n"
-                   ],
-                   [
-                     record.text[0, 10],
-                     record.text[-10, 10]
-                   ])
+        assert_equal([
+                       'ウェストミンスター寺',
+                       "アの皆さんです。\r\n"
+                     ],
+                     [
+                       record.text[0, 10],
+                       record.text[-10, 10]
+                     ])
+      end
+
+      test('not readable') do
+        record = Datasets::AozoraBunko::Record.new
+        record.text_file_url = 'https://mega.nz/file/6tMxgAjZ#PglDDyJL0syRhnULqK0qhTMC7cktsgqwObj5fY_knpE'
+
+        assert_equal(nil, record.text)
+      end
     end
 
-    test('#text method cannot read from text_file_url') do
-      record = Datasets::AozoraBunko::Record.new
-      record.text_file_url = 'https://mega.nz/file/6tMxgAjZ#PglDDyJL0syRhnULqK0qhTMC7cktsgqwObj5fY_knpE'
+    sub_test_case('html') do
+      sub_test_case('readable') do
+        test('encoding is ShiftJIS') do
+          record = Datasets::AozoraBunko::Record.new
+          record.cache_path = Datasets::CachePath.new('test')
+          record.title_id = '059898'
+          record.person_id = '001257'
+          record.html_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html'
+          record.html_file_character_encoding = 'ShiftJIS'
 
-      assert_equal(nil, record.text)
+          assert_equal("\t<title>ワシントン・アーヴィング　Washington Irving 吉田甲子太郎訳 ウェストミンスター寺院</title>",
+                       record.html.split("\r\n")[8])
+        end
+
+        test('encoding is EUC') do
+          record = Datasets::AozoraBunko::Record.new
+          record.cache_path = Datasets::CachePath.new('test')
+
+          record.title_id = '048219'
+          record.person_id = '001329'
+          record.html_file_url = 'http://literature.hanagasumi.net/DRHEIDEGGERSEXPERIMENTJP.html'
+          record.html_file_character_encoding = 'EUC'
+
+          assert_equal('<title>ハイデガー博士の実験 </title>',
+                       record.html.split("\r\n")[9])
+        end
+
+        test('encoding is UTF-8') do
+          record = Datasets::AozoraBunko::Record.new
+          record.cache_path = Datasets::CachePath.new('test')
+
+          record.title_id = '000750'
+          record.person_id = '000146'
+          record.html_file_url = 'http://www.lcv.ne.jp/~ibs52086/fire/'
+          record.html_file_character_encoding = 'UTF-8'
+
+          assert_equal('<title>種田山頭火句集 | 『草木塔抄』他　FIRE ON THE MOUNTAIN</title>',
+                       record.html.split("\n")[7])
+        end
+      end
+
+      test('not readable') do
+        record = Datasets::AozoraBunko::Record.new
+        record.html_file_url = ''
+
+        assert_equal(nil, record.html)
+      end
     end
 
-    test('#html method can read from html_file_url when encoding is ShiftJIS') do
-      record = Datasets::AozoraBunko::Record.new
-      record.cache_path = Datasets::CachePath.new('test')
-      record.title_id = '059898'
-      record.person_id = '001257'
-      record.html_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html'
-      record.html_file_character_encoding = 'ShiftJIS'
+    sub_test_case('converting boolean') do
+      test('#person_copyrighted') do
+        aozora = Datasets::AozoraBunko.new
+        record = aozora.first
+        assert_equal(false, record.person_copyrighted)
+        assert_equal(false, record.to_h[:person_copyrighted])
+      end
 
-      assert_equal("\t<title>ワシントン・アーヴィング　Washington Irving 吉田甲子太郎訳 ウェストミンスター寺院</title>",
-                   record.html.split("\r\n")[8])
-    end
-
-    test('#html method can read from html_file_url when encoding is EUC') do
-      record = Datasets::AozoraBunko::Record.new
-      record.cache_path = Datasets::CachePath.new('test')
-
-      record.title_id = '048219'
-      record.person_id = '001329'
-      record.html_file_url = 'http://literature.hanagasumi.net/DRHEIDEGGERSEXPERIMENTJP.html'
-      record.html_file_character_encoding = 'EUC'
-
-      assert_equal('<title>ハイデガー博士の実験 </title>',
-                   record.html.split("\r\n")[9])
-    end
-
-    test('#html method can read from html_file_url when encoding is UTF-8') do
-      record = Datasets::AozoraBunko::Record.new
-      record.cache_path = Datasets::CachePath.new('test')
-
-      record.title_id = '000750'
-      record.person_id = '000146'
-      record.html_file_url = 'http://www.lcv.ne.jp/~ibs52086/fire/'
-      record.html_file_character_encoding = 'UTF-8'
-
-      assert_equal('<title>種田山頭火句集 | 『草木塔抄』他　FIRE ON THE MOUNTAIN</title>',
-                   record.html.split("\n")[7])
-    end
-
-    test('#html method cannot read from html_file_url') do
-      record = Datasets::AozoraBunko::Record.new
-      record.html_file_url = ''
-
-      assert_equal(nil, record.html)
-    end
-
-    test('#person_copyrighted returns boolean type') do
-      aozora = Datasets::AozoraBunko.new
-      record = aozora.first
-      assert_equal(false, record.person_copyrighted)
-      assert_equal(false, record.to_h[:person_copyrighted])
-    end
-
-    test('#copyrighted returns boolean type') do
-      aozora = Datasets::AozoraBunko.new
-      record = aozora.first
-      assert_equal(false, record.copyrighted)
-      assert_equal(false, record.to_h[:copyrighted])
+      test('#copyrighted') do
+        aozora = Datasets::AozoraBunko.new
+        record = aozora.first
+        assert_equal(false, record.copyrighted)
+        assert_equal(false, record.to_h[:copyrighted])
+      end
     end
 
     test('#clear_cache! removes all cache files') do

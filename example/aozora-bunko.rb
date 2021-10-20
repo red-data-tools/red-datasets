@@ -70,11 +70,5 @@ p record.text
 p record.html
 #=> "<?xml version=\"1.0\" encoding=\"Shift_JIS\"?>\r\n..."
 
-# remove cached text file downloaded from text_file_url
-record.clear_text_file!
-
-# remove cached html file downloaded from html_file_url
-record.clear_html_file!
-
 # remove all cached files
-record.clear_cache!
+aozora.clear_cache!

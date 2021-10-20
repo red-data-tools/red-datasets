@@ -140,18 +140,34 @@ class AozoraBunkoTest < Test::Unit::TestCase
     end
 
     sub_test_case('converting boolean') do
-      test('#person_copyrighted') do
+      test('#person_copyrighted?') do
         aozora = Datasets::AozoraBunko.new
         record = aozora.first
-        assert_equal(false, record.person_copyrighted)
-        assert_equal(false, record.to_h[:person_copyrighted])
+        assert_equal([
+                       false,
+                       false,
+                       false,
+                     ],
+                     [
+                       record.person_copyrighted?,
+                       record.person_copyrighted,
+                       record.to_h[:person_copyrighted],
+                     ])
       end
 
-      test('#copyrighted') do
+      test('#copyrighted?') do
         aozora = Datasets::AozoraBunko.new
         record = aozora.first
-        assert_equal(false, record.copyrighted)
-        assert_equal(false, record.to_h[:copyrighted])
+        assert_equal([
+                       false,
+                       false,
+                       false,
+                     ],
+                     [
+                       record.copyrighted?,
+                       record.copyrighted,
+                       record.to_h[:copyrighted],
+                     ])
       end
     end
 

@@ -79,6 +79,9 @@ module Datasets
         @cache_path = nil
       end
 
+      alias_method :copyrighted?, :copyrighted
+      alias_method :person_copyrighted?, :person_copyrighted
+
       def text
         return @text unless @text.nil?
         return @text if text_file_url.nil? || text_file_url.empty?

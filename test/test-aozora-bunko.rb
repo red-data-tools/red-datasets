@@ -1,6 +1,12 @@
 class AozoraBunkoTest < Test::Unit::TestCase
+  include Helper::PathRestorable
+
+  def setup
+    @dataset = Datasets::AozoraBunko.new
+    @cache_path = @dataset.send(:cache_path)
+  end
+
   test('#new') do
-    datasets = Datasets::AozoraBunko.new
     assert_equal({
                    title_id: '059898',
                    title: 'ウェストミンスター寺院',
@@ -59,14 +65,14 @@ class AozoraBunkoTest < Test::Unit::TestCase
                    html_file_updating_count: '0'
 
                  },
-                 datasets.first.to_h)
+                 @dataset.first.to_h)
   end
 
   sub_test_case(:Record) do
     sub_test_case('#text') do
       test('#readable') do
         record = Datasets::AozoraBunko::Record.new
-        record.cache_path = Datasets::CachePath.new('test')
+        record.cache_path = @cache_path
         record.title_id = '059898'
         record.person_id = '001257'
         record.text_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_ruby_70679.zip'
@@ -94,7 +100,7 @@ class AozoraBunkoTest < Test::Unit::TestCase
       sub_test_case('readable') do
         test('encoding is ShiftJIS') do
           record = Datasets::AozoraBunko::Record.new
-          record.cache_path = Datasets::CachePath.new('test')
+          record.cache_path = @cache_path
           record.title_id = '059898'
           record.person_id = '001257'
           record.html_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html'
@@ -106,7 +112,7 @@ class AozoraBunkoTest < Test::Unit::TestCase
 
         test('encoding is EUC') do
           record = Datasets::AozoraBunko::Record.new
-          record.cache_path = Datasets::CachePath.new('test')
+          record.cache_path = @cache_path
 
           record.title_id = '048219'
           record.person_id = '001329'
@@ -119,7 +125,7 @@ class AozoraBunkoTest < Test::Unit::TestCase
 
         test('encoding is UTF-8') do
           record = Datasets::AozoraBunko::Record.new
-          record.cache_path = Datasets::CachePath.new('test')
+          record.cache_path = @cache_path
 
           record.title_id = '000750'
           record.person_id = '000146'
@@ -141,8 +147,7 @@ class AozoraBunkoTest < Test::Unit::TestCase
 
     sub_test_case('converting boolean') do
       test('#person_copyrighted?') do
-        aozora = Datasets::AozoraBunko.new
-        record = aozora.first
+        record = @dataset.first
         assert_equal([
                        false,
                        false,
@@ -156,8 +161,7 @@ class AozoraBunkoTest < Test::Unit::TestCase
       end
 
       test('#copyrighted?') do
-        aozora = Datasets::AozoraBunko.new
-        record = aozora.first
+        record = @dataset.first
         assert_equal([
                        false,
                        false,
@@ -172,10 +176,8 @@ class AozoraBunkoTest < Test::Unit::TestCase
     end
 
     test('#clear_cache! removes all cache files') do
-      aozora = Datasets::AozoraBunko.new
-      cache_path = aozora.send(:cache_path)
       record = Datasets::AozoraBunko::Record.new
-      record.cache_path = cache_path
+      record.cache_path = @cache_path
 
       record.title_id = '059898'
       record.person_id = '001257'
@@ -183,20 +185,19 @@ class AozoraBunkoTest < Test::Unit::TestCase
       record.text_file_character_encoding = 'ShiftJIS'
       record.html_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html'
       record.html_file_character_encoding = 'ShiftJIS'
-      aozora.clear_cache!
-
-      assert_equal(false, cache_path.base_dir.exist?)
 
       record.text
       record.html
-      assert_equal(true, cache_path.base_dir.exist?)
-      assert_equal(true, record.send(:text_file_output_path).exist?)
-      assert_equal(true, record.send(:html_file_output_path).exist?)
 
-      aozora.clear_cache!
-      assert_equal(false, record.send(:html_file_output_path).exist?)
-      assert_equal(false, record.send(:text_file_output_path).exist?)
-      assert_equal(false, cache_path.base_dir.exist?)
+      restore_path(@cache_path.base_dir) do
+        assert_equal(true, @cache_path.base_dir.exist?)
+        assert_equal(true, record.send(:text_file_output_path).exist?)
+        assert_equal(true, record.send(:html_file_output_path).exist?)
+        @dataset.clear_cache!
+        assert_equal(false, record.send(:html_file_output_path).exist?)
+        assert_equal(false, record.send(:text_file_output_path).exist?)
+        assert_equal(false, @cache_path.base_dir.exist?)
+      end
     end
   end
 end

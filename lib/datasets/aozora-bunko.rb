@@ -138,13 +138,6 @@ module Datasets
         case encoding
         when 'ShiftJIS'
           Encoding::Shift_JIS
-        when 'EUC'
-          # EUC is setted at only :html_file_character_encoding
-          # :html_file_character_encoding value is EUC but the actual condition of encoding is UTF_8 in all case.
-          # e.g. html_file_url is 'http://literature.hanagasumi.net/YoungGoodmanBrownJP.html'
-          #      html_file_character_encoding is 'EUC'
-          #      the actual condition of encoding is UTF_8
-          Encoding::UTF_8
         when 'UTF-8'
           Encoding::UTF_8
         else

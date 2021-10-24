@@ -110,19 +110,6 @@ class AozoraBunkoTest < Test::Unit::TestCase
                        record.html.split("\r\n")[8])
         end
 
-        test('encoding is EUC') do
-          record = Datasets::AozoraBunko::Record.new
-          record.cache_path = @cache_path
-
-          record.title_id = '048219'
-          record.person_id = '001329'
-          record.html_file_url = 'http://literature.hanagasumi.net/DRHEIDEGGERSEXPERIMENTJP.html'
-          record.html_file_character_encoding = 'EUC'
-
-          assert_equal('<title>ハイデガー博士の実験 </title>',
-                       record.html.split("\r\n")[9])
-        end
-
         test('encoding is UTF-8') do
           record = Datasets::AozoraBunko::Record.new
           record.cache_path = @cache_path

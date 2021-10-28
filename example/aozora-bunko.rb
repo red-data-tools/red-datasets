@@ -71,4 +71,4 @@ p book.html
 #=> "<?xml version=\"1.0\" encoding=\"Shift_JIS\"?>\r\n..."
 
 # remove all cached files
-aozora.clear_cache!
+# aozora.clear_cache!

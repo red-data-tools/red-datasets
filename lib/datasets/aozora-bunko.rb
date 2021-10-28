@@ -180,20 +180,10 @@ module Datasets
 
     private
 
-    def data_path
-      cache_dir_path + 'list_person_all_extended_utf8.zip'
-    end
-
-    def download
-      return if data_path.exist?
-
-      data_url = "https://www.aozora.gr.jp/index_pages/#{data_path.basename}"
-      super(data_path, data_url)
-    end
-
     def open_data(&block)
-      download
-
+      data_path = cache_dir_path + 'list_person_all_extended_utf8.zip'
+      data_url = "https://www.aozora.gr.jp/index_pages/#{data_path.basename}"
+      download(data_path, data_url)
       ZipExtractor.new(data_path).extract_one_file do |input|
         block.call(input)
       end

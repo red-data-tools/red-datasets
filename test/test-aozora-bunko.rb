@@ -70,7 +70,7 @@ class AozoraBunkoTest < Test::Unit::TestCase
 
   sub_test_case(:Record) do
     sub_test_case('#text') do
-      test('#readable') do
+      test('readable') do
         record = Datasets::AozoraBunko::Record.new
         record.cache_path = @cache_path
         record.title_id = '059898'
@@ -96,7 +96,7 @@ class AozoraBunkoTest < Test::Unit::TestCase
       end
     end
 
-    sub_test_case('html') do
+    sub_test_case('#html') do
       sub_test_case('readable') do
         test('encoding is ShiftJIS') do
           record = Datasets::AozoraBunko::Record.new

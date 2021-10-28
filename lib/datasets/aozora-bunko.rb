@@ -4,7 +4,7 @@ require_relative 'zip-extractor'
 module Datasets
   # Dataset for AozoraBunko
   class AozoraBunko < Dataset
-    Record = Struct.new(
+    Book = Struct.new(
       # 作品ID,作品名,作品名読み,ソート用読み,副題,副題読み,原題,初出,分類番号,文字遣い種別,作品著作権フラグ,公開日,最終更新日,図書カードURL,
       :title_id,
       :title,
@@ -69,7 +69,7 @@ module Datasets
       :html_file_updating_count
     )
 
-    class Record
+    class Book
       attr_writer :cache_path
 
       def initialize(*args)
@@ -170,10 +170,10 @@ module Datasets
           %w[作品著作権フラグ 人物著作権フラグ].each do |boolean_column_name|
             row[boolean_column_name] = normalize_boolean(row[boolean_column_name])
           end
-          record = Record.new(*row.fields)
-          record.cache_path = cache_path
+          book = Book.new(*row.fields)
+          book.cache_path = cache_path
 
-          yield(record)
+          yield(book)
         end
       end
     end

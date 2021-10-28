@@ -68,121 +68,121 @@ class AozoraBunkoTest < Test::Unit::TestCase
                  @dataset.first.to_h)
   end
 
-  sub_test_case(:Record) do
+  sub_test_case(:Book) do
     sub_test_case('#text') do
       test('readable') do
-        record = Datasets::AozoraBunko::Record.new
-        record.cache_path = @cache_path
-        record.title_id = '059898'
-        record.person_id = '001257'
-        record.text_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_ruby_70679.zip'
-        record.text_file_character_encoding = 'ShiftJIS'
+        book = Datasets::AozoraBunko::Book.new
+        book.cache_path = @cache_path
+        book.title_id = '059898'
+        book.person_id = '001257'
+        book.text_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_ruby_70679.zip'
+        book.text_file_character_encoding = 'ShiftJIS'
 
         assert_equal([
                        'ウェストミンスター寺',
                        "アの皆さんです。\r\n"
                      ],
                      [
-                       record.text[0, 10],
-                       record.text[-10, 10]
+                       book.text[0, 10],
+                       book.text[-10, 10]
                      ])
       end
 
       test('not readable') do
-        record = Datasets::AozoraBunko::Record.new
-        record.text_file_url = 'https://mega.nz/file/6tMxgAjZ#PglDDyJL0syRhnULqK0qhTMC7cktsgqwObj5fY_knpE'
+        book = Datasets::AozoraBunko::Book.new
+        book.text_file_url = 'https://mega.nz/file/6tMxgAjZ#PglDDyJL0syRhnULqK0qhTMC7cktsgqwObj5fY_knpE'
 
-        assert_equal(nil, record.text)
+        assert_equal(nil, book.text)
       end
     end
 
     sub_test_case('#html') do
       sub_test_case('readable') do
         test('encoding is ShiftJIS') do
-          record = Datasets::AozoraBunko::Record.new
-          record.cache_path = @cache_path
-          record.title_id = '059898'
-          record.person_id = '001257'
-          record.html_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html'
-          record.html_file_character_encoding = 'ShiftJIS'
+          book = Datasets::AozoraBunko::Book.new
+          book.cache_path = @cache_path
+          book.title_id = '059898'
+          book.person_id = '001257'
+          book.html_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html'
+          book.html_file_character_encoding = 'ShiftJIS'
 
           assert_equal("\t<title>ワシントン・アーヴィング　Washington Irving 吉田甲子太郎訳 ウェストミンスター寺院</title>",
-                       record.html.split("\r\n")[8])
+                       book.html.split("\r\n")[8])
         end
 
         test('encoding is UTF-8') do
-          record = Datasets::AozoraBunko::Record.new
-          record.cache_path = @cache_path
+          book = Datasets::AozoraBunko::Book.new
+          book.cache_path = @cache_path
 
-          record.title_id = '000750'
-          record.person_id = '000146'
-          record.html_file_url = 'http://www.lcv.ne.jp/~ibs52086/fire/'
-          record.html_file_character_encoding = 'UTF-8'
+          book.title_id = '000750'
+          book.person_id = '000146'
+          book.html_file_url = 'http://www.lcv.ne.jp/~ibs52086/fire/'
+          book.html_file_character_encoding = 'UTF-8'
 
           assert_equal('<title>種田山頭火句集 | 『草木塔抄』他　FIRE ON THE MOUNTAIN</title>',
-                       record.html.split("\n")[7])
+                       book.html.split("\n")[7])
         end
       end
 
       test('not readable') do
-        record = Datasets::AozoraBunko::Record.new
-        record.html_file_url = ''
+        book = Datasets::AozoraBunko::Book.new
+        book.html_file_url = ''
 
-        assert_equal(nil, record.html)
+        assert_equal(nil, book.html)
       end
     end
 
     sub_test_case('converting boolean') do
       test('#person_copyrighted?') do
-        record = @dataset.first
+        book = @dataset.first
         assert_equal([
                        false,
                        false,
                        false,
                      ],
                      [
-                       record.person_copyrighted?,
-                       record.person_copyrighted,
-                       record.to_h[:person_copyrighted],
+                       book.person_copyrighted?,
+                       book.person_copyrighted,
+                       book.to_h[:person_copyrighted],
                      ])
       end
 
       test('#copyrighted?') do
-        record = @dataset.first
+        book = @dataset.first
         assert_equal([
                        false,
                        false,
                        false,
                      ],
                      [
-                       record.copyrighted?,
-                       record.copyrighted,
-                       record.to_h[:copyrighted],
+                       book.copyrighted?,
+                       book.copyrighted,
+                       book.to_h[:copyrighted],
                      ])
       end
     end
 
     test('#clear_cache! removes all cache files') do
-      record = Datasets::AozoraBunko::Record.new
-      record.cache_path = @cache_path
+      book = Datasets::AozoraBunko::Book.new
+      book.cache_path = @cache_path
 
-      record.title_id = '059898'
-      record.person_id = '001257'
-      record.text_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_ruby_70679.zip'
-      record.text_file_character_encoding = 'ShiftJIS'
-      record.html_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html'
-      record.html_file_character_encoding = 'ShiftJIS'
+      book.title_id = '059898'
+      book.person_id = '001257'
+      book.text_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_ruby_70679.zip'
+      book.text_file_character_encoding = 'ShiftJIS'
+      book.html_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html'
+      book.html_file_character_encoding = 'ShiftJIS'
 
-      record.text
-      record.html
+      book.text
+      book.html
 
       restore_path(@cache_path.base_dir) do
         assert_equal(true, @cache_path.base_dir.exist?)
-        assert_equal(true, record.send(:text_file_output_path).exist?)
-        assert_equal(true, record.send(:html_file_output_path).exist?)
+        assert_equal(true, book.send(:text_file_output_path).exist?)
+        assert_equal(true, book.send(:html_file_output_path).exist?)
         @dataset.clear_cache!
-        assert_equal(false, record.send(:html_file_output_path).exist?)
-        assert_equal(false, record.send(:text_file_output_path).exist?)
+        assert_equal(false, book.send(:html_file_output_path).exist?)
+        assert_equal(false, book.send(:text_file_output_path).exist?)
         assert_equal(false, @cache_path.base_dir.exist?)
       end
     end

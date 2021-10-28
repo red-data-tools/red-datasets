@@ -106,8 +106,8 @@ class AozoraBunkoTest < Test::Unit::TestCase
           book.html_file_url = 'https://www.aozora.gr.jp/cards/001257/files/59898_70731.html'
           book.html_file_character_encoding = 'ShiftJIS'
 
-          assert_equal("\t<title>ワシントン・アーヴィング　Washington Irving 吉田甲子太郎訳 ウェストミンスター寺院</title>",
-                       book.html.split("\r\n")[8])
+          assert_equal("<title>ワシントン・アーヴィング　Washington Irving 吉田甲子太郎訳 ウェストミンスター寺院</title>",
+                       book.html.split("\n")[8].strip)
         end
 
         test('encoding is UTF-8') do

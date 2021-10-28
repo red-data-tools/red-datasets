@@ -59,10 +59,8 @@ module Datasets
     private
     def open_data
       data_path = cache_dir_path + "agaricus-lepiota.data"
-      unless data_path.exist?
-        data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/agaricus-lepiota.data"
-        download(data_path, data_url)
-      end
+      data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/agaricus-lepiota.data"
+      download(data_path, data_url)
       CSV.open(data_path) do |csv|
         yield(csv)
       end
@@ -70,10 +68,8 @@ module Datasets
 
     def read_names
       names_path = cache_dir_path + "agaricus-lepiota.names"
-      unless names_path.exist?
-        names_url = "https://archive.ics.uci.edu/ml/machine-learning-databases//mushroom/agaricus-lepiota.names"
-        download(names_path, names_url)
-      end
+      names_url = "https://archive.ics.uci.edu/ml/machine-learning-databases//mushroom/agaricus-lepiota.names"
+      download(names_path, names_url)
       names_path.read
     end
 

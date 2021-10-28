@@ -52,10 +52,8 @@ module Datasets
     private
     def open_data
       data_path = cache_dir_path + "index.html"
-      unless data_path.exist?
-        download(data_path, @metadata.url)
-      end
-      ::File.open(data_path) do |input|
+      download(data_path, @metadata.url)
+      data_path.open do |input|
         yield(input)
       end
     end
@@ -79,10 +77,8 @@ module Datasets
 
     def open_detail(detail)
       data_path = cache_dir_path + detail
-      unless data_path.exist?
-        download(data_path, @metadata.url + detail)
-      end
-      ::File.open(data_path) do |input|
+      download(data_path, @metadata.url + detail)
+      data_path.open do |input|
         yield(input)
       end
     end

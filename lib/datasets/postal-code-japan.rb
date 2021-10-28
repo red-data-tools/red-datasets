@@ -114,9 +114,7 @@ module Datasets
         data_url << "/roman/ken_all_rome.zip"
       end
       data_path = cache_dir_path + "#{@reading}-ken-all.zip"
-      unless data_path.exist?
-        download(data_path, data_url)
-      end
+      download(data_path, data_url)
 
       Zip::File.open(data_path.to_s) do |zip_file|
         zip_file.each do |entry|

@@ -48,7 +48,7 @@ module Datasets
     end
 
     private def each_row(&block)
-      download(@data_path, @data_url) unless @data_path.exist?
+      download(@data_path, @data_url)
       CSV.open(@data_path, headers: :first_row, converters: :all) do |csv|
         csv.each(&block)
       end
@@ -81,7 +81,7 @@ module Datasets
     def each(&block)
       return to_enum(__method__) unless block_given?
 
-      download(@data_path, @metadata.url) unless @data_path.exist?
+      download(@data_path, @metadata.url)
       CSV.open(@data_path, headers: :first_row, converters: :all) do |csv|
         csv.each do |row|
           record = row.to_h

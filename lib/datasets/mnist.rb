@@ -46,13 +46,8 @@ module Datasets
       label_path = cache_dir_path + target_file(:label)
       base_url = self.class::BASE_URL
 
-      unless image_path.exist?
-        download(image_path, base_url + target_file(:image))
-      end
-
-      unless label_path.exist?
-        download(label_path, base_url + target_file(:label))
-      end
+      download(image_path, base_url + target_file(:image))
+      download(label_path, base_url + target_file(:label))
 
       open_data(image_path, label_path, &block)
     end

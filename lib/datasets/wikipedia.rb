@@ -56,10 +56,8 @@ module Datasets
     def open_data(&block)
       base_name = "#{@language}wiki-latest-#{type_in_path}.xml.bz2"
       data_path = cache_dir_path + base_name
-      unless data_path.exist?
-        data_url = "https://dumps.wikimedia.org/#{@language}wiki/latest/#{base_name}"
-        download(data_path, data_url)
-      end
+      data_url = "https://dumps.wikimedia.org/#{@language}wiki/latest/#{base_name}"
+      download(data_path, data_url)
 
       extract_bz2(data_path, &block)
     end

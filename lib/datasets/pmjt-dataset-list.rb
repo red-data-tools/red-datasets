@@ -33,12 +33,9 @@ module Datasets
     def each(&block)
       return to_enum(__method__) unless block_given?
 
-      unless @data_path.exist?
-        latest_version = "201901"
-        url = "http://codh.rois.ac.jp/pmjt/list/pmjt-dataset-list-#{latest_version}.csv"
-
-        download(@data_path, url)
-      end
+      latest_version = "201901"
+      url = "http://codh.rois.ac.jp/pmjt/list/pmjt-dataset-list-#{latest_version}.csv"
+      download(@data_path, url)
       CSV.open(@data_path, headers: :first_row, encoding: "Windows-31J:UTF-8") do |csv|
         csv.each do |row|
           record = create_record(row)

@@ -215,7 +215,7 @@ module Datasets
         # even if error happens dispite of its error mapping.
         # So we can't avoid caching retrieved response from the api.
         # ref: https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0
-        download(@data_path, @url.to_s) unless @data_path.exist?
+        download(@data_path, @url.to_s)
       end
 
       def index_data

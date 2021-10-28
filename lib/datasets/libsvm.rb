@@ -100,13 +100,11 @@ module Datasets
 
     def open_data(&block)
       data_path = cache_dir_path + @file.name
-      unless data_path.exist?
-        download(data_path, @file.url)
-      end
+      download(data_path, @file.url)
       if data_path.extname == ".bz2"
         extract_bz2(data_path, &block)
       else
-        File.open(data_path, &block)
+        data_path.open(&block)
       end
     end
 

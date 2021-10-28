@@ -187,10 +187,8 @@ module Datasets
 
     def open_data
       data_path = cache_dir_path + "hepatitis.csv"
-      unless data_path.exist?
-        data_url = "#{base_url}/hepatitis.data"
-        download(data_path, data_url)
-      end
+      data_url = "#{base_url}/hepatitis.data"
+      download(data_path, data_url)
       CSV.open(data_path) do |csv|
         yield(csv)
       end
@@ -198,10 +196,8 @@ module Datasets
 
     def read_names
       names_path = cache_dir_path + "hepatitis.names"
-      unless names_path.exist?
-        names_url = "#{base_url}/hepatitis.names"
-        download(names_path, names_url)
-      end
+      names_url = "#{base_url}/hepatitis.names"
+      download(names_path, names_url)
       names_path.read
     end
   end

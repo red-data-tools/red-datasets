@@ -50,10 +50,8 @@ module Datasets
       return to_enum(__method__) unless block_given?
 
       data_path = cache_dir_path + "cifar-#{@n_classes}.tar.gz"
-      unless data_path.exist?
-        data_url = "https://www.cs.toronto.edu/~kriz/cifar-#{@n_classes}-binary.tar.gz"
-        download(data_path, data_url)
-      end
+      data_url = "https://www.cs.toronto.edu/~kriz/cifar-#{@n_classes}-binary.tar.gz"
+      download(data_path, data_url)
 
       parse_data(data_path, &block)
     end

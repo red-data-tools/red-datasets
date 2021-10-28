@@ -63,10 +63,8 @@ module Datasets
     private
     def open_data
       data_path = cache_dir_path + "synonyms.txt"
-      unless data_path.exist?
-        data_url = "https://raw.githubusercontent.com/WorksApplications/SudachiDict/develop/src/main/text/synonyms.txt"
-        download(data_path, data_url)
-      end
+      data_url = "https://raw.githubusercontent.com/WorksApplications/SudachiDict/develop/src/main/text/synonyms.txt"
+      download(data_path, data_url)
       CSV.open(data_path,
                encoding: "UTF-8",
                skip_blanks: true) do |csv|
@@ -76,10 +74,8 @@ module Datasets
 
     def download_description
       description_path = cache_dir_path + "synonyms.md"
-      unless description_path.exist?
-        description_url = "https://raw.githubusercontent.com/WorksApplications/SudachiDict/develop/docs/synonyms.md"
-        download(description_path, description_url)
-      end
+      description_url = "https://raw.githubusercontent.com/WorksApplications/SudachiDict/develop/docs/synonyms.md"
+      download(description_path, description_url)
       description_path.read
     end
 

@@ -59,10 +59,8 @@ module Datasets
         ext = "test"
       end
       data_path = cache_dir_path + "adult-#{ext}.csv"
-      unless data_path.exist?
-        data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.#{ext}"
-        download(data_path, data_url)
-      end
+      data_url = "http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.#{ext}"
+      download(data_path, data_url)
 
       options = {
                  converters: [:numeric, lambda {|f| f.strip}],
@@ -75,10 +73,8 @@ module Datasets
 
     def read_names
       names_path = cache_dir_path + "adult.names"
-      unless names_path.exist?
-        names_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names"
-        download(names_path, names_url)
-      end
+      names_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names"
+      download(names_path, names_url)
       names_path.read
     end
   end

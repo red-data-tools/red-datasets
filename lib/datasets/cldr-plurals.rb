@@ -42,10 +42,8 @@ module Datasets
     private
     def open_data
       data_path = cache_dir_path + "plurals.xml"
-      unless data_path.exist?
-        download(data_path, @metadata.url)
-      end
-      ::File.open(data_path) do |input|
+      download(data_path, @metadata.url)
+      data_path.open do |input|
         yield(input)
       end
     end

@@ -23,6 +23,8 @@ module Datasets
     end
 
     def download(output_path)
+      return if output_path.exist?
+
       output_path.parent.mkpath
 
       headers = {"User-Agent" => "Red Datasets/#{VERSION}"}

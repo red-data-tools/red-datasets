@@ -44,14 +44,10 @@ module Datasets
       end
 
       private def open_data
-        download unless data_path.exist?
+        download(data_path, metadata.url)
         CSV.open(data_path, headers: :first_row, converters: :all) do |csv|
           yield csv
         end
-      end
-
-      private def download
-        super(data_path, metadata.url)
       end
     end
 

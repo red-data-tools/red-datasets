@@ -36,10 +36,8 @@ module Datasets
 
       base_name = "ptb.#{@type}.txt"
       data_path = cache_dir_path + base_name
-      unless data_path.exist?
-        base_url = "https://raw.githubusercontent.com/wojzaremba/lstm/master/data"
-        download(data_path, "#{base_url}/#{base_name}")
-      end
+      base_url = "https://raw.githubusercontent.com/wojzaremba/lstm/master/data"
+      download(data_path, "#{base_url}/#{base_name}")
 
       parse_data(data_path, &block)
     end

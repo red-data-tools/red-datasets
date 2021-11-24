@@ -17,14 +17,14 @@ module Datasets
       @metadata.name = "Diamonds"
       @metadata.licenses = ["CC0"]
       @metadata.url = "https://ggplot2.tidyverse.org/reference/diamonds.html"
-      @metadata.description = "Diamonds dataset original from ggplot2, see also https://ggplot2.tidyverse.org/reference/diamonds.html"
+      @metadata.description = "Diamonds dataset from ggplot2"
 
       @data_path = cache_dir_path + "diamonds.csv"
     end
 
     def each(&block)
-
-      download(@data_path, @metadata.url)
+      data_url = "https://github.com/tidyverse/ggplot2/raw/main/data-raw/diamonds.csv"
+      download(@data_path, data_url)
       CSV.open(@data_path, headers: :first_row, converters: :all) do |csv|
         csv.each do |row|
           record = Record.new(*row.fields)

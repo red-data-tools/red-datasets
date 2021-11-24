@@ -78,6 +78,13 @@ module Datasets
     def open_detail(detail)
       data_path = cache_dir_path + detail
       download(data_path, @metadata.url + detail)
+      # Hack to fix XML error in EUR-Lex section of
+      # https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/multilabel.html
+      if detail == "multilabel.html"
+        page = data_path.read
+        page.gsub!("'>', '<',", "'&gt', '&lt',")
+        data_path.write(page)
+      end
       data_path.open do |input|
         yield(input)
       end

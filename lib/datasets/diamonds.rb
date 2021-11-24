@@ -1,27 +1,25 @@
 module Datasets
   class Diamonds < Dataset
-    Record = Struct.new(:label,
-                        :price,
-                        :carat,
+    Record = Struct.new(:carat,
                         :cut,
                         :color,
                         :clarity,
                         :depth,
                         :table,
+                        :price,
                         :x,
                         :y,
                         :z)
 
-    def initialize(name)
+    def initialize()
       super()
       @metadata.id = "diamonds"
       @metadata.name = "Diamonds"
-      @metadata.licenses = ["CC-0"]
+      @metadata.licenses = ["CC0"]
       @metadata.url = "https://www.openml.org/data/get_csv/21792853/dataset"
-      @metadata.description = "Diamonds dataset original from ggplot2"
+      @metadata.description = "Diamonds dataset original from ggplot2, see also https://ggplot2.tidyverse.org/reference/diamonds.html"
 
-      @data_path = cache_dir_path + (name + ".csv")
-      @name = name
+      @data_path = cache_dir_path + "diamonds.csv"
     end
 
     def each(&block)
@@ -29,17 +27,11 @@ module Datasets
       download(@data_path, @metadata.url)
       CSV.open(@data_path, headers: :first_row, converters: :all) do |csv|
         csv.each do |row|
-          record = prepare_record(row)
+          record = Record.new(*row.fields)
           yield record
         end
       end
     end
-
-    private
-    def prepare_record(csv_row)
-      record = csv_row.to_h
-      record.transform_keys!(&:to_sym)
-   end
 
  end
 end

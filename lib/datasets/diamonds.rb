@@ -16,7 +16,7 @@ module Datasets
       @metadata.id = "diamonds"
       @metadata.name = "Diamonds"
       @metadata.licenses = ["CC0"]
-      @metadata.url = "https://www.openml.org/data/get_csv/21792853/dataset"
+      @metadata.url = "https://ggplot2.tidyverse.org/reference/diamonds.html"
       @metadata.description = "Diamonds dataset original from ggplot2, see also https://ggplot2.tidyverse.org/reference/diamonds.html"
 
       @data_path = cache_dir_path + "diamonds.csv"

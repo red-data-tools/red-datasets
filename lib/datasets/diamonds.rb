@@ -22,7 +22,9 @@ module Datasets
       @data_path = cache_dir_path + "diamonds.csv"
     end
 
-    def each(&block)
+    def each
+      return to_enum(__method__) unless block_given?
+
       data_url = "https://github.com/tidyverse/ggplot2/raw/main/data-raw/diamonds.csv"
       download(@data_path, data_url)
       CSV.open(@data_path, headers: :first_row, converters: :all) do |csv|
@@ -33,5 +35,5 @@ module Datasets
       end
     end
 
- end
+  end
 end

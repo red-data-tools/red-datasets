@@ -15,7 +15,7 @@ module Datasets
       super()
       @metadata.id = "diamonds"
       @metadata.name = "Diamonds"
-      @metadata.licenses = ["CC0"]
+      @metadata.licenses = ["Unknown"]
       @metadata.url = "https://ggplot2.tidyverse.org/reference/diamonds.html"
       @metadata.description = "Diamonds dataset from ggplot2"
 

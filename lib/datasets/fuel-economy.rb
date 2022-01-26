@@ -17,7 +17,7 @@ module Datasets
       @metadata.id = "FuelEconomy"
       @metadata.name = "Fuel-Economy"
       @metadata.licenses = ["PublicDomain"]
-      @metadata.url = "https://ggplot2.tidyverse.org/reference/diamonds.html"
+      @metadata.url = "https://ggplot2.tidyverse.org/reference/mpg.html"
       @metadata.description = "Fuel economy dataset from ggplot2, originally from https://www.fueleconomy.gov"
 
       @data_path = cache_dir_path + "mpg.csv"

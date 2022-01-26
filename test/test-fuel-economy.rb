@@ -1,4 +1,4 @@
-class RubyTest < Test::Unit::TestCase
+class FuelEconomyTest < Test::Unit::TestCase
   def setup
     @dataset = Datasets::FuelEconomy.new
   end

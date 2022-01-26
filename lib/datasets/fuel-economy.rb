@@ -10,7 +10,7 @@ module Datasets
                         :city_mpg,
                         :highway_mpg,
                         :fuel,
-                        :class)
+                        :type)
 
     def initialize()
       super()

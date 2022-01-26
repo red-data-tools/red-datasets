@@ -139,7 +139,7 @@ end
 1. Fork https://github.com/red-data-tools/red-datasets 
 2. Create a feature branch from master
 3. Develop in the feature branch
-4. Pull request form the feature branch to https://github.com/red-data-tools/red-datasets
+4. Pull request from the feature branch to https://github.com/red-data-tools/red-datasets
 
 ## License
 

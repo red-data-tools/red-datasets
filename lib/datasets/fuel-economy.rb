@@ -16,7 +16,7 @@ module Datasets
       super()
       @metadata.id = "FuelEconomy"
       @metadata.name = "Fuel-Economy"
-      @metadata.licenses = ["PublicDomain"]
+      @metadata.licenses = ["CC0-1.0"]
       @metadata.url = "https://ggplot2.tidyverse.org/reference/mpg.html"
       @metadata.description = "Fuel economy dataset from ggplot2, originally from https://www.fueleconomy.gov"
 

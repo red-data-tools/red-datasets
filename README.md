@@ -23,6 +23,7 @@ TODO: Document them in source code to list in document: https://www.rubydoc.info
 * CIFAR-10 Dataset
 * CIFAR-100 Dataset
 * Fashion-MNIST
+* Fuel Economy Dataset
 * Iris Dataset
 * MNIST database
 * The Penn Treebank Project

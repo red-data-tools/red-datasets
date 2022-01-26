@@ -2,14 +2,14 @@ module Datasets
   class FuelEconomy < Dataset
     Record = Struct.new(:manufacturer,
                         :model,
-                        :displ,
+                        :displacement,
                         :year,
-                        :cyl,
-                        :trans,
-                        :drv,
-                        :cty,
-                        :hwy,
-                        :fl,
+                        :n_cylinders,
+                        :transmission,
+                        :drive_train,
+                        :city_mpg,
+                        :highway_mpg,
+                        :fuel,
                         :class)
 
     def initialize()

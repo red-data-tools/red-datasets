@@ -45,7 +45,7 @@ module Datasets
 
     def open_data
       data_path = cache_dir_path + 'latest.csv'
-      data_url = 'https://raw.githubusercontent.com/geolonia/japanese-addresses/develop/data/latest.csv'
+      data_url = 'https://raw.githubusercontent.com/geolonia/japanese-addresses/master/data/latest.csv'
       download(data_path, data_url)
       CSV.open(data_path) do |csv|
         yield(csv)

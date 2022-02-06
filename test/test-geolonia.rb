@@ -46,4 +46,19 @@ class GeoloniaTest < Test::Unit::TestCase
                    records[-1].to_h,
                  ])
   end
+
+  sub_test_case("#metadata") do
+    test("#description") do
+      description = @dataset.metadata.description
+      assert_equal([
+                     "# Geolonia 住所データ",
+                     "## 住所データ仕様",
+                     "### ファイルフォーマット",
+                     "### 列",
+                   ],
+                   description.scan(/^#.*$/),
+                   description)
+    end
+  end
+
 end

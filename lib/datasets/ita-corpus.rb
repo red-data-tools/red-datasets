@@ -1,5 +1,3 @@
-require 'csv'
-
 require_relative 'dataset'
 
 module Datasets

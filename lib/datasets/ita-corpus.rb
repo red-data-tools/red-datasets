@@ -21,7 +21,7 @@ module Datasets
 
       open_emotion_data do |text|
         text.each_line  do |line|
-          strArry = row.split(':')
+          id, sentence = row.split(':', 2)
           record = Record.new(strArry[0] , strArry[1].chomp)
           yield(record)
         end

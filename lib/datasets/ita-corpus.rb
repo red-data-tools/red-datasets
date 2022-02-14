@@ -22,7 +22,7 @@ module Datasets
       return to_enum(__method__) unless block_given?
 
       open_emotion_data do |text|
-        text.each do |row|
+        text.each_line  do |line|
           strArry = row.split(':')
           record = Record.new(strArry[0] , strArry[1].chomp)
           yield(record)

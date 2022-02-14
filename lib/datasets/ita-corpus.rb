@@ -3,7 +3,7 @@ require 'csv'
 require_relative 'dataset'
 
 module Datasets
-  class ITAcorpus < Dataset
+  class ITACorpus < Dataset
     Record = Struct.new(:id,
                         :sentence)
 

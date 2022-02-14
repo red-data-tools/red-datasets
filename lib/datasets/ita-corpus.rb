@@ -45,8 +45,8 @@ module Datasets
       data_path = cache_dir_path + 'emotion_transcript_utf8.txt'
       data_url = "#{download_base_url}/emotion_transcript_utf8.txt"
       download(data_path, data_url)
-      File.open(data_path) do |text|
-        yield(text)
+      File.open(data_path) do |file|
+        yield(file)
       end
     end
 

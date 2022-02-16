@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
+
 require "datasets"
 
-diamonds = Datasets::FuelEconomy.new
+fuel_economy = Datasets::FuelEconomy.new
 
-diamonds.each do |record|
+fuel_economy.each do |record|
   p [
      record.manufacturer,
      record.model,

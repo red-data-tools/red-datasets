@@ -1,5 +1,7 @@
+require_relative "ggplot2-dataset"
+
 module Datasets
-  class Diamonds < Dataset
+  class Diamonds < Ggplot2Dataset
     Record = Struct.new(:carat,
                         :cut,
                         :color,
@@ -12,7 +14,7 @@ module Datasets
                         :z)
 
     def initialize()
-      super()
+      super("diamonds")
       @metadata.id = "diamonds"
       @metadata.name = "Diamonds"
       # https://github.com/tidyverse/ggplot2/pull/4686#issuecomment-986769199
@@ -24,24 +26,9 @@ module Datasets
       # This data may be public domain but we aren't sure it for now.
       # We use the same license as ggplot2 here for now.
       @metadata.licenses = ["MIT"]
-      @metadata.url = "https://ggplot2.tidyverse.org/reference/diamonds.html"
-      @metadata.description = "Diamonds dataset from ggplot2"
-
-      @data_path = cache_dir_path + "diamonds.csv"
     end
 
-    def each
-      return to_enum(__method__) unless block_given?
-
-      data_url = "https://github.com/tidyverse/ggplot2/raw/main/data-raw/diamonds.csv"
-      download(@data_path, data_url)
-      CSV.open(@data_path, headers: :first_row, converters: :all) do |csv|
-        csv.each do |row|
-          record = Record.new(*row.fields)
-          yield record
-        end
-      end
-    end
-
+    COLUMN_NAME_MAPPING = {
+    }
   end
 end

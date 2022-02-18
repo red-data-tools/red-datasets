@@ -20,17 +20,17 @@ module Datasets
       return to_enum(__method__) unless block_given?
 
       open_emotion_data do |text|
-        text.each_line  do |line|
-          id, sentence = row.split(':', 2)
-          record = Record.new(strArry[0] , strArry[1].chomp)
+        text.each_line(chomp: true)  do |line|
+          id, sentence = line.split(':', 2)
+          record = Record.new(id , sentence)
           yield(record)
         end
       end
 
       open_recitation_data do |text|
-        text.each do |row|
-          strArry = row.split(':')
-          record = Record.new(strArry[0] , strArry[1].chomp)
+        text.each_line(chomp: true) do |line|
+          id, sentence = line.split(':', 2)
+          record = Record.new(id , sentence)
           yield(record)
         end
       end
@@ -64,7 +64,7 @@ module Datasets
       readme_path = cache_dir_path + readme_base_name
       readme_url = "#{download_base_url}/#{readme_base_name}"
       download(readme_path, readme_url)
-      readme_path.read.split(/^## ITAコーパスの文献情報/, 2)[0].strip
+      readme_path.read.split(/^## ファイル構成/, 2)[0].strip
     end
   end
 end

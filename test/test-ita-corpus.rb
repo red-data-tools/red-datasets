@@ -1,6 +1,6 @@
-class ITAcorpusTest < Test::Unit::TestCase
+class ITACorpusTest < Test::Unit::TestCase
   def setup
-    @dataset = Datasets::ITAcorpus.new
+    @dataset = Datasets::ITACorpus.new
   end
 
   test('#each') do
@@ -29,6 +29,7 @@ class ITAcorpusTest < Test::Unit::TestCase
       assert_equal([
                      "# ITAコーパスの文章リスト公開用リポジトリ",
                      "## ITAコーパスとは",
+                     "## ITAコーパスの文献情報"
                    ],
                    description.scan(/^#.*$/),
                    description)

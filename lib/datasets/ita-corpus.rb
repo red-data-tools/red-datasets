@@ -5,8 +5,13 @@ module Datasets
     Record = Struct.new(:id,
                         :sentence)
 
-    def initialize
-      super
+    def initialize(type: :emotion)
+      unless [:emotion, :recitation].include?(type)
+        raise ArgumentError, 'Please set type :emotion or :recitation'
+      end
+
+      super()
+      @type = type
       @metadata.id = 'ita-corpus'
       @metadata.name = 'ITA-corpus'
       @metadata.url = 'https://github.com/mmorise/ita-corpus'
@@ -16,24 +21,23 @@ module Datasets
       end
     end
 
-    def each
+    def each(&block)
       return to_enum(__method__) unless block_given?
 
-      open_emotion_data do |text|
-        text.each_line(chomp: true)  do |line|
-          id, sentence = line.split(':', 2)
-          record = Record.new(id , sentence)
-          yield(record)
-        end
-      end
+      data_path = cache_dir_path + "#{@type}_transcript_utf8.txt"
+      data_url = "#{download_base_url}/#{@type}_transcript_utf8.txt"
+      download(data_path, data_url)
 
-      open_recitation_data do |text|
-        text.each_line(chomp: true) do |line|
-          id, sentence = line.split(':', 2)
-          record = Record.new(id , sentence)
-          yield(record)
-        end
-      end
+      parse_data(data_path, &block)
+    end
+
+    private
+    def fetch_readme
+      readme_base_name = "README.md"
+      readme_path = cache_dir_path + readme_base_name
+      readme_url = "#{download_base_url}/#{readme_base_name}"
+      download(readme_path, readme_url)
+      readme_path.read.split(/^## ファイル構成/, 2)[0].strip
     end
 
     private
@@ -41,30 +45,15 @@ module Datasets
       "https://raw.githubusercontent.com/mmorise/ita-corpus/main"
     end
 
-    def open_emotion_data
-      data_path = cache_dir_path + 'emotion_transcript_utf8.txt'
-      data_url = "#{download_base_url}/emotion_transcript_utf8.txt"
-      download(data_path, data_url)
-      File.open(data_path) do |file|
-        yield(file)
+    private
+    def parse_data(data_path)
+      File.open(data_path) do |f|
+        f.each_line(chomp: true) do |line|
+          id, sentence = line.split(':', 2)
+          record = Record.new(id , sentence)
+          yield(record)
+        end
       end
-    end
-
-    def open_recitation_data
-      data_path = cache_dir_path + 'recitation_transcript_utf8.txt'
-      data_url = "#{download_base_url}/recitation_transcript_utf8.txt"
-      download(data_path, data_url)
-      File.open(data_path) do |text|
-        yield(text)
-      end
-    end
-
-    def fetch_readme
-      readme_base_name = "README.md"
-      readme_path = cache_dir_path + readme_base_name
-      readme_url = "#{download_base_url}/#{readme_base_name}"
-      download(readme_path, readme_url)
-      readme_path.read.split(/^## ファイル構成/, 2)[0].strip
     end
   end
 end

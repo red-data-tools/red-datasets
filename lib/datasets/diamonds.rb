@@ -17,15 +17,7 @@ module Datasets
       super("diamonds")
       @metadata.id = "diamonds"
       @metadata.name = "Diamonds"
-      # https://github.com/tidyverse/ggplot2/pull/4686#issuecomment-986769199
-      #
-      # > I don't think we can add anything here without being sure of
-      # > the provenance. However, in the US data is not
-      # > copyrightable.
-      #
-      # This data may be public domain but we aren't sure it for now.
-      # We use the same license as ggplot2 here for now.
-      @metadata.licenses = ["MIT"]
+      @metadata.licenses = ["CC0-1.0"]
     end
 
     COLUMN_NAME_MAPPING = {

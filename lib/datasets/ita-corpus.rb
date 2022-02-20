@@ -7,7 +7,7 @@ module Datasets
 
     def initialize(type: :emotion)
       unless [:emotion, :recitation].include?(type)
-        raise ArgumentError, 'Please set type :emotion or :recitation'
+        raise ArgumentError, "Please set type :emotion or :recitation: #{type.inspect}"
       end
 
       super()

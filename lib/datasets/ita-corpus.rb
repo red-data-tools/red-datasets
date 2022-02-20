@@ -40,7 +40,6 @@ module Datasets
       readme_path.read.split(/^## ファイル構成/, 2)[0].strip
     end
 
-    private
     def download_base_url
       "https://raw.githubusercontent.com/mmorise/ita-corpus/main"
     end

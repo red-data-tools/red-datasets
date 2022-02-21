@@ -2,6 +2,7 @@ require_relative "datasets/version"
 
 require_relative "datasets/adult"
 require_relative "datasets/aozora-bunko"
+require_relative "datasets/california-housing"
 require_relative "datasets/cifar"
 require_relative "datasets/cldr-plurals"
 require_relative "datasets/communities"

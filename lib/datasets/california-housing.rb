@@ -49,7 +49,7 @@ Statistics and Probability Letters, 33 (1997) 291-297.
     private
     def open_data(data_path, file_name)
       File.open(data_path) do |file|
-        Zlib::GzipReader.wrap(file) do |gz|
+        Zlib::GzipReader.open(file) do |gz|
           Gem::Package::TarReader.new(gz) do |tar|
             tar.each do |entry|
               if entry.header.name == file_name

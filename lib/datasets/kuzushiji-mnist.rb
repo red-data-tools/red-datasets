@@ -10,7 +10,7 @@ module Datasets
     end
 
     def licenses
-      ["CC BY-SA 4.0"]
+      ["CC-BY-SA-4.0"]
     end
   end
 end

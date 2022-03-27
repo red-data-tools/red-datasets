@@ -17,17 +17,30 @@ You can use datasets easily because you can access each dataset with multiple wa
 
 ## Available datasets
 
-TODO: Document them in source code to list in document: https://www.rubydoc.info/gems/red-datasets
-
 * Adult Dataset
+* Aozora Bunko
+* California Housing
 * CIFAR-10 Dataset
 * CIFAR-100 Dataset
+* CLDR language plural rules
+* Communities and crime
 * Diamonds Dataset
+* E-Stat Japan
 * Fashion-MNIST
 * Fuel Economy Dataset
+* Geolonia Japanese Addresses
+* Hepatitis
 * Iris Dataset
+* Libsvm
 * MNIST database
+* Mushroom
+* Penguins
 * The Penn Treebank Project
+* PMJT - Pre-Modern Japanese Text dataset list
+* Postal Codes in Japan
+* Rdatasets
+* Seaborn Data
+* Sudachi Synonym Dictionary
 * Wikipedia
 * Wine Dataset
 

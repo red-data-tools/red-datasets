@@ -311,7 +311,6 @@ class LivedoorNewsTest < Test::Unit::TestCase
         Datasets::LivedoorNews.new(type: :invalid)
       end
     end
-
   end
 
   sub_test_case("#metadata") do

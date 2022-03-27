@@ -56,7 +56,7 @@ module Datasets
       File.open(data_path) do |f|
         Gem::Package::TarReader.new(f) do |tar|
           tar.seek(target_file_name) do |entry|
-            return entry.read().force_encoding("UTF-8")
+            return entry.read.force_encoding("UTF-8")
           end
         end
       end

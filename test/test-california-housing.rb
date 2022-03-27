@@ -49,7 +49,8 @@ Housing information from the 1990 census used in
 Pace, R. Kelley and Ronald Barry,
 "Sparse Spatial Autoregressions",
 Statistics and Probability Letters, 33 (1997) 291-297.
-     DESCRIPTION
+Available from http://lib.stat.cmu.edu/datasets/.
+      DESCRIPTION
     end
   end
 end

@@ -70,7 +70,7 @@ module Datasets
     end
 
     def parse_data(data_path, &block)
-      target_file_name = @type.to_s.gsub(/_/,'-')
+      target_file_name = @type.to_s.gsub(/_/, '-')
       File.open(data_path) do |f|
         Gem::Package::TarReader.new(f) do |tar|
           tar.each do |entry|

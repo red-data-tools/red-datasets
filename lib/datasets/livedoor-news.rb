@@ -20,15 +20,9 @@ module Datasets
         :peachy
       ]
       unless news_list.include?(type)
-        raise ArgumentError, "Please set type :topic_news or"\
-                                             ":sports_watch or"\
-                                             ":it_life_hack or"\
-                                             ":kaden_channel or"\
-                                             ":movie_enter or"\
-                                             ":dokujo_tsushin or"\
-                                             ":smax or"\
-                                             ":livedoor_homme or"\
-                                             ":peachy: #{type.inspect}"
+        valid_type_labels = news_list.collect(&:inspect).join(", ")
+        message = ":type must be one of [#{valid_type_labels}]: #{type.inspect}"
+        raise ArgumentError, message
       end
 
       super()

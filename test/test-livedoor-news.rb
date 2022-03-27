@@ -329,5 +329,4 @@ class LivedoorNewsTest < Test::Unit::TestCase
                                  description)
     end
   end
-
 end

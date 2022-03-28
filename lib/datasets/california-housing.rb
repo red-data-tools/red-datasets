@@ -19,7 +19,7 @@ module Datasets
       @metadata.name = "California Housing"
       @metadata.url = "http://lib.stat.cmu.edu/datasets/"
       @metadata.licenses = ["CCO"]
-      @metadata.description =  <<~DESCRIPTION
+      @metadata.description = <<-DESCRIPTION
 Housing information from the 1990 census used in
 Pace, R. Kelley and Ronald Barry,
 "Sparse Spatial Autoregressions",

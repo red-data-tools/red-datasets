@@ -36,14 +36,16 @@ Available from http://lib.stat.cmu.edu/datasets/.
       file_name = "cadata.txt"
       download(data_path, data_url)
       open_data(data_path, file_name) do |input|
-        input.each_with_index do |line, id|
-          if id > 26
-            options = {
-              converters: [:numeric],
-            }
-            row = CSV.parse(line[2..-1].gsub(/\s+/,","),**options)
-            yield(Record.new(*row[0][0..8]))
-          end
+        data = ""
+        input.each_line do |line|
+          next unless line.start_with?(" ")
+          data << line.lstrip.gsub(/ +/, ",")
+        end
+        options = {
+          converters: [:numeric],
+        }
+        CSV.parse(data, **options) do |row|
+          yield(Record.new(*row))
         end
       end
     end
@@ -54,5 +56,6 @@ Available from http://lib.stat.cmu.edu/datasets/.
         yield input
       end
     end
+
   end
 end

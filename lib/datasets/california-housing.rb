@@ -56,6 +56,5 @@ Available from http://lib.stat.cmu.edu/datasets/.
         yield input
       end
     end
-
   end
 end

@@ -12,26 +12,27 @@ class CaliforniaHousingTest < Test::Unit::TestCase
     assert_equal([
                    20640,
                    {
-                     longitude: -122.230000,
-                     latitude: 37.880000,
-                     housingMedianAge: 41.000000,
-                     totalRooms: 880.000000,
-                     totalBedrooms: 129.000000,
+                     median_house_value: 452600.000000,
+                     median_income: 8.325200,
+                     housing_median_age: 41.000000,
+                     total_rooms: 880.000000,
+                     total_bedrooms: 129.000000,
                      population: 322.000000,
                      households: 126.000000,
-                     medianIncome: 8.325200,
-                     medianHouseValue: 452600.000000
+                     latitude: 37.880000,
+                     longitude: -122.230000,
+                     latitude: 37.880000
                    },
                    {
-                     longitude: -121.240000,
-                     latitude: 39.370000,
-                     housingMedianAge: 16.000000,
-                     totalRooms: 2785.000000,
-                     totalBedrooms: 616.000000,
+                     median_house_value: 89400.000000,
+                     median_income: 2.388600,
+                     housing_median_age: 16.000000,
+                     total_rooms: 2785.000000,
+                     total_bedrooms: 616.000000,
                      population: 1387.000000,
                      households: 530.000000,
-                     medianIncome: 2.388600,
-                     medianHouseValue: 89400.000000,
+                     latitude: 39.370000,
+                     longitude: -121.240000
                    },
                  ],
                  [

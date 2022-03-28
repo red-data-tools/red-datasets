@@ -20,8 +20,7 @@ class CaliforniaHousingTest < Test::Unit::TestCase
                      population: 322.000000,
                      households: 126.000000,
                      latitude: 37.880000,
-                     longitude: -122.230000,
-                     latitude: 37.880000
+                     longitude: -122.230000
                    },
                    {
                      median_house_value: 89400.000000,

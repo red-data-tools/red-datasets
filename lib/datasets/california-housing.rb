@@ -1,16 +1,13 @@
 require "csv"
-require "zip"
-
-require_relative "dataset"
-require "rubygems/package"
+require_relative 'zip-extractor'
 
 module Datasets
   class CaliforniaHousing < Dataset
-    Record = Struct.new(:medianHouseValue,
-                        :medianIncome,
-                        :housingMedianAge,
-                        :totalRooms,
-                        :totalBedrooms,
+    Record = Struct.new(:median_house_value,
+                        :median_income,
+                        :housing_median_age,
+                        :total_rooms,
+                        :total_bedrooms,
                         :population,
                         :households,
                         :latitude,
@@ -45,16 +42,7 @@ Available from http://lib.stat.cmu.edu/datasets/.
               converters: [:numeric],
             }
             row = CSV.parse(line[2..-1].gsub(/\s+/,","),**options)
-            record = Record.new(row[0][0],
-                                row[0][1],
-                                row[0][2],
-                                row[0][3],
-                                row[0][4],
-                                row[0][5],
-                                row[0][6],
-                                row[0][7],
-                                row[0][8])
-            yield(record)
+            yield(Record.new(*row[0][0..8]))
           end
         end
       end
@@ -62,8 +50,8 @@ Available from http://lib.stat.cmu.edu/datasets/.
 
     private
     def open_data(data_path, file_name)
-      Zip::File.open(data_path) do |zip_file|
-        yield zip_file.get_input_stream(file_name)
+      ZipExtractor.new(data_path).extract_one_file do |input|
+        yield input
       end
     end
   end

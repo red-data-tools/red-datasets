@@ -4,7 +4,7 @@ require_relative "dataset"
 #require_relative "zip_extractor"
 
 module Datasets
-  class Afinn < Dataset
+  class AFINN < Dataset
     Record = Struct.new(:word,
                         :valence)
 

@@ -13,7 +13,7 @@ module Datasets
       @metadata.id = "afinn"
       @metadata.name = "AFINN"
       @metadata.url = "http://www2.imm.dtu.dk/pubdb/pubs/6010-full.html"
-      @metadata.licenses = ["Open Database License (ODbL) v1.0"]
+      @metadata.licenses = ["ODbL-1.0"]
       @metadata.description = "A sentiment labelled list of 2477 English words and phrases"
     end
 

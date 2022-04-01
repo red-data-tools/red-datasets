@@ -7,13 +7,13 @@ class LivedoorNewsTest < Test::Unit::TestCase
                     770,
                     [
                       "http://news.livedoor.com/article/detail/5903225/",
-                      "2011-10-02T10:00:00+0900",
+                      Time.iso8601("2011-10-02T10:00:00+0900"),
                       "悪評が次から次へと溢",
                       "/5571502/\n"
                     ],
                     [
                       "http://news.livedoor.com/article/detail/6918105/",
-                      "2012-09-04T12:45:00+0900",
+                      Time.iso8601("2012-09-04T12:45:00+0900"),
                       "ジャンプ連載漫画が終",
                       "提案も散見された。\n"
                     ],
@@ -40,13 +40,13 @@ class LivedoorNewsTest < Test::Unit::TestCase
                     900,
                     [
                       "http://news.livedoor.com/article/detail/4597641/",
-                      "2010-02-10T10:50:00+0900",
+                      Time.iso8601("2010-02-10T10:50:00+0900"),
                       "【Sports Wa",
                       "送る秋山であった。\n"
                     ],
                     [
                       "http://news.livedoor.com/article/detail/6917848/",
-                      "2012-09-04T11:25:00+0900",
+                      Time.iso8601("2012-09-04T11:25:00+0900"),
                       "ジーコ、本田圭佑につ",
                       "る」と語っている。\n"
                     ],
@@ -73,13 +73,13 @@ class LivedoorNewsTest < Test::Unit::TestCase
                     870,
                     [
                       "http://news.livedoor.com/article/detail/6292880/",
-                      "2012-02-19T13:00:00+0900",
+                      Time.iso8601("2012-02-19T13:00:00+0900"),
                       "旧式Macで禁断のパ",
                       "p\n" + "クチコミを見る\n"
                     ],
                     [
                       "http://news.livedoor.com/article/detail/6918825/",
-                      "2012-09-04T15:00:00+0900",
+                      Time.iso8601("2012-09-04T15:00:00+0900"),
                       "レノボWindows",
                       "J\n" + "クチコミを見る\n"
                     ],
@@ -106,13 +106,13 @@ class LivedoorNewsTest < Test::Unit::TestCase
                     864,
                     [
                       "http://news.livedoor.com/article/detail/5774093/",
-                      "2011-08-10T10:00:00+0900",
+                      Time.iso8601("2011-08-10T10:00:00+0900"),
                       "【ニュース】電力使用",
                       "に備える【デジ通】\n"
                     ],
                     [
                       "http://news.livedoor.com/article/detail/6919353/",
-                      "2012-09-04T17:00:00+0900",
+                      Time.iso8601("2012-09-04T17:00:00+0900"),
                       "Hulu、ついに待望",
                       "uに今後も注目だ。\n"
                     ],
@@ -139,13 +139,13 @@ class LivedoorNewsTest < Test::Unit::TestCase
                     870,
                     [
                       "http://news.livedoor.com/article/detail/5840081/",
-                      "2011-09-08T10:00:00+0900",
+                      Time.iso8601("2011-09-08T10:00:00+0900"),
                       "インタビュー：宮崎あ",
                       "ない。 1 2 3\n"
                     ],
                     [
                       "http://news.livedoor.com/article/detail/6909318/",
-                      "2012-09-01T10:30:00+0900",
+                      Time.iso8601("2012-09-01T10:30:00+0900"),
                       "【週末映画まとめ読み",
                       "レイ+DVDセット\n"
                     ],
@@ -172,13 +172,13 @@ class LivedoorNewsTest < Test::Unit::TestCase
                     870,
                     [
                       "http://news.livedoor.com/article/detail/4778030/",
-                      "2010-05-22T14:30:00+0900",
+                      Time.iso8601("2010-05-22T14:30:00+0900"),
                       "友人代表のスピーチ、",
                       "も幸あれ（高山惠）\n"
                     ],
                     [
                       "http://news.livedoor.com/article/detail/6915005/",
-                      "2012-09-03T14:00:00+0900",
+                      Time.iso8601("2012-09-03T14:00:00+0900"),
                       "男女間で“カワイイ”",
                       "ツー／神田はるひ）\n"
                     ],
@@ -205,13 +205,13 @@ class LivedoorNewsTest < Test::Unit::TestCase
                     870,
                     [
                       "http://news.livedoor.com/article/detail/6507397/",
-                      "2012-04-26T16:55:00+0900",
+                      Time.iso8601("2012-04-26T16:55:00+0900"),
                       "あのアプリもこのアプ",
                       "n Twitter\n"
                     ],
                     [
                       "http://news.livedoor.com/article/detail/6919324/",
-                      "2012-09-04T16:55:00+0900",
+                      Time.iso8601("2012-09-04T16:55:00+0900"),
                       "【究極にカスタマイズ",
                       "個人） : 富士通\n"
                     ],
@@ -238,13 +238,13 @@ class LivedoorNewsTest < Test::Unit::TestCase
                     511,
                     [
                       "http://news.livedoor.com/article/detail/4568088/",
-                      "2010-01-24T18:10:00+0900",
+                      Time.iso8601("2010-01-24T18:10:00+0900"),
                       "フォーエバー２１旗艦",
                       "フォーエバー２１」\n"
                     ],
                     [
                       "http://news.livedoor.com/article/detail/6828491/",
-                      "2012-08-06T14:30:00+0900",
+                      Time.iso8601("2012-08-06T14:30:00+0900"),
                       "【女子座談会】ぶっち",
                       "タートキャンペーン\n"
                     ],
@@ -271,13 +271,13 @@ class LivedoorNewsTest < Test::Unit::TestCase
                     842,
                     [
                       "http://news.livedoor.com/article/detail/4289213/",
-                      "2009-08-07T20:30:00+0900",
+                      Time.iso8601("2009-08-07T20:30:00+0900"),
                       "韓国の伝統菓子を食べ",
                       "試してみませんか？\n"
                     ],
                     [
                       "http://news.livedoor.com/article/detail/6908055/",
-                      "2012-09-01T18:00:00+0900",
+                      Time.iso8601("2012-09-01T18:00:00+0900"),
                       "初デートで彼を悶絶さ",
                       "hyアプリの使い方\n"
                     ],
@@ -298,15 +298,17 @@ class LivedoorNewsTest < Test::Unit::TestCase
     end
 
     test("invalid") do
-      message = "Please set type :topic_news or"\
-                                ":sports_watch or"\
-                                ":it_life_hack or"\
-                                ":kaden_channel or"\
-                                ":movie_enter or"\
-                                ":dokujo_tsushin or"\
-                                ":smax or"\
-                                ":livedoor_homme or"\
-                                ":peachy: :invalid"
+      message = ":type must be one of "\
+               "[:topic_news, "\
+                ":sports_watch, "\
+                ":it_life_hack, "\
+                ":kaden_channel, "\
+                ":movie_enter, "\
+                ":dokujo_tsushin, "\
+                ":smax, "\
+                ":livedoor_homme, "\
+                ":peachy]: "\
+                ":invalid"
       assert_raise(ArgumentError.new(message)) do
         Datasets::LivedoorNews.new(type: :invalid)
       end

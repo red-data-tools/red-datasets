@@ -64,15 +64,17 @@ module Datasets
     end
 
     def parse_data(data_path, &block)
-      target_file_name = @type.to_s.gsub(/_/, '-')
+      target_directory_name = "text/#{@type.to_s.gsub(/_/, '-')}"
       File.open(data_path) do |f|
         Gem::Package::TarReader.new(f) do |tar|
           tar.each do |entry|
-            if entry.file? && entry.full_name.include?(target_file_name) && !entry.full_name.include?('LICENSE')
-              url, timestamp, sentence = entry.read().force_encoding("UTF-8").split(/\R/,3)
-              record = Record.new(url , timestamp, sentence)
-              yield(record)
-            end
+            next unless entry.file?
+            directory_name, base_name = File.split(entry.full_name)
+            next unless directory_name == target_directory_name
+            next if base_name == "LICENSE.txt"
+            url, timestamp, sentence = entry.read.force_encoding("UTF-8").split("\n", 3)
+            record = Record.new(url, Time.iso8601(timestamp), sentence)
+            yield(record)
           end
         end
       end

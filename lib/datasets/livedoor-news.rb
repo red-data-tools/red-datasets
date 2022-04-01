@@ -69,9 +69,9 @@ module Datasets
         Gem::Package::TarReader.new(f) do |tar|
           tar.each do |entry|
             if entry.file? && entry.full_name.include?(target_file_name) && !entry.full_name.include?('LICENSE')
-                url, timestamp, sentence = entry.read().force_encoding("UTF-8").split(/\R/,3)
-                record = Record.new(url , timestamp, sentence)
-                yield(record)
+              url, timestamp, sentence = entry.read().force_encoding("UTF-8").split(/\R/,3)
+              record = Record.new(url , timestamp, sentence)
+              yield(record)
             end
           end
         end

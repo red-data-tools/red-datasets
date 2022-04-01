@@ -30,7 +30,7 @@ module Datasets
       @metadata.id = 'livedoor-news'
       @metadata.name = 'livedoor-news'
       @metadata.url = 'https://www.rondhuit.com/download.html#ldcc'
-      @metadata.licenses = ['CC']
+      @metadata.licenses = ['CC-BY-ND-2.1-JP']
       @metadata.description = lambda do
         fetch_readme
       end

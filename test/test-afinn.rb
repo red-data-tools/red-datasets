@@ -26,17 +26,13 @@ class AFINNTest < Test::Unit::TestCase
   sub_test_case('#metadata') do
     test('#description') do
       description = @dataset.metadata.description
-      assert_equal(<<-DESCRIPTION, description)
-        AFINN is a list of English words rated for valence with an integer
+      assert_equal(<<-DESCRIPTION.chomp, description)
+AFINN is a list of English words rated for valence with an integer
 between minus five (negative) and plus five (positive). The words have
 been manually labeled by Finn Årup Nielsen in 2009-2011. The file
 is tab-separated. There are two versions:
 
-AFINN-111: Newest version with 2477 words and phrases, which is used here.
-
-AFINN-96: 1468 unique words and phrases on 1480 lines. Note that there
-are 1480 lines, as some words are listed twice. The word list in not
-entirely in alphabetic ordering.  
+AFINN-111: Newest version with 2477 words and phrases.
 
 An evaluation of the word list is available in:
 
@@ -58,7 +54,7 @@ copyleft license.
 
 See comments on the word list here:
 http://fnielsen.posterous.com/old-anew-a-sentiment-about-sentiment-analysis
-        DESCRIPTION
+      DESCRIPTION
     end
   end
 end

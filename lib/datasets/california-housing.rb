@@ -52,7 +52,7 @@ Available from http://lib.stat.cmu.edu/datasets/.
 
     private
     def open_data(data_path, file_name)
-      ZipExtractor.new(data_path).extract_one_file do |input|
+      ZipExtractor.new(data_path).extract_first_file do |input|
         yield input
       end
     end

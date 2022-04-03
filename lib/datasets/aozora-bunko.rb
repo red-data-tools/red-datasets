@@ -93,7 +93,7 @@ module Datasets
         downloader = Downloader.new(text_file_url)
         downloader.download(text_file_output_path)
 
-        @text = ZipExtractor.new(text_file_output_path).extract_one_file do |input|
+        @text = ZipExtractor.new(text_file_output_path).extract_first_file do |input|
           input.read.encode(Encoding::UTF_8, normalize_encoding(text_file_character_encoding))
         end
 
@@ -184,7 +184,7 @@ module Datasets
       data_path = cache_dir_path + 'list_person_all_extended_utf8.zip'
       data_url = "https://www.aozora.gr.jp/index_pages/#{data_path.basename}"
       download(data_path, data_url)
-      ZipExtractor.new(data_path).extract_one_file do |input|
+      ZipExtractor.new(data_path).extract_first_file do |input|
         block.call(input)
       end
     end

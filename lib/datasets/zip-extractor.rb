@@ -6,7 +6,7 @@ module Datasets
       @path = path
     end
 
-    def extract_one_file
+    def extract_first_file
       Zip::File.open(@path) do |zip_file|
         zip_file.each do |entry|
           next unless entry.file?

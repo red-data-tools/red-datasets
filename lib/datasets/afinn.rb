@@ -1,5 +1,5 @@
 require "csv"
-require_relative 'zip-extractor'
+require_relative "zip-extractor"
 
 module Datasets
   class AFINN < Dataset

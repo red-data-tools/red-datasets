@@ -1,6 +1,7 @@
 require_relative "datasets/version"
 
 require_relative "datasets/adult"
+require_relative "datasets/afinn"
 require_relative "datasets/aozora-bunko"
 require_relative "datasets/california-housing"
 require_relative "datasets/cifar"

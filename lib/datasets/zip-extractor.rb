@@ -18,7 +18,8 @@ module Datasets
       end
       nil
     end
-    def extract_named_file(file_path)
+
+    def extract_file(file_path)
       Zip::File.open(@path) do |zip_file|
         zip_file.each do |entry|
           next unless entry.file?

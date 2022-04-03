@@ -56,7 +56,7 @@ http://fnielsen.posterous.com/old-anew-a-sentiment-about-sentiment-analysis
       download(data_path, data_url)
 
       extractor = ZipExtractor.new(data_path)
-      extractor.extract_named_file(file_path) do |input|
+      extractor.extract_file(file_path) do |input|
         csv = CSV.new(input, col_sep: "\t", converters: :numeric)
         csv.each do |row|
           yield(Record.new(*row))

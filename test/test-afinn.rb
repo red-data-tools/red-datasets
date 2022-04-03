@@ -1,4 +1,4 @@
-class AfinnTest < Test::Unit::TestCase
+class AFINNTest < Test::Unit::TestCase
   def setup
     @dataset = Datasets::AFINN.new
   end

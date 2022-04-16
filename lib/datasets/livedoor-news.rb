@@ -1,5 +1,5 @@
+require_relative "dataset"
 require_relative "tar-gz-readable"
-require_relative 'dataset'
 
 module Datasets
   class LivedoorNews < Dataset

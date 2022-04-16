@@ -1,8 +1,10 @@
+require_relative "tar-gz-readable"
 require "rubygems/package"
 require_relative 'dataset'
 
 module Datasets
   class LivedoorNews < Dataset
+    include TarGzReadable
     Record = Struct.new(:url,
                         :timestamp,
                         :sentence)
@@ -44,18 +46,6 @@ module Datasets
     end
 
     private
-    def fetch_readme
-      data_path = download_tar_gz
-      target_file_name = 'text/README.txt'
-      File.open(data_path) do |f|
-        Gem::Package::TarReader.new(f) do |tar|
-          tar.seek(target_file_name) do |entry|
-            return entry.read.force_encoding("UTF-8")
-          end
-        end
-      end
-    end
-
     def download_tar_gz
       data_path = cache_dir_path + "livedoor-news.tar.gz"
       data_url = "https://www.rondhuit.com/download/ldcc-20140209.tar.gz"
@@ -63,19 +53,27 @@ module Datasets
       data_path
     end
 
+    def fetch_readme
+      data_path = download_tar_gz
+      target_file_name = 'text/README.txt'
+      open_tar_gz(data_path) do |tar|
+        tar.seek(target_file_name) do |entry|
+          return entry.read.force_encoding("UTF-8")
+        end
+      end
+    end
+
     def parse_data(data_path, &block)
       target_directory_name = "text/#{@type.to_s.gsub(/_/, '-')}"
-      File.open(data_path) do |f|
-        Gem::Package::TarReader.new(f) do |tar|
-          tar.each do |entry|
-            next unless entry.file?
-            directory_name, base_name = File.split(entry.full_name)
-            next unless directory_name == target_directory_name
-            next if base_name == "LICENSE.txt"
-            url, timestamp, sentence = entry.read.force_encoding("UTF-8").split("\n", 3)
-            record = Record.new(url, Time.iso8601(timestamp), sentence)
-            yield(record)
-          end
+      open_tar_gz(data_path) do |tar|
+        tar.each do |entry|
+          next unless entry.file?
+          directory_name, base_name = File.split(entry.full_name)
+          next unless directory_name == target_directory_name
+          next if base_name == "LICENSE.txt"
+          url, timestamp, sentence = entry.read.force_encoding("UTF-8").split("\n", 3)
+          record = Record.new(url, Time.iso8601(timestamp), sentence)
+          yield(record)
         end
       end
     end

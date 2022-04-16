@@ -27,7 +27,10 @@ module Datasets
 
       output_path.parent.mkpath
 
-      headers = {"User-Agent" => "Red Datasets/#{VERSION}"}
+      headers = {
+        "Accept-Encoding" => "identity",
+        "User-Agent" => "Red Datasets/#{VERSION}",
+      }
       start = nil
       partial_output_path = Pathname.new("#{output_path}.partial")
       if partial_output_path.exist?

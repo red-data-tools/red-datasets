@@ -298,17 +298,17 @@ class LivedoorNewsTest < Test::Unit::TestCase
     end
 
     test("invalid") do
-      message = ":type must be one of "\
-               "[:topic_news, "\
-                ":sports_watch, "\
-                ":it_life_hack, "\
-                ":kaden_channel, "\
-                ":movie_enter, "\
-                ":dokujo_tsushin, "\
-                ":smax, "\
-                ":livedoor_homme, "\
-                ":peachy]: "\
-                ":invalid"
+      message = ":type must be one of [" +
+                ":topic_news, " +
+                ":sports_watch, " +
+                ":it_life_hack, " +
+                ":kaden_channel, " +
+                ":movie_enter, " +
+                ":dokujo_tsushin, " +
+                ":smax, " +
+                ":livedoor_homme, " +
+                ":peachy" +
+                "]: :invalid"
       assert_raise(ArgumentError.new(message)) do
         Datasets::LivedoorNews.new(type: :invalid)
       end

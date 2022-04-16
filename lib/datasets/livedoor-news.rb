@@ -1,5 +1,4 @@
 require_relative "tar-gz-readable"
-require "rubygems/package"
 require_relative 'dataset'
 
 module Datasets

@@ -38,15 +38,15 @@ module Datasets
       @metadata.name = "seaborn: #{name}"
       @metadata.url = URL_FORMAT % {name: name}
 
-      @data_path = cache_dir_path + (name + ".csv")
       @name = name
     end
 
     def each(&block)
       return to_enum(__method__) unless block_given?
 
-      download(@data_path, @metadata.url)
-      CSV.open(@data_path, headers: :first_row, converters: :all) do |csv|
+      data_path = cache_dir_path + "#{@name}.csv"
+      download(data_path, @metadata.url)
+      CSV.open(data_path, headers: :first_row, converters: :all) do |csv|
         csv.each do |row|
           record = prepare_record(row)
           yield record

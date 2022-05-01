@@ -1,3 +1,5 @@
+require "json"
+
 module Datasets
   class SeabornDataList < Dataset
     def initialize
@@ -7,19 +9,21 @@ module Datasets
       @metadata.url = "https://github.com/mwaskom/seaborn-data"
       @metadata.licenses = nil
       @metadata.description = "Datasets for seaborn examples."
-
-      @data_path = cache_dir_path / "index.html"
     end
 
     def each(&block)
       return to_enum(__method__) unless block_given?
 
-      download(@data_path, @metadata.url)
+      data_path = cache_dir_path + "trees.json"
+      url = "https://api.github.com/repos/mwaskom/seaborn-data/git/trees/master"
+      download(data_path, url)
 
-      regexp = %r{/mwaskom/seaborn-data/blob/master/(\w*).csv}
-      datasets = File.open(@data_path).read.scan(regexp)
-      datasets.each do |dataset_name|
-        record = {dataset: dataset_name[0]}
+      tree = JSON.parse(File.read(data_path))["tree"]
+      tree.each do |content|
+        path = content["path"]
+        next unless path.end_with?(".csv")
+        dataset = File.basename(path, ".csv")
+        record = {dataset: dataset}
         yield record
       end
     end

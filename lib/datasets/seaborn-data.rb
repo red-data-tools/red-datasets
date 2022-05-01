@@ -1,4 +1,30 @@
 module Datasets
+  class SeabornDataList < Dataset
+    def initialize
+      super
+      @metadata.id = "seaborn-data-list"
+      @metadata.name = "SeabornDataList"
+      @metadata.url = "https://github.com/mwaskom/seaborn-data"
+      @metadata.licenses = nil
+      @metadata.description = "Datasets for seaborn examples."
+
+      @data_path = cache_dir_path / "index.html"
+    end
+
+    def each(&block)
+      return to_enum(__method__) unless block_given?
+
+      download(@data_path, @metadata.url)
+
+      regexp = %r{/mwaskom/seaborn-data/blob/master/(\w*).csv}
+      datasets = File.open(@data_path).read.scan(regexp)
+      datasets.each do |dataset_name|
+        record = {dataset: dataset_name[0]}
+        yield record
+      end
+    end
+  end
+
   class SeabornData < Dataset
     URL_FORMAT = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/%{name}.csv".freeze
 

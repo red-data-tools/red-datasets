@@ -127,4 +127,20 @@ class SeabornDataTest < Test::Unit::TestCase
                   )
     end
   end
+
+  sub_test_case("dataset list") do
+    def setup
+      @dataset = Datasets::SeabornDataList.new
+    end
+
+    def test_each
+      table = @dataset.to_table
+      assert_equal(
+        [ "anagrams", "anscombe", "attention", "brain_networks", "car_crashes",
+          "diamonds", "dots", "exercise", "flights", "fmri", "gammas", "geyser",
+          "iris", "mpg", "penguins", "planets", "taxis", "tips", "titanic" ],
+        table.to_h[:dataset]
+      )
+    end
+  end 
 end

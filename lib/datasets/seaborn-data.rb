@@ -27,7 +27,13 @@ module Datasets
     private
     def prepare_record(csv_row)
       record = csv_row.to_h
-      record.transform_keys!(&:to_sym)
+      record.transform_keys! do |key|
+        if key.nil?
+          :index
+        else
+          key.to_sym
+        end
+      end
 
       # Perform the same preprocessing as seaborn's load_dataset function
       preprocessor = :"preprocess_#{@name}_record"

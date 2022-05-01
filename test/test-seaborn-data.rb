@@ -94,4 +94,37 @@ class SeabornDataTest < Test::Unit::TestCase
                    ])
     end
   end
+
+  sub_test_case("attention") do
+    def setup
+      @dataset = Datasets::SeabornData.new("attention")
+    end
+
+    def test_each
+      records = @dataset.to_a
+      assert_equal([
+                     60,
+                     {
+                       :index=>1,
+                       :subject=>2,
+                       :attention=>"divided",
+                       :solutions=>1,
+                       :score=>3.0
+                     },
+                     {
+                       :index=>59,
+                       :subject=>20,
+                       :attention=>"focused",
+                       :solutions=>3,
+                       :score=>5.0
+                     }
+                   ],
+                   [
+                     records.size,
+                     records[1],
+                     records[-1]
+                   ]
+                  )
+    end
+  end
 end

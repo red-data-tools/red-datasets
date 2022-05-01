@@ -5,7 +5,7 @@ module Datasets
     def initialize
       super
       @metadata.id = "seaborn-data-list"
-      @metadata.name = "SeabornDataList"
+      @metadata.name = "seaborn: data list"
       @metadata.url = "https://github.com/mwaskom/seaborn-data"
       @metadata.licenses = nil
       @metadata.description = "Datasets for seaborn examples."
@@ -35,7 +35,7 @@ module Datasets
     def initialize(name)
       super()
       @metadata.id = "seaborn-data-#{name}"
-      @metadata.name = "SeabornData: #{name}"
+      @metadata.name = "seaborn: #{name}"
       @metadata.url = URL_FORMAT % {name: name}
 
       @data_path = cache_dir_path + (name + ".csv")

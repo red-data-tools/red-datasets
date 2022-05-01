@@ -1,7 +1,7 @@
 require "json"
 
 module Datasets
-  class SeabornDataList < Dataset
+  class SeabornList < Dataset
     def initialize
       super
       @metadata.id = "seaborn-data-list"
@@ -30,12 +30,12 @@ module Datasets
     end
   end
 
-  class SeabornData < Dataset
+  class Seaborn < Dataset
     URL_FORMAT = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/%{name}.csv".freeze
 
     def initialize(name)
       super()
-      @metadata.id = "seaborn-data-#{name}"
+      @metadata.id = "seaborn-#{name}"
       @metadata.name = "seaborn: #{name}"
       @metadata.url = URL_FORMAT % {name: name}
       # @metadata.licenses = TODO
@@ -84,4 +84,7 @@ module Datasets
       record[:sex] &&= record[:sex].capitalize
     end
   end
+
+  # For backward compatibility
+  SeabornData = Seaborn
 end

@@ -39,7 +39,7 @@ You can use datasets easily because you can access each dataset with multiple wa
 * PMJT - Pre-Modern Japanese Text dataset list
 * Postal Codes in Japan
 * Rdatasets
-* Seaborn Data
+* Seaborn
 * Sudachi Synonym Dictionary
 * Wikipedia
 * Wine Dataset

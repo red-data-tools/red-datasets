@@ -1,7 +1,7 @@
-class SeabornDataTest < Test::Unit::TestCase
+class SeabornTest < Test::Unit::TestCase
   sub_test_case("list") do
     def setup
-      @dataset = Datasets::SeabornDataList.new
+      @dataset = Datasets::SeabornList.new
     end
 
     def test_each
@@ -33,7 +33,7 @@ class SeabornDataTest < Test::Unit::TestCase
 
   sub_test_case("fmri") do
     def setup
-      @dataset = Datasets::SeabornData.new("fmri")
+      @dataset = Datasets::Seaborn.new("fmri")
     end
 
     def test_each
@@ -65,7 +65,7 @@ class SeabornDataTest < Test::Unit::TestCase
 
   sub_test_case("flights") do
     def setup
-      @dataset = Datasets::SeabornData.new("flights")
+      @dataset = Datasets::Seaborn.new("flights")
     end
 
     def test_each
@@ -93,7 +93,7 @@ class SeabornDataTest < Test::Unit::TestCase
 
   sub_test_case("penguins") do
     def setup
-      @dataset = Datasets::SeabornData.new("penguins")
+      @dataset = Datasets::Seaborn.new("penguins")
     end
 
     def test_each
@@ -129,7 +129,7 @@ class SeabornDataTest < Test::Unit::TestCase
 
   sub_test_case("attention") do
     def setup
-      @dataset = Datasets::SeabornData.new("attention")
+      @dataset = Datasets::Seaborn.new("attention")
     end
 
     def test_each
@@ -137,26 +137,25 @@ class SeabornDataTest < Test::Unit::TestCase
       assert_equal([
                      60,
                      {
-                       :index=>1,
-                       :subject=>2,
-                       :attention=>"divided",
-                       :solutions=>1,
-                       :score=>3.0
+                       index: 1,
+                       subject: 2,
+                       attention: "divided",
+                       solutions: 1,
+                       score: 3.0
                      },
                      {
-                       :index=>59,
-                       :subject=>20,
-                       :attention=>"focused",
-                       :solutions=>3,
-                       :score=>5.0
+                       index: 59,
+                       subject: 20,
+                       attention: "focused",
+                       solutions: 3,
+                       score: 5.0
                      }
                    ],
                    [
                      records.size,
                      records[1],
                      records[-1]
-                   ]
-                  )
+                   ])
     end
   end
 end

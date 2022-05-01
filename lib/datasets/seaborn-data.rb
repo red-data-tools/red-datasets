@@ -7,7 +7,8 @@ module Datasets
       @metadata.id = "seaborn-data-list"
       @metadata.name = "seaborn: data list"
       @metadata.url = "https://github.com/mwaskom/seaborn-data"
-      @metadata.licenses = nil
+      # Treat as the same license as seaborn
+      @metadata.licenses = ["BSD-3-Clause"]
       @metadata.description = "Datasets for seaborn examples."
     end
 
@@ -37,6 +38,7 @@ module Datasets
       @metadata.id = "seaborn-data-#{name}"
       @metadata.name = "seaborn: #{name}"
       @metadata.url = URL_FORMAT % {name: name}
+      # @metadata.licenses = TODO
 
       @name = name
     end

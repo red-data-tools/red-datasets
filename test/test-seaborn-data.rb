@@ -1,4 +1,36 @@
 class SeabornDataTest < Test::Unit::TestCase
+  sub_test_case("list") do
+    def setup
+      @dataset = Datasets::SeabornDataList.new
+    end
+
+    def test_each
+      records = @dataset.each.to_a
+      assert_equal([
+                     {dataset: "anagrams"},
+                     {dataset: "anscombe"},
+                     {dataset: "attention"},
+                     {dataset: "brain_networks"},
+                     {dataset: "car_crashes"},
+                     {dataset: "diamonds"},
+                     {dataset: "dots"},
+                     {dataset: "exercise"},
+                     {dataset: "flights"},
+                     {dataset: "fmri"},
+                     {dataset: "gammas"},
+                     {dataset: "geyser"},
+                     {dataset: "iris"},
+                     {dataset: "mpg"},
+                     {dataset: "penguins"},
+                     {dataset: "planets"},
+                     {dataset: "taxis"},
+                     {dataset: "tips"},
+                     {dataset: "titanic"},
+                   ],
+                   records)
+    end
+  end
+
   sub_test_case("fmri") do
     def setup
       @dataset = Datasets::SeabornData.new("fmri")

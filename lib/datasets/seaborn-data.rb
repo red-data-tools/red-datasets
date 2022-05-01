@@ -1,4 +1,34 @@
+require "json"
+
 module Datasets
+  class SeabornDataList < Dataset
+    def initialize
+      super
+      @metadata.id = "seaborn-data-list"
+      @metadata.name = "SeabornDataList"
+      @metadata.url = "https://github.com/mwaskom/seaborn-data"
+      @metadata.licenses = nil
+      @metadata.description = "Datasets for seaborn examples."
+    end
+
+    def each(&block)
+      return to_enum(__method__) unless block_given?
+
+      data_path = cache_dir_path + "trees.json"
+      url = "https://api.github.com/repos/mwaskom/seaborn-data/git/trees/master"
+      download(data_path, url)
+
+      tree = JSON.parse(File.read(data_path))["tree"]
+      tree.each do |content|
+        path = content["path"]
+        next unless path.end_with?(".csv")
+        dataset = File.basename(path, ".csv")
+        record = {dataset: dataset}
+        yield record
+      end
+    end
+  end
+
   class SeabornData < Dataset
     URL_FORMAT = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/%{name}.csv".freeze
 

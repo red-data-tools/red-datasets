@@ -5,11 +5,11 @@ require 'datasets'
 #WIP
 billingualCorpus = Datasets::JapaneseEnglishBilingualCorpus.new
 
-emptyArticle = Datasets::JapaneseEnglishBilingualCorpus::Article.new
+#emptyArticle = Datasets::JapaneseEnglishBilingualCorpus::Article.new
 #emptyTitle = Datasets::JapaneseEnglishBilingualCorpus::Title.new
 #emptySection = Datasets::JapaneseEnglishBilingualCorpus::Section.new
 #emptyPage = Datasets::JapaneseEnglishBilingualCorpus::Page.new
-#emptySentence = Datasets::JapaneseEnglishBilingualCorpus::Sentence.new
+emptySentence = Datasets::JapaneseEnglishBilingualCorpus::Sentence.new
 
 #articles = billingualCorpus.select{|x| x.is_a?(emptyArticle.class)}
 #titles = billingualCorpus.select{|x| x.is_a?(emptyTitle.class)}

@@ -2,35 +2,21 @@
 
 require "datasets"
 
-categories = [
-  :buddhism,
-  :bulding,
-  :culture,
-  :emperor,
-  :family,
-  :geographical_name,
-  :history,
-  :literature,
-  :person_name,
-  :railway,
-  :road,
-  :shrine_and_temple,
-  :school,
-  :shinto,
-  :title,
-]
+wikipedia_kyoto_articles =
+  Datasets::WikipediaKyotoJapaneseEnglish.new(type: :article)
 
-categories.each do |category|
-  wikipedia_kyoto =
-    Datasets::WikipediaKyotoJapaneseEnglish.new(category: category)
-
-  wikipedia_kyoto.each_with_index do |article, i|
-    puts("=" * 40)
-    puts("#{category}: #{i}: #{article.source}")
-    article.contents.each do |content|
-      puts("  Japanese: #{content.japanese}")
-      puts("  English:  #{content.english}")
-    end
-    puts("=" * 40)
+wikipedia_kyoto_articles.each_with_index do |article, i|
+  puts("#{i}: #{article.source}")
+  article.contents.each do |content|
+    puts("  Japanese: #{content.japanese}")
+    puts("  English:  #{content.english}")
   end
 end
+
+#wikipedia_kyoto_lexicon =
+#  Datasets::WikipediaKyotoJapaneseEnglish.new(type: :lexicon)
+
+#wikipedia_kyoto_lexicon.each do |record|
+#  puts("  Japanese: #{record.japanese}")
+#  puts("  English:  #{record.english}")
+#end

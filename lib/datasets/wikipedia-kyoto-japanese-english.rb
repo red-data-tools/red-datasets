@@ -1,3 +1,4 @@
+require 'csv'
 require "rexml/streamlistener"
 require "rexml/parsers/baseparser"
 require "rexml/parsers/streamparser"
@@ -48,36 +49,16 @@ module Datasets
       end
     end
 
-    CATEGORY_TO_DIRECTORY_MAP = {
-      buddhism: "BDS",
-      bulding: "BLD",
-      culture: "CLT",
-      emperor: "EPR",
-      family: "FML",
-      geographical_name: "GNM",
-      history: "HST",
-      literature: "LTT",
-      person_name: "PNM",
-      railway: "RLW",
-      road: "ROD",
-      shrine_and_temple: "SAT",
-      school: "SCL",
-      shinto: "SNT",
-      title: "TTL",
-    }
-    private_constant :CATEGORY_TO_DIRECTORY_MAP
+    Entry = Struct.new(:japanese,
+                         :english)
 
-    def initialize(category: nil)
-      unless CATEGORY_TO_DIRECTORY_MAP.key?(category)
-        valid_category_labels =
-          CATEGORY_TO_DIRECTORY_MAP.keys.collect(&:inspect).join(", ")
-        message = ":category must be one of [#{valid_category_labels}]: " +
-                  category.inspect
-        raise ArgumentError, message
+    def initialize(type: :article)
+      unless [:article, :lexicon].include?(type)
+        raise ArgumentError, "Please set type :article or :lexicon #{type.inspect}"
       end
 
       super()
-      @category = category
+      @type = type
       @metadata.id = "wikipedia-kyoto-japanese-english"
       @metadata.name =
         "The Japanese-English Bilingual Corpus of Wikipedia's Kyoto Articles"
@@ -99,15 +80,23 @@ articles (related to Kyoto) into English.
 
       data_path = download_tar_gz
 
-      target_directory_name = CATEGORY_TO_DIRECTORY_MAP[@category]
       open_tar_gz(data_path) do |tar|
         tar.each do |entry|
           next unless entry.file?
-          directory_name, base_name = File.split(entry.full_name)
-          next unless directory_name == target_directory_name
-          listener = ArticleListener.new(block)
-          parser = REXML::Parsers::StreamParser.new(entry.read, listener)
-          parser.parse
+          base_name = File.basename(entry.full_name)
+          case @type
+          when :article
+            next if base_name == "kyoto_lexicon.csv" || base_name == "readme.pdf" || base_name == "Wiki_Corpus_List_2.01.csv"
+            listener = ArticleListener.new(block)
+            parser = REXML::Parsers::StreamParser.new(entry.read, listener)
+            parser.parse
+          when :lexicon
+            next unless base_name == "kyoto_lexicon.csv"
+            CSV.parse(entry.read.force_encoding("UTF-8")) do |row|
+              next if row[0] == "日本語"
+              yield(Entry.new(row[0],row[1]))
+            end
+          end
         end
       end
     end

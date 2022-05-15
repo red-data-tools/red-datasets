@@ -94,7 +94,7 @@ articles (related to Kyoto) into English.
             next unless base_name == "kyoto_lexicon.csv"
             CSV.parse(entry.read.force_encoding("UTF-8")) do |row|
               next if row[0] == "日本語"
-              yield(Entry.new(row[0],row[1]))
+              yield(Entry.new(row[0], row[1]))
             end
           end
         end

@@ -92,8 +92,12 @@ articles (related to Kyoto) into English.
             parser.parse
           when :lexicon
             next unless base_name == "kyoto_lexicon.csv"
+            is_header = true
             CSV.parse(entry.read.force_encoding("UTF-8")) do |row|
-              next if row[0] == "日本語"
+              if is_header
+                is_header = false
+                next
+              end
               yield(Entry.new(row[0], row[1]))
             end
           end

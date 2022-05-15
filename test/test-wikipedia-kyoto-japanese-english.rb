@@ -74,7 +74,7 @@ class WikipediaKyotoJapaneseEnglishTest < Test::Unit::TestCase
   end
 
   test("invalid") do
-    message = "Please set type :article or :lexicon :invalid"
+    message = "Please set type :article or :lexicon: :invalid"
     assert_raise(ArgumentError.new(message)) do
       Datasets::WikipediaKyotoJapaneseEnglish.new(type: :invalid)
     end

@@ -54,7 +54,7 @@ module Datasets
 
     def initialize(type: :article)
       unless [:article, :lexicon].include?(type)
-        raise ArgumentError, "Please set type :article or :lexicon #{type.inspect}"
+        raise ArgumentError, "Please set type :article or :lexicon: #{type.inspect}"
       end
 
       super()

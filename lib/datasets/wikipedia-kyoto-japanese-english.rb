@@ -50,7 +50,7 @@ module Datasets
     end
 
     Entry = Struct.new(:japanese,
-                         :english)
+                       :english)
 
     def initialize(type: :article)
       unless [:article, :lexicon].include?(type)

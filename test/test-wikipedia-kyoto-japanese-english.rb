@@ -4,7 +4,7 @@ class WikipediaKyotoJapaneseEnglishTest < Test::Unit::TestCase
     @dataset_lexicon = Datasets::WikipediaKyotoJapaneseEnglish.new(type: :lexicon)
   end
 
-  test('#article') do
+  test('article') do
     first_article = @dataset_articles.each.first
     assert_equal([
                     "jawiki-20080607-pages-articles.xml",
@@ -20,7 +20,7 @@ class WikipediaKyotoJapaneseEnglishTest < Test::Unit::TestCase
                   ])
   end
 
-  test('#title_and_sentence') do
+  test('title_and_sentence') do
     title, sentence = @dataset_articles.each.first.to_h[:contents].first(2)
     assert_equal([
                   [
@@ -53,7 +53,7 @@ class WikipediaKyotoJapaneseEnglishTest < Test::Unit::TestCase
                   ])
   end
 
-  test('#lexicon') do
+  test('lexicon') do
     records = @dataset_lexicon.each.to_a
     assert_equal([
                    51982,
@@ -80,7 +80,7 @@ class WikipediaKyotoJapaneseEnglishTest < Test::Unit::TestCase
     end
   end
 
-  test("#description") do
+  test("description") do
     description = @dataset_articles.metadata.description
     assert_equal(<<-DESCRIPTION, description)
 "The Japanese-English Bilingual Corpus of Wikipedia's Kyoto Articles"

@@ -86,7 +86,7 @@ articles (related to Kyoto) into English.
           base_name = File.basename(entry.full_name)
           case @type
           when :article
-            next if base_name == "kyoto_lexicon.csv" || base_name == "readme.pdf" || base_name == "Wiki_Corpus_List_2.01.csv"
+            next unless base_name.end_with?(".xml")
             listener = ArticleListener.new(block)
             parser = REXML::Parsers::StreamParser.new(entry.read, listener)
             parser.parse

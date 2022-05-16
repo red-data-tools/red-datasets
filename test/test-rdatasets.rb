@@ -48,7 +48,7 @@ class RdatasetsTest < Test::Unit::TestCase
       test("without package_name") do
         records = @dataset.each.to_a
         assert_equal([
-                       1745,
+                       1884,
                        {
                          package: "AER",
                          dataset: "Affairs",
@@ -64,18 +64,18 @@ class RdatasetsTest < Test::Unit::TestCase
                          doc: "https://vincentarelbundock.github.io/Rdatasets/doc/AER/Affairs.html"
                        },
                        {
-                         package: "vcd",
-                         dataset: "WomenQueue",
-                         title: "Women in Queues",
-                         rows: 11,
-                         cols: 2,
+                         package: "wooldridge",
+                         dataset: "wine",
+                         title: "wine",
+                         rows: 21,
+                         cols: 5,
                          n_binary: 0,
-                         n_character: 0,
-                         n_factor: 1,
+                         n_character: 1,
+                         n_factor: 0,
                          n_logical: 0,
-                         n_numeric: 1,
-                         csv: "https://vincentarelbundock.github.io/Rdatasets/csv/vcd/WomenQueue.csv",
-                         doc: "https://vincentarelbundock.github.io/Rdatasets/doc/vcd/WomenQueue.html"
+                         n_numeric: 4,
+                         csv: "https://vincentarelbundock.github.io/Rdatasets/csv/wooldridge/wine.csv",
+                         doc: "https://vincentarelbundock.github.io/Rdatasets/doc/wooldridge/wine.html"
                        },
                      ],
                      [

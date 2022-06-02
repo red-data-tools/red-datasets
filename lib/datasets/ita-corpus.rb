@@ -44,7 +44,6 @@ module Datasets
       "https://raw.githubusercontent.com/mmorise/ita-corpus/main"
     end
 
-    private
     def parse_data(data_path)
       File.open(data_path) do |f|
         f.each_line(chomp: true) do |line|

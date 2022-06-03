@@ -152,7 +152,7 @@ module Datasets
         @text_stack.last << data
       end
 
-      def cdata(contnet)
+      def cdata(content)
         @text_stack.last << content
       end
 

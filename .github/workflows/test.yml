@@ -25,6 +25,9 @@ jobs:
           - ubuntu-latest
           - windows-latest
     runs-on: ${{ matrix.runs-on }}
+    env:
+      # We can invalidate the current cache by updating this.
+      CACHE_VERSION: "2022-06-10"
     steps:
       - uses: actions/checkout@v2
       - uses: ruby/setup-ruby@v1
@@ -38,7 +41,7 @@ jobs:
             ~/.cache/red-datasets
           key: ${{ runner.os }}-${{ hashFiles('lib/**') }}
           restore-keys: |
-            ${{ runner.os }}-
+            ${{ env.CACHE_VERSION }}-${{ runner.os }}-
       - uses: actions/cache@v2
         if: |
           runner.os == 'macOS'
@@ -47,7 +50,7 @@ jobs:
             ~/Library/Caches/red-datasets
           key: ${{ runner.os }}-${{ hashFiles('lib/**') }}
           restore-keys: |
-            ${{ runner.os }}-
+            ${{ env.CACHE_VERSION }}-${{ runner.os }}-
       - uses: actions/cache@v2
         if: |
           runner.os == 'Windows'
@@ -56,7 +59,7 @@ jobs:
             ~/AppData/Local/red-datasets
           key: ${{ runner.os }}-${{ hashFiles('lib/**') }}
           restore-keys: |
-            ${{ runner.os }}-
+            ${{ env.CACHE_VERSION }}-${{ runner.os }}-
       - name: Install dependencies
         run: |
           bundle install

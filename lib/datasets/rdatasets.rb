@@ -82,13 +82,15 @@ module Datasets
       return to_enum(__method__) unless block_given?
 
       download(@data_path, @metadata.url)
-      CSV.open(@data_path, headers: :first_row, converters: :all) do |csv|
-        csv.each do |row|
-          record = row.to_h
-          record.delete("")
-          record.transform_keys!(&:to_sym)
-          yield record
-        end
+      symbol_raw_converter = lambda do |header|
+        header.encode(CSV::ConverterEncoding).to_sym
+      end
+
+      table = CSV.table(@data_path,
+                        header_converters: [symbol_raw_converter])
+      table.delete(:"") # delete 1st column for indices.
+      table.each do |row|
+        yield row.to_h
       end
     end
   end

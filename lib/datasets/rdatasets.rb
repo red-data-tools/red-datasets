@@ -85,10 +85,22 @@ module Datasets
       symbol_raw_converter = lambda do |header|
         header.encode(CSV::ConverterEncoding).to_sym
       end
-
+      na_converter = lambda do |field|
+        begin
+          if field.encode(CSV::ConverterEncoding) == "NA"
+            nil
+          else
+            field
+          end
+        rescue
+          field
+        end
+      end
       table = CSV.table(@data_path,
-                        header_converters: [symbol_raw_converter])
+                        header_converters: [symbol_raw_converter],
+                        converters: [na_converter, :all])
       table.delete(:"") # delete 1st column for indices.
+
       table.each do |row|
         yield row.to_h
       end

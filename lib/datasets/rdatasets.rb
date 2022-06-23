@@ -82,13 +82,27 @@ module Datasets
       return to_enum(__method__) unless block_given?
 
       download(@data_path, @metadata.url)
-      CSV.open(@data_path, headers: :first_row, converters: :all) do |csv|
-        csv.each do |row|
-          record = row.to_h
-          record.delete("")
-          record.transform_keys!(&:to_sym)
-          yield record
+      symbol_raw_converter = lambda do |header|
+        header.encode(CSV::ConverterEncoding).to_sym
+      end
+      na_converter = lambda do |field|
+        begin
+          if field.encode(CSV::ConverterEncoding) == "NA"
+            nil
+          else
+            field
+          end
+        rescue
+          field
         end
+      end
+      table = CSV.table(@data_path,
+                        header_converters: [symbol_raw_converter],
+                        converters: [na_converter, :all])
+      table.delete(:"") # delete 1st column for indices.
+
+      table.each do |row|
+        yield row.to_h
       end
     end
   end

@@ -17,7 +17,7 @@ class SeabornTest < Test::Unit::TestCase
                      {dataset: "exercise"},
                      {dataset: "flights"},
                      {dataset: "fmri"},
-                     {dataset: "gammas"},
+                     # {dataset: "gammas"}, # Removed Aug.15, 2022
                      {dataset: "geyser"},
                      {dataset: "iris"},
                      {dataset: "mpg"},

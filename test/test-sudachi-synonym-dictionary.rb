@@ -6,7 +6,7 @@ class SudachiSynonymDictionaryTest < Test::Unit::TestCase
   test('#each') do
     records = @dataset.each.to_a
     assert_equal([
-                   65066,
+                   65182,
                    {
                      group_id: "000001",
                      is_noun: true,
@@ -19,15 +19,15 @@ class SudachiSynonymDictionaryTest < Test::Unit::TestCase
                      notation: "曖昧",
                    },
                    {
-                     group_id: "024892",
+                     group_id: "024909",
                      is_noun: true,
                      expansion_type: :expanded,
                      lexeme_id: 1,
                      form_type: :typical,
-                     acronym_type: :typical,
-                     variant_type: :alphabet,
-                     categories: ["教育"],
-                     notation: "gymnasium",
+                     acronym_type: :alphabet,
+                     variant_type: :typical,
+                     categories: ["ビジネス"],
+                     notation: "BPO",
                    },
                  ],
                  [

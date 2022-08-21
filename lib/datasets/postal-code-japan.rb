@@ -111,7 +111,7 @@ module Datasets
       when :uppercase
         data_url << "/oogaki/zip/ken_all.zip"
       when :romaji
-        data_url << "/roman/naccs1.zip"
+        data_url << "/roman/ken_all_rome.zip"
       end
       data_path = cache_dir_path + "#{@reading}-ken-all.zip"
       download(data_path, data_url)

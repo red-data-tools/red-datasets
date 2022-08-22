@@ -161,10 +161,10 @@ class RdatasetsTest < Test::Unit::TestCase
           records = @dataset.each.to_a
           assert_equal([
                          182,
-                         { event: 1, mag: 7, station: 117, dist: 12, accel: 0.359 },
+                         { event: 1, mag: 7, station: "117", dist: 12, accel: 0.359 },
                          { event: 16, mag: 5.1, station: nil, dist: 7.6, accel: 0.28 },
                          { event: 23, mag: 5.3, station: "c168", dist: 25.3, accel: 0.23 },
-                         { event: 23, mag: 5.3, station: 5072, dist: 53.1, accel: 0.022 }
+                         { event: 23, mag: 5.3, station: "5072", dist: 53.1, accel: 0.022 }
                        ],
                        [
                          records.size,
@@ -195,6 +195,50 @@ class RdatasetsTest < Test::Unit::TestCase
                          records[0],
                          records[-1]
                        ])
+        end
+      end
+    end
+
+    sub_test_case('validate') do
+      sub_test_case('nace_rev2') do
+        def setup
+          @dataset = Datasets::Rdatasets.new('validate', 'nace_rev2')
+        end
+
+        test('#each') do
+          records = @dataset.each.to_a
+          assert_equal([
+                        996,
+                        {
+                          Order: 398_481,
+                          Level: 1,
+                          Code: 'A',
+                          Parent: '',
+                          Description: 'AGRICULTURE, FORESTRY AND FISHING',
+                          This_item_includes: 'This section includes the exploitation of vegetal and animal natural resources, comprising the activities of growing of crops, raising and breeding of animals, harvesting of timber and other plants, animals or animal products from a farm or their natural habitats.',
+                          This_item_also_includes: '',
+                          Rulings: '',
+                          This_item_excludes: '',
+                          "Reference_to_ISIC_Rev._4": 'A'
+                        },
+                        {
+                          Order: 399_476,
+                          Level: 4,
+                          Code: '99.00',
+                          Parent: '99.0',
+                          Description: 'Activities of extraterritorial organisations and bodies',
+                          This_item_includes: "This class includes:\n- activities of international organisations such as the United Nations and the specialised agencies of the United Nations system, regional bodies etc., the International Monetary Fund, the World Bank, the World Customs Organisation, the Organisation for Economic Co-operation and Development, the organisation of Petroleum Exporting Countries, the European Communities, the European Free Trade Association etc.",
+                          This_item_also_includes: "This class also includes:\n- activities of diplomatic and consular missions when being determined by the country of their location rather than by the country they represent",
+                          Rulings: '',
+                          This_item_excludes: '',
+                          "Reference_to_ISIC_Rev._4": '9900'
+                        }
+                      ],
+                      [
+                        records.size,
+                        records[0],
+                        records[-1]
+                      ])
         end
       end
     end

@@ -107,9 +107,29 @@ module Datasets
         end
       end
 
+      quote_preserving_converter = lambda do |field, info|
+        f = field.encode(CSV::ConverterEncoding)
+        return f if info.quoted?
+
+        begin
+          begin
+            begin
+              return DateTime.parse(f) if f.match?(DateTimeMatcher)
+            rescue
+              return Integer(f)
+            end
+          rescue
+            return Float(f)
+          end
+        rescue
+          field
+        end
+      end
+
       table = CSV.table(@data_path,
                         header_converters: [:symbol_raw],
-                        converters: [na_converter, inf_converter, :all])
+                        # quote_preserving_converter should be the last
+                        converters: [na_converter, inf_converter, quote_preserving_converter])
       table.delete(:"") # delete 1st column for indices.
 
       table.each do |row|

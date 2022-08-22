@@ -88,7 +88,19 @@ class RdatasetsTest < Test::Unit::TestCase
   end
 
   sub_test_case("Rdatasets") do
+    test('invalid package name') do
+      assert_raise(ArgumentError) do
+        Datasets::Rdatasets.new('invalid package name', 'AirPassengers')
+      end
+    end
+
     sub_test_case("datasets") do
+      test("invalid dataset name") do
+        assert_raise(ArgumentError) do
+          Datasets::Rdatasets.new("datasets", "invalid datasets name")
+        end
+      end
+
       sub_test_case("AirPassengers") do
         def setup
           @dataset = Datasets::Rdatasets.new("datasets", "AirPassengers")
@@ -120,60 +132,70 @@ class RdatasetsTest < Test::Unit::TestCase
         end
       end
 
-      test("invalid dataset name") do
-        assert_raise(ArgumentError) do
-          Datasets::Rdatasets.new("datasets", "invalid datasets name")
+      sub_test_case("airquality") do
+        def setup
+          @dataset = Datasets::Rdatasets.new("datasets", "airquality")
+        end
+
+        test("#each") do
+          records = @dataset.each.to_a
+          assert_equal([
+                         153,
+                         { Ozone: nil, "Solar.R": nil, Wind: 14.3, Temp: 56, Month: 5, Day: 5 },
+                         { Ozone: 20, "Solar.R": 223, Wind: 11.5, Temp: 68, Month: 9, Day: 30 },
+                       ],
+                       [
+                         records.size,
+                         records[4],
+                         records[-1]
+                       ])
+        end
+      end
+
+      sub_test_case('attenu') do
+        def setup
+          @dataset = Datasets::Rdatasets.new('datasets', 'attenu')
+        end
+
+        test('#each') do
+          records = @dataset.each.to_a
+          assert_equal([
+                         182,
+                         { event: 1, mag: 7, station: 117, dist: 12, accel: 0.359 },
+                         { event: 16, mag: 5.1, station: nil, dist: 7.6, accel: 0.28 },
+                         { event: 23, mag: 5.3, station: "c168", dist: 25.3, accel: 0.23 },
+                         { event: 23, mag: 5.3, station: 5072, dist: 53.1, accel: 0.022 }
+                       ],
+                       [
+                         records.size,
+                         records[0],
+                         records[78],
+                         records[169],
+                         records[-1]
+                       ])
         end
       end
     end
 
-    sub_test_case("airquality") do
-      def setup
-        @dataset = Datasets::Rdatasets.new("datasets", "airquality")
-      end
+    sub_test_case('drc') do
+      sub_test_case('germination') do
+        def setup
+          @dataset = Datasets::Rdatasets.new('drc', 'germination')
+        end
 
-      test("#each") do
-        records = @dataset.each.to_a
-        assert_equal([
-                       153,
-                       { Ozone: nil, "Solar.R": nil, Wind: 14.3, Temp: 56, Month: 5, Day: 5},
-                       { Ozone: 20, "Solar.R": 223, Wind: 11.5, Temp: 68, Month: 9, Day: 30},
-                     ],
-                     [
-                       records.size,
-                       records[4],
-                       records[-1]
-                     ])
-      end
-    end
-
-    sub_test_case('attenu') do
-      def setup
-        @dataset = Datasets::Rdatasets.new('datasets', 'attenu')
-      end
-
-      test('#each') do
-        records = @dataset.each.to_a
-        assert_equal([
-                       182,
-                       { event: 1, mag: 7, station: 117, dist: 12, accel: 0.359 },
-                       { event: 16, mag: 5.1, station: nil, dist: 7.6, accel: 0.28 },
-                       { event: 23, mag: 5.3, station: "c168", dist: 25.3, accel: 0.23 },
-                       { event: 23, mag: 5.3, station: 5072, dist: 53.1, accel: 0.022 }
-                     ],
-                     [
-                       records.size,
-                       records[0],
-                       records[78],
-                       records[169],
-                       records[-1]
-                     ])
-      end
-    end
-
-    test("invalid package name") do
-      assert_raise(ArgumentError) do
-        Datasets::Rdatasets.new("invalid package name", "AirPassengers")
+        test('#each') do
+          records = @dataset.each.to_a
+          assert_equal([
+                         192,
+                         { temp: 10, species: 'wheat', start: 0, end: 1.0, germinated: 0 },
+                         { temp: 40, species: 'rice', start: 18, end: Float::INFINITY, germinated: 12 }
+                       ],
+                       [
+                         records.size,
+                         records[0],
+                         records[-1]
+                       ])
+        end
       end
     end
   end

@@ -82,6 +82,7 @@ module Datasets
       return to_enum(__method__) unless block_given?
 
       download(@data_path, @metadata.url)
+
       na_converter = lambda do |field|
         begin
           if field.encode(CSV::ConverterEncoding) == "NA"
@@ -93,9 +94,22 @@ module Datasets
           field
         end
       end
+
+      inf_converter = lambda do |field|
+        begin
+          if field.encode(CSV::ConverterEncoding) == "Inf"
+            Float::INFINITY
+          else
+            field
+          end
+        rescue
+          field
+        end
+      end
+
       table = CSV.table(@data_path,
                         header_converters: [:symbol_raw],
-                        converters: [na_converter, :all])
+                        converters: [na_converter, inf_converter, :all])
       table.delete(:"") # delete 1st column for indices.
 
       table.each do |row|

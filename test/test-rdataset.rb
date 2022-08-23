@@ -1,7 +1,7 @@
-class RdatasetsTest < Test::Unit::TestCase
-  sub_test_case("RdatasetsList") do
+class RdatasetTest < Test::Unit::TestCase
+  sub_test_case("RdatasetList") do
     def setup
-      @dataset = Datasets::RdatasetsList.new
+      @dataset = Datasets::RdatasetList.new
     end
 
     sub_test_case("#each") do
@@ -87,23 +87,23 @@ class RdatasetsTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case("Rdatasets") do
+  sub_test_case("Rdataset") do
     test('invalid package name') do
       assert_raise(ArgumentError) do
-        Datasets::Rdatasets.new('invalid package name', 'AirPassengers')
+        Datasets::Rdataset.new('invalid package name', 'AirPassengers')
       end
     end
 
     sub_test_case("datasets") do
       test("invalid dataset name") do
         assert_raise(ArgumentError) do
-          Datasets::Rdatasets.new("datasets", "invalid datasets name")
+          Datasets::Rdataset.new("datasets", "invalid datasets name")
         end
       end
 
       sub_test_case("AirPassengers") do
         def setup
-          @dataset = Datasets::Rdatasets.new("datasets", "AirPassengers")
+          @dataset = Datasets::Rdataset.new("datasets", "AirPassengers")
         end
 
         test("#each") do
@@ -134,7 +134,7 @@ class RdatasetsTest < Test::Unit::TestCase
 
       sub_test_case("airquality") do
         def setup
-          @dataset = Datasets::Rdatasets.new("datasets", "airquality")
+          @dataset = Datasets::Rdataset.new("datasets", "airquality")
         end
 
         test("#each") do
@@ -154,7 +154,7 @@ class RdatasetsTest < Test::Unit::TestCase
 
       sub_test_case('attenu') do
         def setup
-          @dataset = Datasets::Rdatasets.new('datasets', 'attenu')
+          @dataset = Datasets::Rdataset.new('datasets', 'attenu')
         end
 
         test('#each') do
@@ -180,7 +180,7 @@ class RdatasetsTest < Test::Unit::TestCase
     sub_test_case('drc') do
       sub_test_case('germination') do
         def setup
-          @dataset = Datasets::Rdatasets.new('drc', 'germination')
+          @dataset = Datasets::Rdataset.new('drc', 'germination')
         end
 
         test('#each') do
@@ -202,7 +202,7 @@ class RdatasetsTest < Test::Unit::TestCase
     sub_test_case('validate') do
       sub_test_case('nace_rev2') do
         def setup
-          @dataset = Datasets::Rdatasets.new('validate', 'nace_rev2')
+          @dataset = Datasets::Rdataset.new('validate', 'nace_rev2')
         end
 
         test('#each') do

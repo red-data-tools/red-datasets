@@ -18,7 +18,7 @@ module Datasets
 
     def initialize
       super
-      @metadata.id = "rdatasets"
+      @metadata.id = "rdataset-list"
       @metadata.name = "Rdataset"
       @metadata.url = "https://vincentarelbundock.github.io/Rdatasets/"
       @metadata.licenses = ["GPL-3"]

@@ -68,7 +68,7 @@ module Datasets
       end
 
       super()
-      @metadata.id = "rdatasets-#{package_name}-#{dataset_name}"
+      @metadata.id = "rdataset-#{package_name}-#{dataset_name}"
       @metadata.name = "Rdataset: #{package_name}: #{dataset_name}"
       @metadata.url = info.csv
       @metadata.licenses = ["GPL-3"]

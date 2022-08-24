@@ -2,7 +2,7 @@ require_relative "dataset"
 require_relative "tar-gz-readable"
 
 module Datasets
-  class RdatasetsList < Dataset
+  class RdatasetList < Dataset
     Record = Struct.new(:package,
                         :dataset,
                         :title,
@@ -18,8 +18,8 @@ module Datasets
 
     def initialize
       super
-      @metadata.id = "rdatasets"
-      @metadata.name = "Rdatasets"
+      @metadata.id = "rdataset-list"
+      @metadata.name = "Rdataset"
       @metadata.url = "https://vincentarelbundock.github.io/Rdatasets/"
       @metadata.licenses = ["GPL-3"]
       @data_url = "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/datasets.csv"
@@ -55,9 +55,12 @@ module Datasets
     end
   end
 
-  class Rdatasets < Dataset
+  # For backward compatibility
+  RdatasetsList = RdatasetList
+
+  class Rdataset < Dataset
     def initialize(package_name, dataset_name)
-      list = RdatasetsList.new
+      list = RdatasetList.new
 
       info = list.filter(package: package_name, dataset: dataset_name).first
       unless info
@@ -65,8 +68,8 @@ module Datasets
       end
 
       super()
-      @metadata.id = "rdatasets-#{package_name}-#{dataset_name}"
-      @metadata.name = "Rdatasets: #{package_name}: #{dataset_name}"
+      @metadata.id = "rdataset-#{package_name}-#{dataset_name}"
+      @metadata.name = "Rdataset: #{package_name}: #{dataset_name}"
       @metadata.url = info.csv
       @metadata.licenses = ["GPL-3"]
       @metadata.description = info.title
@@ -137,4 +140,7 @@ module Datasets
       end
     end
   end
+
+  # For backward compatibility
+  Rdatasets = Rdataset
 end

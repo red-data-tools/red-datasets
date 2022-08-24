@@ -121,7 +121,7 @@ class RdatasetTest < Test::Unit::TestCase
         end
 
         test("#metadata.id") do
-          assert_equal("rdatasets-datasets-AirPassengers", @dataset.metadata.id)
+          assert_equal("rdataset-datasets-AirPassengers", @dataset.metadata.id)
         end
 
         test("#metadata.description") do

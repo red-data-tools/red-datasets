@@ -16,7 +16,12 @@ module Datasets
       @metadata.id = "quora-duplicate-question-pair"
       @metadata.name = "Quora's duplicated question pair dataset"
       @metadata.url = "https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs"
-      @metadata.licenses = ["Quora Terms of Service"]
+      @metadata.licenses = [
+        {
+          name: "Quora's Terms of Service",
+          url: "https://www.quora.com/about/tos",
+        }
+      ]
     end
 
     def each

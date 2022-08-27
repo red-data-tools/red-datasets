@@ -13,7 +13,7 @@ module Datasets
 
     def initialize
       super()
-      @metadata.id = "quora_duplicate_question_pair"
+      @metadata.id = "quora-duplicate-question-pair"
       @metadata.name = "quora_duplicate_question_pair"
       @metadata.url = "https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs"
       @metadata.licenses = ["Quora Terms of Service"]

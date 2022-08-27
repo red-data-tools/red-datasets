@@ -29,20 +29,8 @@ module Datasets
 
       open_data do |csv|
         csv.each do |row|
-          next if row[0].nil?
-          id,
-          first_question_id,
-          second_question_id,
-          first_question,
-          second_question,
-          duplicated = row.values_at
-
-          record = Record.new(id,
-                              first_question_id,
-                              second_question_id,
-                              first_question,
-                              second_question,
-                              !duplicated.zero?)
+          row["is_duplicate"] = (row["is_duplicate"] == 1)
+          record = Record.new(*row.fields)
           yield(record)
         end
       end

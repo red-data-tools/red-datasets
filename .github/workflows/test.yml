@@ -27,37 +27,37 @@ jobs:
     runs-on: ${{ matrix.runs-on }}
     env:
       # We can invalidate the current cache by updating this.
-      CACHE_VERSION: "2022-06-10"
+      CACHE_VERSION: "2022-08-27"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         if: |
           runner.os == 'Linux'
         with:
           path: |
             ~/.cache/red-datasets
-          key: ${{ runner.os }}-${{ hashFiles('lib/**') }}
+          key: ${{ env.CACHE_VERSION }}-${{ runner.os }}-${{ hashFiles('lib/**') }}
           restore-keys: |
             ${{ env.CACHE_VERSION }}-${{ runner.os }}-
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         if: |
           runner.os == 'macOS'
         with:
           path: |
             ~/Library/Caches/red-datasets
-          key: ${{ runner.os }}-${{ hashFiles('lib/**') }}
+          key: ${{ env.CACHE_VERSION }}-${{ runner.os }}-${{ hashFiles('lib/**') }}
           restore-keys: |
             ${{ env.CACHE_VERSION }}-${{ runner.os }}-
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         if: |
           runner.os == 'Windows'
         with:
           path: |
             ~/AppData/Local/red-datasets
-          key: ${{ runner.os }}-${{ hashFiles('lib/**') }}
+          key: ${{ env.CACHE_VERSION }}-${{ runner.os }}-${{ hashFiles('lib/**') }}
           restore-keys: |
             ${{ env.CACHE_VERSION }}-${{ runner.os }}-
       - name: Install dependencies

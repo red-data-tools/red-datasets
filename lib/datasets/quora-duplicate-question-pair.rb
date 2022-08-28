@@ -4,12 +4,14 @@ require_relative "dataset"
 
 module Datasets
   class QuoraDuplicateQuestionPair < Dataset
-    Record = Struct.new(:id,
-                        :first_question_id,
-                        :second_question_id,
-                        :first_question,
-                        :second_question,
-                        :duplicated)
+    class Record < Struct.new(:id,
+                              :first_question_id,
+                              :second_question_id,
+                              :first_question,
+                              :second_question,
+                              :duplicated)
+      alias_method :duplicated?, :duplicated
+    end
 
     def initialize
       super()

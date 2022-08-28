@@ -10,24 +10,24 @@ class QuoraDuplicateQuestionPairTest < Test::Unit::TestCase
   test("#each") do
     records = @dataset.each.to_a
     assert_equal([
-                    404290,
-                    record(0,
-                           1,
-                           2,
-                           "What is the step by step guide to invest in share market in india?",
-                           "What is the step by step guide to invest in share market?",
-                           false),
-                    record(404289,
-                           537932,
-                           537933,
-                           "What is like to have sex with cousin?",
-                           "What is it like to have sex with your cousin?",
-                           false),
+                   404290,
+                   record(0,
+                          1,
+                          2,
+                          "What is the step by step guide to invest in share market in india?",
+                          "What is the step by step guide to invest in share market?",
+                          false),
+                   record(404289,
+                          537932,
+                          537933,
+                          "What is like to have sex with cousin?",
+                          "What is it like to have sex with your cousin?",
+                          false),
                  ],
                  [
-                    records.size,
-                    records.first,
-                    records.last,
+                   records.size,
+                   records.first,
+                   records.last,
                  ])
   end
 end

@@ -86,8 +86,8 @@ module Datasets
             url: "https://opendata.cityofnewyork.us/open-data-law/",
           }
         ]
-        @year = format("%04d", year)
-        @month = format("%02d", month)
+        @year = year
+        @month = month
       end
 
       def each
@@ -101,9 +101,9 @@ module Datasets
 
       private
       def open_data
-        file_name = "yellow_tripdata_#{@year}-#{@month}.parquet"
-        data_path = cache_dir_path + file_name
-        data_url = "https://d37ci6vzurychx.cloudfront.net/trip-data/#{file_name}"
+        base_name = "yellow_tripdata_%04d-%02d.parquet" % [@year, @month]
+        data_path = cache_dir_path + base_name
+        data_url = "https://d37ci6vzurychx.cloudfront.net/trip-data/#{base_name}"
         download(data_path, data_url)
         Arrow::Table.load(data_path)
       end

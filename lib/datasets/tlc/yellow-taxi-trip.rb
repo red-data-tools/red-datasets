@@ -77,12 +77,12 @@ module Datasets
 
       def initialize(year: Date.today.year, month: Date.today.month)
         super()
-        @metadata.id = "nyc-taxi-and-limousine-commission-trip-yello-taxi"
-        @metadata.name = "New York city's taxi and limousine commission trip yellow taxi record dataset"
-        @metadata.url = "https://d37ci6vzurychx.cloudfront.net/trip-data"
+        @metadata.id = "nyc-taxi-and-limousine-commission-yello-taxi-trip"
+        @metadata.name = "New York city Taxi and Limousine Commission: yellow taxi trip record dataset"
+        @metadata.url = "https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page"
         @metadata.licenses = [
           {
-            name: "Public",
+            spdx_id: "CC0-1.0",
             url: "https://opendata.cityofnewyork.us/open-data-law/",
           }
         ]

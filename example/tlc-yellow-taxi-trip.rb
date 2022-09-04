@@ -2,7 +2,7 @@
 
 require "datasets"
 
-trips = Datasets::TLCTripYellowTaxi.new(year: 2022, month: 1)
+trips = Datasets::TLC::YellowTaxiTrip.new(year: 2022, month: 1)
 trips.each do |trip|
   p [
       trip.vendor,

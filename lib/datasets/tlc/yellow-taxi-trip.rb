@@ -82,8 +82,8 @@ module Datasets
         @metadata.url = "https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page"
         @metadata.licenses = [
           {
-            spdx_id: "CC0-1.0",
-            url: "https://opendata.cityofnewyork.us/open-data-law/",
+            name: "NYC Open Data Terms of Use",
+            url: "https://opendata.cityofnewyork.us/overview/#termsofuse",
           }
         ]
         @year = year

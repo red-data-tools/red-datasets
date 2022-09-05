@@ -54,7 +54,7 @@ module Datasets
         end
 
         def store_and_fwd=(store_and_fwd)
-          super(store_and_fwd === 'Y')
+          super(store_and_fwd == 'Y')
         end
 
         def payment=(payment)

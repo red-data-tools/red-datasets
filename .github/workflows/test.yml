@@ -59,15 +59,6 @@ jobs:
           key: ${{ env.CACHE_VERSION }}-${{ runner.os }}-${{ hashFiles('lib/**') }}
           restore-keys: |
             ${{ env.CACHE_VERSION }}-${{ runner.os }}-
-      - name: Prepare the Apache Arrow APT repository
-        if: |
-          runner.os == 'Linux'
-        run: |
-          sudo apt update
-          sudo apt install -y -V ca-certificates lsb-release wget
-          wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
-          sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
-          sudo apt update
       - name: Install dependencies
         run: |
           bundle install

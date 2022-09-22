@@ -52,7 +52,9 @@
   * Renamed Rdatasets to Rdataset.
     [GitHub#148][Patch by Hirokazu SUZUKI]
 
-  * Removed support for Ruby 2.6. by Sutou Kouhei
+  * Removed support for Ruby 2.6.
+
+  * Add missing license information.
 
   * `Datasets::QuoraDuplicateQuestionPair`: Added.
     [GitHub#149][Patch by otegami]

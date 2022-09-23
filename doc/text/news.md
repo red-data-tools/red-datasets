@@ -61,29 +61,11 @@
 
 ### Fixes
 
-  * Fixed Rdatasets test case about without package_name.
-    [GitHub#112][Patch by Benson Muite]
-
   * Fixed key from nil to :index in `Datasets::SeabornData`.
     [GitHub#133][Patch by Hirokazu SUZUKI]
 
-  * Fixed typo in `Datasets::Wikipedia::ArticlesListener#cdata`.
-    [GitHub#136][Patch by kojix2]
-
-  * Removed needless line in `Datasets::ITACorpus`.
-    [GitHub#137][Patch by kojix2]
-
   * Fixed `Datasets::Rdatasets#each` to change "NA" to nil.
     [GitHub#139][Patch by Hirokazu SUZUKI]
-
-  * Removed gammas from `Datasets::SeabornData`.
-    [GitHub#147][Patch by Hirokazu SUZUKI]
-
-  * Updated total number of csv files in `Datasets::Rdatasets` test case.
-    [GitHub#147][Patch by Hirokazu SUZUKI]
-
-  * Aligned updated dictionaries in `Datasets::SudachiSynonymDictionary#each`
-    [GitHub#147][Patch by Hirokazu SUZUKI]
 
   * Fix `Datasets::Rdatasets#each` with mixed data of numeric and string.
     [GitHub#140][Patch by Hirokazu SUZUKI]
@@ -99,8 +81,6 @@
   * abcdefg-1234567
 
   * Hirokazu SUZUKI
-
-  * kojix2
 
   * Sutou Kouhei
 

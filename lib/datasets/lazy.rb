@@ -25,6 +25,10 @@ module Datasets
     def register(constant_name, feature)
       @constants[constant_name] = feature
     end
+
+    def constant_names
+      @constants.keys
+    end
   end
 
   LAZY_LOADER = LazyLoader.new

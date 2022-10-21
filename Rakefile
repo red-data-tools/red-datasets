@@ -22,7 +22,7 @@ end
 
 desc "Generate an artifact for GitHub Pages"
 task :pages do
-  pages_dir = "github-pages"
+  pages_dir = "_site"
   rm_rf(pages_dir)
   mkdir_p(pages_dir)
 
@@ -55,9 +55,5 @@ task :pages do
   </body>
 </html>
     HTML
-  end
-
-  cd(pages_dir) do
-    sh("tar", "cfz", "../github-pages.tar.gz", ".")
   end
 end

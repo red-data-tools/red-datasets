@@ -35,22 +35,39 @@ task :pages do
   <head>
     <meta charset="UTF-8">
     <title>Red Datasets</title>
+    <style>
+      table {
+        margin-left: 20vw;
+        min-width: 50%;
+      }
+      th {
+        font-size: 30px;
+        padding: 20px;
+      }
+      td {
+        border-bottom: 1px solid #D9DCE0;
+        padding: 20px;
+        font-weight: bold;
+      }
+    </style>
   </head>
   <body>
     <section>
       <h1>Red Datasets</h1>
-      <section>
-        <h2>Available datasets</h2>
-        <ul>
+      <table>
+        <thead>
+          <tr><th>Available datasets</th></tr>
+        </thead>
+        <tbody>
     HTML
     Datasets::LAZY_LOADER.constant_names.sort.each do |constant_name|
       index_html.puts(<<-HTML)
-          <li>#{CGI.escapeHTML("Datasets::#{constant_name}")}</li>
+          <tr><td>#{CGI.escapeHTML("Datasets::#{constant_name}")}</td></tr>
       HTML
     end
     index_html.puts(<<-HTML)
-        </ul>
-      </section>
+        </tbody>
+      </table>
     </section>
   </body>
 </html>

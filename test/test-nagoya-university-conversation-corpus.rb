@@ -9,23 +9,19 @@ class NagoyaUniversityConversationCorpusTest < Test::Unit::TestCase
     assert_equal([
                    856,
                    {
-                     sentence_order_number: 1,
                      participant_id: 'F107',
                      content: '＊＊＊の町というのはちいちゃくって、城壁がこう町全体をぐるっと回ってて、それが城壁の上を歩いても１時間ぐらいですよね。'
                    },
                    {
-                     sentence_order_number: 856,
                      participant_id: nil,
                      content: '＠ＥＮＤ'
                    },
                    603,
                    {
-                     sentence_order_number: 1,
                      participant_id: 'F007',
                      content: 'それでは話を始めまーす。'
                    },
                    {
-                     sentence_order_number: 603,
                      participant_id: nil,
                      content: '＠ＥＮＤ'
                    }

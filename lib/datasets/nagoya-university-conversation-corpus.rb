@@ -21,7 +21,6 @@ module Datasets
     )
 
     Sentence = Struct.new(
-      :sentence_order_number,
       :participant_id,
       :content
     )
@@ -59,7 +58,6 @@ module Datasets
       data = Data.new
       participants = []
       sentences = []
-      sentence_order_number = 1
 
       text_file.get_input_stream.each do |input|
         input.each_line(chomp: true) do |line|
@@ -84,19 +82,15 @@ module Datasets
             data.note = line.split('：')[1]
           elsif line.include?('＠ＥＮＤ')
             sentence = Sentence.new
-            sentence.sentence_order_number = sentence_order_number
             sentence.participant_id = nil
             sentence.content = '＠ＥＮＤ'
 
             sentences << sentence
-            sentence_order_number += 1
           else
             sentence = Sentence.new
-            sentence.sentence_order_number = sentence_order_number
             sentence.participant_id, sentence.content = line.split('：')
 
             sentences << sentence
-            sentence_order_number += 1
           end
         end
       end

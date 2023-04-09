@@ -115,5 +115,14 @@ class NagoyaUniversityConversationCorpusTest < Test::Unit::TestCase
                  ])
   end
 
-  #TODO:test for metadata
+  sub_test_case('#metadata') do
+    test('#description') do
+      description = @dataset.metadata.description
+      assert_equal(<<~DESCRIPTION, description)
+        The "Nagoya University Conversation Corpus" is a corpus of 129 conversations,
+        total about 100 hours of chatting among native speakers of Japanese,
+        which is converted into text.
+      DESCRIPTION
+    end
+  end
 end

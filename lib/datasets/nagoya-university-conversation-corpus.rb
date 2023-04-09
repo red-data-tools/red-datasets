@@ -31,7 +31,11 @@ module Datasets
       @metadata.name = 'Nagoya University Conversation Curpus'
       @metadata.url = 'https://mmsrv.ninjal.ac.jp/nucc/'
       @metadata.licenses = ['CC-BY-NC-ND-4.0']
-      # TODO: add description after confirmation
+      @metadata.description = <<~DESCRIPTION
+        The "Nagoya University Conversation Corpus" is a corpus of 129 conversations,
+        total about 100 hours of chatting among native speakers of Japanese,
+        which is converted into text.
+      DESCRIPTION
     end
 
     def each

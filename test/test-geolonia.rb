@@ -6,7 +6,7 @@ class GeoloniaTest < Test::Unit::TestCase
   test('#each') do
     records = @dataset.each.to_a
     assert_equal([
-                   277191,
+                   277616,
                    {
                      :prefecture_code => "01",
                      :prefecture_name => "北海道",
@@ -28,16 +28,16 @@ class GeoloniaTest < Test::Unit::TestCase
                      :prefecture_name => "沖縄県",
                      :prefecture_kana => "オキナワケン",
                      :prefecture_romaji => "OKINAWA KEN",
-                     :municipality_code => "47325",
-                     :municipality_name => "中頭郡嘉手納町",
-                     :municipality_kana => "ナカガミグンカデナチョウ",
-                     :municipality_romaji => "NAKAGAMI GUN KADENA CHO",
-                     :street_name => "字兼久",
+                     :municipality_code => "47382",
+                     :municipality_name => "八重山郡与那国町",
+                     :municipality_kana => "ヤエヤマグンヨナグニチョウ",
+                     :municipality_romaji => "YAEYAMA GUN YONAGUNI CHO",
+                     :street_name => "字与那国",
                      :street_kana => nil,
                      :street_romaji => nil,
-                     :alias => "下原",
-                     :latitude => "26.351841",
-                     :longitude => "127.744975",
+                     :alias => nil,
+                     :latitude => "24.455925",
+                     :longitude => "122.987678",
                    },
                  ],
                  [
@@ -55,6 +55,7 @@ class GeoloniaTest < Test::Unit::TestCase
                      "## 住所データ仕様",
                      "### ファイルフォーマット",
                      "### 列",
+                     "### ソート順",
                    ],
                    description.scan(/^#.*$/),
                    description)

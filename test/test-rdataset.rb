@@ -8,7 +8,7 @@ class RdatasetTest < Test::Unit::TestCase
       test("with package_name") do
         records = @dataset.filter(package: "datasets").to_a
         assert_equal([
-                       84,
+                       102,
                        {
                          package: "datasets",
                          dataset: "ability.cov",
@@ -48,7 +48,7 @@ class RdatasetTest < Test::Unit::TestCase
       test("without package_name") do
         records = @dataset.each.to_a
         assert_equal([
-                       1892,
+                       2142,
                        {
                          package: "AER",
                          dataset: "Affairs",

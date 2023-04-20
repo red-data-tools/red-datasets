@@ -14,6 +14,7 @@ class SeabornTest < Test::Unit::TestCase
                      {dataset: "car_crashes"},
                      {dataset: "diamonds"},
                      {dataset: "dots"},
+                     {dataset: "dowjones"},
                      {dataset: "exercise"},
                      {dataset: "flights"},
                      {dataset: "fmri"},

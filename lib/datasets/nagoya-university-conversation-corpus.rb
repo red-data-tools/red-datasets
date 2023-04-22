@@ -20,10 +20,11 @@ module Datasets
       :residence
     )
 
-    Sentence = Struct.new(
-      :participant_id,
-      :content
-    )
+    Sentence = Struct.new(:participant_id, :content) do
+      def end?
+        participant_id.nil? and content.nil?
+      end
+    end
 
     def initialize
       super()
@@ -53,12 +54,9 @@ module Datasets
       data_url = 'https://mmsrv.ninjal.ac.jp/nucc/nucc.zip'
       download(data_path, data_url)
 
-      zip_file = Zip::File.open(data_path)
-      zip_file.each do |entry|
-        next unless entry.file?
-        ZipExtractor.new(data_path).extract_file(entry.name) do |input_stream|
-          yield(input_stream)
-        end
+      extractor = ZipExtractor.new(data_path)
+      extractor.extract_files do |input_stream|
+        yield(input_stream)
       end
     end
 
@@ -74,24 +72,23 @@ module Datasets
             data.name = line[1..]
           elsif line.start_with?('＠収集年月日')
             # mixed cases with and without'：'
-            data.date = line[6..].delete('：')
+            data.date = line[6..].delete_prefix('：')
           elsif line.start_with?('＠場所')
             data.place = line[4..]
           elsif line.start_with?('＠参加者の関係')
             data.relationships = line.split('：', 2)[1]
           elsif line.start_with?('＠参加者')
             participant = Participant.new
-            temp_id, temp_profiles = line.split('：', 2)
-            participant.id = temp_id[4..]
-            participant.attribute, participant.birthplace, participant.residence = temp_profiles.split('、')
+            participant.id, profiles = line[4..].split('：', 2)
+            participant.attribute, participant.birthplace, participant.residence = profiles.split('、', 3)
 
             participants << participant
           elsif line.start_with?('％ｃｏｍ')
             data.note = line.split('：', 2)[1]
-          elsif line.start_with?('＠ＥＮＤ')
+          elsif line == '＠ＥＮＤ'
             sentence = Sentence.new
             sentence.participant_id = nil
-            sentence.content = '＠ＥＮＤ'
+            sentence.content = nil
 
             sentences << sentence
           else

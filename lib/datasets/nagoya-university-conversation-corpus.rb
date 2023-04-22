@@ -41,8 +41,8 @@ module Datasets
     def each
       return to_enum(__method__) unless block_given?
 
-      open_data do |text_file|
-        yield(parse_file(text_file))
+      open_data do |input_stream|
+        yield(parse_file(input_stream))
       end
     end
 
@@ -52,39 +52,43 @@ module Datasets
       data_path = cache_dir_path + 'nucc.zip'
       data_url = 'https://mmsrv.ninjal.ac.jp/nucc/nucc.zip'
       download(data_path, data_url)
+
       zip_file = Zip::File.open(data_path)
       zip_file.each do |entry|
-        yield(entry) if entry.file?
+        next unless entry.file?
+        ZipExtractor.new(data_path).extract_file(entry.name) do |input_stream|
+          yield(input_stream)
+        end
       end
     end
 
-    def parse_file(text_file)
+    def parse_file(input_stream)
       data = Data.new
       participants = []
       sentences = []
 
-      text_file.get_input_stream.each do |input|
+      input_stream.each do |input|
         input.each_line(chomp: true) do |line|
-          line = line.force_encoding('utf-8')
-          if line.include?('＠データ')
+          line.force_encoding('utf-8')
+          if line.start_with?('＠データ')
             data.name = line[1..]
-          elsif line.include?('＠収集年月日')
+          elsif line.start_with?('＠収集年月日')
             # mixed cases with and without'：'
             data.date = line[6..].delete('：')
-          elsif line.include?('＠場所')
+          elsif line.start_with?('＠場所')
             data.place = line[4..]
-          elsif line.include?('＠参加者') && !line.include?('参加者の関係')
+          elsif line.start_with?('＠参加者の関係')
+            data.relationships = line.split('：', 2)[1]
+          elsif line.start_with?('＠参加者')
             participant = Participant.new
-            temp_id, temp_profiles = line.split('：')
+            temp_id, temp_profiles = line.split('：', 2)
             participant.id = temp_id[4..]
             participant.attribute, participant.birthplace, participant.residence = temp_profiles.split('、')
 
             participants << participant
-          elsif line.include?('＠参加者の関係')
-            data.relationships = line.split('：')[1]
-          elsif line.include?('％ｃｏｍ')
-            data.note = line.split('：')[1]
-          elsif line.include?('＠ＥＮＤ')
+          elsif line.start_with?('％ｃｏｍ')
+            data.note = line.split('：', 2)[1]
+          elsif line.start_with?('＠ＥＮＤ')
             sentence = Sentence.new
             sentence.participant_id = nil
             sentence.content = '＠ＥＮＤ'
@@ -92,7 +96,7 @@ module Datasets
             sentences << sentence
           else
             sentence = Sentence.new
-            sentence.participant_id, sentence.content = line.split('：')
+            sentence.participant_id, sentence.content = line.split('：', 2)
 
             sentences << sentence
           end

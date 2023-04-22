@@ -7,8 +7,8 @@ nagoya_university_conversation_corpus = Datasets::NagoyaUniversityConversationCo
 nagoya_university_conversation_corpus.each do |data|
   data.sentences.each do |sentence|
     p [
-      sentence.participant_id,
-      sentence.content
+        sentence.participant_id,
+        sentence.content
       ]
   end
 end

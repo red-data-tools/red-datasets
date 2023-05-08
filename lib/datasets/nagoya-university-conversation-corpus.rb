@@ -69,7 +69,7 @@ module Datasets
         input.each_line(chomp: true) do |line|
           line.force_encoding('utf-8')
           if line.start_with?('＠データ')
-            data.name = line[1..]
+            data.name = line[4..]
           elsif line.start_with?('＠収集年月日')
             # mixed cases with and without'：'
             data.date = line[6..].delete_prefix('：')

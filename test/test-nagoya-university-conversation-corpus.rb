@@ -85,14 +85,14 @@ class NagoyaUniversityConversationCorpusTest < Test::Unit::TestCase
       assert_equal([
                      129,
                      [
-                       'データ１（約３５分）',
+                       '１（約３５分）',
                        '２００１年１０月１６日',
                        'ファミリーレストラン',
                        '英会話教室の友人',
                        nil
                      ],
                      [
-                       'データ１２９（３６分）',
+                       '１２９（３６分）',
                        '２００３年２月１６日',
                        '二人の自宅',
                        '母と娘',

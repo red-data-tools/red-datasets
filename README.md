@@ -1,6 +1,5 @@
 # Red Datasets
 
-[![Build Status](https://travis-ci.org/red-data-tools/red-datasets.svg?branch=master)](https://travis-ci.org/red-data-tools/red-datasets)
 [![Gem Version](https://badge.fury.io/rb/red-datasets.svg)](https://badge.fury.io/rb/red-datasets)
 
 ## Description

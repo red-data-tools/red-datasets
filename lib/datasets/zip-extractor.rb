@@ -32,5 +32,17 @@ module Datasets
       end
       nil
     end
+
+    def extract_files
+      Zip::File.open(@path) do |zip_file|
+        zip_file.each do |entry|
+          next unless entry.file?
+
+          entry.get_input_stream do |input|
+            yield(input)
+          end
+        end
+      end
+    end
   end
 end

@@ -65,6 +65,8 @@ module Datasets
   LAZY_LOADER.register(:LivedoorNews, "datasets/livedoor-news")
   LAZY_LOADER.register(:MNIST, "datasets/mnist")
   LAZY_LOADER.register(:Mushroom, "datasets/mushroom")
+  LAZY_LOADER.register(:NagoyaUniversityConversationCorpus,
+                       "datasets/nagoya-university-conversation-corpus")
   LAZY_LOADER.register(:Penguins, "datasets/penguins")
   LAZY_LOADER.register(:PennTreebank, "datasets/penn-treebank")
   LAZY_LOADER.register(:PMJTDatasetList, "datasets/pmjt-dataset-list")

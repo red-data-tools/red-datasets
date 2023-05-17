@@ -39,14 +39,15 @@ module Datasets
     end
 
     def extract_bz2(path)
-      input, output = IO.pipe
-      pid = spawn("bzcat", path.to_s, {:out => output})
-      begin
-        output.close
-        yield(input)
-      ensure
-        input.close
-        Process.waitpid(pid)
+      IO.pipe do |input, output|
+        pid = spawn("bzcat", path.to_s, {:out => output})
+        begin
+          output.close
+          yield(input)
+        ensure
+          input.close
+          Process.waitpid(pid)
+        end
       end
     end
   end

@@ -30,47 +30,57 @@ module Datasets
 
       output_path.parent.mkpath
 
-      headers = {
-        "Accept-Encoding" => "identity",
-        "User-Agent" => "Red Datasets/#{VERSION}",
-      }
-      start = nil
-      partial_output_path = Pathname.new("#{output_path}.partial")
-      if partial_output_path.exist?
-        start = partial_output_path.size
-        headers["Range"] = "bytes=#{start}-"
-      end
-
-      start_http(@url, headers) do |response|
-        if response.is_a?(Net::HTTPPartialContent)
-          mode = "ab"
-        else
-          start = nil
-          mode = "wb"
+      n_retries = 0
+      n_max_retries = 5
+      begin
+        headers = {
+          "Accept-Encoding" => "identity",
+          "User-Agent" => "Red Datasets/#{VERSION}",
+        }
+        start = nil
+        partial_output_path = Pathname.new("#{output_path}.partial")
+        if partial_output_path.exist?
+          start = partial_output_path.size
+          headers["Range"] = "bytes=#{start}-"
         end
 
-        base_name = @url.path.split("/").last
-        size_current = 0
-        size_max = response.content_length
-        if start
-          size_current += start
-          size_max += start
-          yield_chunks(partial_output_path, &block) if block_given?
-        end
-        progress_reporter = ProgressReporter.new(base_name, size_max)
-        partial_output_path.open(mode) do |output|
-          response.read_body do |chunk|
-            size_current += chunk.bytesize
-            progress_reporter.report(size_current)
-            output.write(chunk)
-            yield(chunk) if block_given?
+        start_http(@url, headers) do |response|
+          if response.is_a?(Net::HTTPPartialContent)
+            mode = "ab"
+          else
+            start = nil
+            mode = "wb"
+          end
+
+          base_name = @url.path.split("/").last
+          size_current = 0
+          size_max = response.content_length
+          if start
+            size_current += start
+            size_max += start
+            if block_given? and n_retries.zero?
+              yield_chunks(partial_output_path, &block)
+            end
+          end
+          progress_reporter = ProgressReporter.new(base_name, size_max)
+          partial_output_path.open(mode) do |output|
+            response.read_body do |chunk|
+              size_current += chunk.bytesize
+              progress_reporter.report(size_current)
+              output.write(chunk)
+              yield(chunk) if block_given?
+            end
           end
         end
+        FileUtils.mv(partial_output_path, output_path)
+      rescue Net::ReadTimeout => error
+        n_retries += 1
+        retry if n_retries < n_max_retries
+        raise
+      rescue TooManyRedirects => error
+        last_url = error.message[/\Atoo many redirections: (.+)\z/, 1]
+        raise TooManyRedirects, "too many redirections: #{@url} .. #{last_url}"
       end
-      FileUtils.mv(partial_output_path, output_path)
-    rescue TooManyRedirects => error
-      last_url = error.message[/\Atoo many redirections: (.+)\z/, 1]
-      raise TooManyRedirects, "too many redirections: #{@url} .. #{last_url}"
     end
 
     private def start_http(url, headers, limit = 10, &block)

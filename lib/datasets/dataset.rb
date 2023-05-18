@@ -42,7 +42,7 @@ module Datasets
       case bz2
       when Pathname, String
         IO.pipe do |input, output|
-          pid = spawn("bzcat", path.to_s, {out: output})
+          pid = spawn("bzcat", bz2.to_s, {out: output})
           begin
             output.close
             yield(input)

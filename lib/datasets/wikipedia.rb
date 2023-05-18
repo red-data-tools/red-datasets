@@ -53,9 +53,15 @@ module Datasets
     end
 
     private
+    def base_name
+      "#{@language}wiki-latest-#{type_in_path}.xml.bz2"
+    end
+
+    def data_path
+      cache_dir_path + base_name
+    end
+
     def open_data(&block)
-      base_name = "#{@language}wiki-latest-#{type_in_path}.xml.bz2"
-      data_path = cache_dir_path + base_name
       data_url = "https://dumps.wikimedia.org/#{@language}wiki/latest/#{base_name}"
       bz2 = Enumerator.new do |yielder|
         download(data_path, data_url) do |bz2_chunk|

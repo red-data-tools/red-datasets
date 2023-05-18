@@ -21,10 +21,10 @@ class WikipediaTest < Test::Unit::TestCase
       end
 
       test("#each") do
-        def @dataset.download(output_path, url)
-          xml_path = output_path.sub_ext("")
-          xml_path.open("w") do |xml_file|
-            xml_file.puts(<<-XML)
+        data_path = @dataset.__send__(:data_path)
+        xml_path = data_path.sub_ext("")
+        xml_path.open("w") do |xml_file|
+          xml_file.puts(<<-XML)
 <mediawiki
    xmlns="http://www.mediawiki.org/xml/export-0.10/"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -55,11 +55,10 @@ class WikipediaTest < Test::Unit::TestCase
     </revision>
   </page>
 </mediawiki>
-            XML
-          end
-          unless system("bzip2", xml_path.to_s)
-            raise "failed to run bzip2"
-          end
+          XML
+        end
+        unless system("bzip2", xml_path.to_s)
+          raise "failed to run bzip2"
         end
 
         contributor = Datasets::Wikipedia::Contributor.new("user", 10)

@@ -33,20 +33,55 @@ module Datasets
       @cache_path ||= CachePath.new(@metadata.id)
     end
 
-    def download(output_path, url)
+    def download(output_path, url, &block)
       downloader = Downloader.new(url)
-      downloader.download(output_path)
+      downloader.download(output_path, &block)
     end
 
-    def extract_bz2(path)
-      IO.pipe do |input, output|
-        pid = spawn("bzcat", path.to_s, {:out => output})
-        begin
-          output.close
-          yield(input)
-        ensure
-          input.close
-          Process.waitpid(pid)
+    def extract_bz2(bz2)
+      case bz2
+      when Pathname, String
+        IO.pipe do |input, output|
+          pid = spawn("bzcat", path.to_s, {out: output})
+          begin
+            output.close
+            yield(input)
+          ensure
+            input.close
+            Process.waitpid(pid)
+          end
+        end
+      else
+        IO.pipe do |bz2_input, bz2_output|
+          IO.pipe do |plain_input, plain_output|
+            bz2_thread = Thread.new do
+              begin
+                bz2.each do |chunk|
+                  bz2_output.write(chunk)
+                  bz2_output.flush
+                end
+              rescue => error
+                message = "Failed to read bzcat input: " +
+                          "#{erro.class}: #{error.message}"
+                $stderr.puts(message)
+              ensure
+                bz2_output.close
+              end
+            end
+            begin
+              pid = spawn("bzcat", {in: bz2_input, out: plain_output})
+              begin
+                bz2_input.close
+                plain_output.close
+                yield(plain_input)
+              ensure
+                plain_input.close
+                Process.waitpid(pid)
+              end
+            ensure
+              bz2_thread.kill
+            end
+          end
         end
       end
     end

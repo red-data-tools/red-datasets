@@ -22,8 +22,11 @@ module Datasets
       end
     end
 
-    def download(output_path)
-      return if output_path.exist?
+    def download(output_path, &block)
+      if output_path.exist?
+        yield_chunks(output_path, &block) if block_given?
+        return
+      end
 
       output_path.parent.mkpath
 
@@ -52,6 +55,7 @@ module Datasets
         if start
           size_current += start
           size_max += start
+          yield_chunks(partial_output_path, &block) if block_given?
         end
         progress_reporter = ProgressReporter.new(base_name, size_max)
         partial_output_path.open(mode) do |output|
@@ -59,6 +63,7 @@ module Datasets
             size_current += chunk.bytesize
             progress_reporter.report(size_current)
             output.write(chunk)
+            yield(chunk) if block_given?
           end
         end
       end
@@ -95,6 +100,17 @@ module Datasets
             message += ": #{url}"
             raise response.error_type.new(message, response)
           end
+        end
+      end
+    end
+
+    private def yield_chunks(path)
+      path.open("rb") do |output|
+        chunk_size = 1024 * 1024
+        chunk = ""
+        i = 0
+        while output.read(chunk_size, chunk)
+          yield(chunk)
         end
       end
     end

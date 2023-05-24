@@ -54,11 +54,13 @@ module Datasets
       else
         IO.pipe do |bz2_input, bz2_output|
           IO.pipe do |plain_input, plain_output|
+            bz2_stop = false
             bz2_thread = Thread.new do
               begin
                 bz2.each do |chunk|
                   bz2_output.write(chunk)
                   bz2_output.flush
+                  break if bz2_stop
                 end
               rescue => error
                 message = "Failed to read bzcat input: " +
@@ -79,7 +81,8 @@ module Datasets
                 Process.waitpid(pid)
               end
             ensure
-              bz2_thread.kill
+              bz2_stop = true
+              bz2_thread.join
             end
           end
         end

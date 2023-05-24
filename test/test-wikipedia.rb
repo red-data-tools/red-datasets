@@ -1,99 +1,54 @@
 class WikipediaTest < Test::Unit::TestCase
-  sub_test_case("ja") do
+  sub_test_case("en") do
     sub_test_case("articles") do
-      include Helper::Sandbox
-
       def setup
-        setup_sandbox
-        @dataset = Datasets::Wikipedia.new(language: :ja,
+        @dataset = Datasets::Wikipedia.new(language: :en,
                                            type: :articles)
-        def @dataset.cache_dir_path
-          @cache_dir_path
-        end
-        def @dataset.cache_dir_path=(path)
-          @cache_dir_path = path
-        end
-        @dataset.cache_dir_path = @tmp_dir
-      end
-
-      def teardown
-        teardown_sandbox
       end
 
       test("#each") do
-        data_path = @dataset.__send__(:data_path)
-        xml_path = data_path.sub_ext("")
-        xml_path.open("w") do |xml_file|
-          xml_file.puts(<<-XML)
-<mediawiki
-   xmlns="http://www.mediawiki.org/xml/export-0.10/"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.10/ http://www.mediawiki.org/xml/export-0.10.xsd"
-   version="0.10" xml:lang="ja">
-  <siteinfo>
-    <sitename>Wikipedia</sitename>
-  </siteinfo>
-  <page>
-    <title>タイトル</title>
-    <ns>4</ns>
-    <id>1</id>
-    <restrictions>sysop</restrictions>
-    <revision>
-      <id>3</id>
-      <parentid>2</parentid>
-      <timestamp>2004-04-30T14:46:00Z</timestamp>
-      <contributor>
-        <username>user</username>
-        <id>10</id>
-      </contributor>
-      <minor />
-      <comment>コメント</comment>
-      <model>wikitext</model>
-      <format>text/x-wiki</format>
-      <text xml:space="preserve">テキスト</text>
-      <sha1>a9674b19f8c56f785c91a555d0a144522bb318e6</sha1>
-    </revision>
-  </page>
-</mediawiki>
-          XML
-        end
-        unless system("bzip2", xml_path.to_s)
-          raise "failed to run bzip2"
-        end
-
-        contributor = Datasets::Wikipedia::Contributor.new("user", 10)
+        contributor = Datasets::Wikipedia::Contributor.new("Elli", 20842734)
         revision = Datasets::Wikipedia::Revision.new
-        revision.id = 3
-        revision.parent_id = 2
-        revision.timestamp = Time.iso8601("2004-04-30T14:46:00Z")
+        revision.id = 1002250816
+        revision.parent_id = 854851586
+        revision.timestamp = Time.iso8601("2021-01-23T15:15:01Z")
         revision.contributor = contributor
-        revision.comment = "コメント"
+        revision.comment = "shel"
         revision.model = "wikitext"
         revision.format = "text/x-wiki"
-        revision.text = "テキスト"
-        revision.sha1 = "a9674b19f8c56f785c91a555d0a144522bb318e6"
+        revision.text = <<-TEXT.chomp
+#REDIRECT [[Computer accessibility]]
+
+{{rcat shell|
+{{R from move}}
+{{R from CamelCase}}
+{{R unprintworthy}}
+}}
+        TEXT
+        revision.sha1 = "kmysdltgexdwkv2xsml3j44jb56dxvn"
         page = Datasets::Wikipedia::Page.new
-        page.title = "タイトル"
-        page.namespace = 4
-        page.id = 1
-        page.restrictions = ["sysop"]
+        page.title = "AccessibleComputing"
+        page.namespace = 0
+        page.id = 10
+        page.restrictions = nil
+        page.redirect = "Computer accessibility"
         page.revision = revision
         assert_equal(page, @dataset.each.first)
       end
 
       sub_test_case("#metadata") do
         test("#id") do
-          assert_equal("wikipedia-ja-articles",
+          assert_equal("wikipedia-en-articles",
                        @dataset.metadata.id)
         end
 
         test("#name") do
-          assert_equal("Wikipedia articles (ja)",
+          assert_equal("Wikipedia articles (en)",
                        @dataset.metadata.name)
         end
 
         test("#description") do
-          assert_equal("Wikipedia articles in ja",
+          assert_equal("Wikipedia articles in en",
                        @dataset.metadata.description)
         end
       end

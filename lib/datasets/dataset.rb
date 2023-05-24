@@ -62,7 +62,7 @@ module Datasets
                 end
               rescue => error
                 message = "Failed to read bzcat input: " +
-                          "#{erro.class}: #{error.message}"
+                          "#{error.class}: #{error.message}"
                 $stderr.puts(message)
               ensure
                 bz2_output.close

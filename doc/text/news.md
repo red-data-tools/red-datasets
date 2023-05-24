@@ -1,5 +1,21 @@
 # News
 
+## 0.1.6 - 2023-05-24
+
+### Improvements
+
+  * Added support for lazy loading by `require "datasets/lazy"`.
+
+  * `Datasets::NagoyaUniversityConversationCorpus`: Added.
+    [GH-168][https://github.com/red-data-tools/red-datasets/issues/168]
+    [Patch by matsuura]
+
+  * `Datasets::Wikipedia`: Added support for downloading in background.
+
+### Thanks
+
+  * matsuura
+
 ## 0.1.5 - 2022-09-22
 
 ### Improvements

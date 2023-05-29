@@ -1,5 +1,12 @@
 # News
 
+## 0.1.7 - 2023-05-29
+
+### Improvements
+
+  * `Datasets::NagoyaUniversityConversationCorpus`: Avoid using
+    endless range for old Ruby.
+
 ## 0.1.6 - 2023-05-24
 
 ### Improvements

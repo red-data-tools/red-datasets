@@ -69,17 +69,17 @@ module Datasets
         input.each_line(chomp: true) do |line|
           line.force_encoding('utf-8')
           if line.start_with?('＠データ')
-            data.name = line[4..]
+            data.name = line[4..-1]
           elsif line.start_with?('＠収集年月日')
             # mixed cases with and without'：'
-            data.date = line[6..].delete_prefix('：')
+            data.date = line[6..-1].delete_prefix('：')
           elsif line.start_with?('＠場所')
-            data.place = line[4..]
+            data.place = line[4..-1]
           elsif line.start_with?('＠参加者の関係')
             data.relationships = line.split('：', 2)[1]
           elsif line.start_with?('＠参加者')
             participant = Participant.new
-            participant.id, profiles = line[4..].split('：', 2)
+            participant.id, profiles = line[4..-1].split('：', 2)
             participant.attribute, participant.birthplace, participant.residence = profiles.split('、', 3)
 
             participants << participant

@@ -6,7 +6,7 @@ class GeoloniaTest < Test::Unit::TestCase
   test('#each') do
     records = @dataset.each.to_a
     assert_equal([
-                   277616,
+                   277656,
                    {
                      :prefecture_code => "01",
                      :prefecture_name => "北海道",

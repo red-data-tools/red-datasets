@@ -99,6 +99,68 @@ class HouseOfCouncillorTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case(":in_house_group") do
+    def setup
+      @dataset = Datasets::HouseOfCouncillor.new(type: :in_house_group)
+    end
+
+    def record(*args)
+      Datasets::HouseOfCouncillor::InHouseGroup.new(*args)
+    end
+
+    test("#each") do
+      records = @dataset.each.to_a
+      assert_equal([
+                     10,
+                     record(Date.parse("2023-10-20"),
+                            "自由民主党",
+                            "自民",
+                            Date.parse("2023-11-26"),
+                            117,
+                            24,
+                            Date.parse("2025-07-28"),
+                            19,
+                            5,
+                            35,
+                            6,
+                            54,
+                            11,
+                            Date.parse("2028-07-25"),
+                            18,
+                            5,
+                            45,
+                            8,
+                            63,
+                            13),
+                     record(Date.parse("2023-10-20"),
+                            "各派に属しない議員",
+                            "無所属",
+                            Date.parse("2023-11-26"),
+                            10,
+                            4,
+                            Date.parse("2025-07-28"),
+                            2,
+                            0,
+                            5,
+                            2,
+                            7,
+                            2,
+                            Date.parse("2028-07-25"),
+                            1,
+                            0,
+                            2,
+                            2,
+                            3,
+                            2),
+                   ],
+                   [
+                     records.size,
+                     records.first,
+                     records.last,
+                   ])
+    end
+  end
+
   sub_test_case(":member") do
     def setup
       @dataset = Datasets::HouseOfCouncillor.new(type: :member)

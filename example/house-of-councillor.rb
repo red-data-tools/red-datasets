@@ -11,6 +11,12 @@ house_of_councillor.each do |record|
   p record.promulgated_on, record.values
 end
 
+# In-House group
+house_of_councillor = Datasets::HouseOfCouncillor.new(type: :in_house_group)
+house_of_councillor.each do |record|
+  p record.values
+end
+
 # Member
 house_of_councillor = Datasets::HouseOfCouncillor.new(type: :member)
 house_of_councillor.each do |record|

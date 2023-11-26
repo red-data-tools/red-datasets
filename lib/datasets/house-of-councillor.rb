@@ -42,6 +42,27 @@ module Datasets
                       :entracted_law_url,
                       :notes)
 
+    InHouseGroup = Struct.new(:in_house_group_name_and_abbreviation_on,
+                              :in_house_group_name,
+                              :in_house_group_abbreviation,
+                              :number_of_members_on,
+                              :number_of_members,
+                              :number_of_women_members,
+                              :first_term_expires_on,
+                              :first_term_proportional_representation_number_of_members,
+                              :first_term_proportional_representation_number_of_women_members,
+                              :first_term_election_district_number_of_members,
+                              :first_term_election_district_number_of_women_members,
+                              :first_term_total_number_of_members,
+                              :first_term_total_number_of_women_members,
+                              :second_term_expires_on,
+                              :second_term_proportional_representation_number_of_members,
+                              :second_term_proportional_representation_number_of_women_members,
+                              :second_term_election_district_number_of_members,
+                              :second_term_election_district_number_of_women_members,
+                              :second_term_total_number_of_members,
+                              :second_term_total_number_of_women_members)
+
     Member = Struct.new(:professional_name,
                         :true_name,
                         :profile_url,
@@ -59,6 +80,7 @@ module Datasets
 
     VALID_TYPES = [
       :bill,
+      :in_house_group,
       :member,
     ]
 
@@ -73,7 +95,7 @@ module Datasets
       end
 
       @metadata.id = "house-of-councillor"
-      @metadata.name = "Bill and member of the House of Councillors of Japan"
+      @metadata.name = "Bill, in-House group, member of the House of Councillors of Japan"
       @metadata.url = "https://smartnews-smri.github.io/house-of-councillors"
       @metadata.licenses = ["MIT"]
       @metadata.description = "The House of Councillors of Japan (type: #{@type})"
@@ -87,6 +109,8 @@ module Datasets
           case @type
           when :bill
             record = Bill.new(*row.fields)
+          when :in_house_group
+            record = InHouseGroup.new(*row.fields)
           when :member
             record = Member.new(*row.fields)
           end
@@ -102,6 +126,8 @@ module Datasets
       case @type
       when :bill
         data_url << "/gian.csv"
+      when :in_house_group
+        data_url << "/kaiha.csv"
       when :member
         data_url << "/giin.csv"
       end

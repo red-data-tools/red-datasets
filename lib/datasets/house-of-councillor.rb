@@ -2,6 +2,46 @@ require_relative "dataset"
 
 module Datasets
   class HouseOfCouncillor < Dataset
+    Bill = Struct.new(:council_time,
+                      :bill_type,
+                      :submit_time,
+                      :submit_number,
+                      :title,
+                      :bill_url,
+                      :bill_summary_url,
+                      :proposed_bill_url,
+                      :proposed_on,
+                      :proposed_on_from_house_of_representatives,
+                      :proposed_on_to_house_of_representatives,
+                      :prior_deliberations_type,
+                      :continuation_type,
+                      :proposers,
+                      :submitter,
+                      :submitter_type,
+                      :progress_of_house_of_councillors_committees_etc_refer_on,
+                      :progress_of_house_of_councillors_committees_etc_committee_etc,
+                      :progress_of_house_of_councillors_committees_etc_pass_on,
+                      :progress_of_house_of_councillors_committees_etc_result,
+                      :progress_of_house_of_councillors_plenary_sitting_pass_on,
+                      :progress_of_house_of_councillors_plenary_sitting_result,
+                      :progress_of_house_of_councillors_plenary_sitting_committees,
+                      :progress_of_house_of_councillors_plenary_sitting_vote_type,
+                      :progress_of_house_of_councillors_plenary_sitting_vote_method,
+                      :progress_of_house_of_councillors_plenary_sitting_result_url,
+                      :progress_of_house_of_representatives_committees_etc_refer_on,
+                      :progress_of_house_of_representatives_committees_etc_committee_etc,
+                      :progress_of_house_of_representatives_committees_etc_pass_on,
+                      :progress_of_house_of_representatives_committees_etc_result,
+                      :progress_of_house_of_representatives_plenary_sitting_pass_on,
+                      :progress_of_house_of_representatives_plenary_sitting_result,
+                      :progress_of_house_of_representatives_plenary_sitting_committees,
+                      :progress_of_house_of_representatives_plenary_sitting_vote_type,
+                      :progress_of_house_of_representatives_plenary_sitting_vote_method,
+                      :promulgated_on,
+                      :law_number,
+                      :entracted_law_url,
+                      :notes)
+
     Member = Struct.new(:professional_name,
                         :true_name,
                         :profile_url,
@@ -18,10 +58,11 @@ module Datasets
                         :career_on)
 
     VALID_TYPES = [
+      :bill,
       :member,
     ]
 
-    def initialize(type: :member)
+    def initialize(type: :bill)
       super()
       @type = type
       unless VALID_TYPES.include?(type)
@@ -32,10 +73,10 @@ module Datasets
       end
 
       @metadata.id = "house-of-councillor"
-      @metadata.name = "Bill of the House of Councillors of Japan"
+      @metadata.name = "Bill and member of the House of Councillors of Japan"
       @metadata.url = "https://smartnews-smri.github.io/house-of-councillors"
       @metadata.licenses = ["MIT"]
-      @metadata.description = "Bill of the House of Councillors of Japan"
+      @metadata.description = "The House of Councillors of Japan (type: #{@type})"
     end
 
     def each
@@ -44,6 +85,8 @@ module Datasets
       open_data do |csv|
         csv.each do |row|
           case @type
+          when :bill
+            record = Bill.new(*row.fields)
           when :member
             record = Member.new(*row.fields)
           end
@@ -57,6 +100,8 @@ module Datasets
     def open_data
       data_url = "https://smartnews-smri.github.io/house-of-councillors/data"
       case @type
+      when :bill
+        data_url << "/gian.csv"
       when :member
         data_url << "/giin.csv"
       end

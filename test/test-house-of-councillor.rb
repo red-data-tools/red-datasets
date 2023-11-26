@@ -1,7 +1,107 @@
 class HouseOfCouncillorTest < Test::Unit::TestCase
-  sub_test_case(":member") do
+  sub_test_case(":bill") do
     def setup
       @dataset = Datasets::HouseOfCouncillor.new
+    end
+
+    def record(*args)
+      Datasets::HouseOfCouncillor::Bill.new(*args)
+    end
+
+    test("#each") do
+      records = @dataset.each.to_a
+      assert_equal([
+                     9182,
+                     record(153,
+                            "法律案（内閣提出）",
+                            153,
+                            1,
+                            "司法制度改革推進法案",
+                            "https://www.sangiin.go.jp/japanese/joho1/kousei/gian/153/meisai/m15303153001.htm",
+                            "https://www.sangiin.go.jp/japanese/joho1/kousei/gian/153/pdf/5315310.pdf",
+                            nil,
+                            Date.parse("2001-09-28"),
+                            Date.parse("2001-10-30"),
+                            nil,
+                            "衆先議",
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            Date.parse("2001-10-31"),
+                            "法務委員会",
+                            Date.parse("2001-11-08"),
+                            "可決",
+                            Date.parse("2001-11-09"),
+                            "可決",
+                            nil,
+                            "多数",
+                            "押しボタン",
+                            "https://www.sangiin.go.jp/japanese/joho1/kousei/vote/153/153-1109-v005.htm",
+                            Date.parse("2001-10-18"),
+                            "法務委員会",
+                            Date.parse("2001-10-26"),
+                            "可決",
+                            Date.parse("2001-10-30"),
+                            "可決",
+                            nil,
+                            "多数",
+                            "起立",
+                            Date.parse("2001-11-16"),
+                            119,
+                            nil,
+                            nil),
+                     record(212,
+                            "NHK決算",
+                            210,
+                            1,
+                            "日本放送協会令和三年度財産目録、貸借対照表、損益計算書、資本等変動計算書及びキャッシュ・フロー計算書並びにこれらに関する説明書",
+                            "https://www.sangiin.go.jp/japanese/joho1/kousei/gian/212/meisai/m212550210001.htm",
+                            nil,
+                            nil,
+                            Date.parse("2022-12-02"),
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            Date.parse("2023-10-20"),
+                            "総務委員会",
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            nil),
+                   ],
+                   [
+                     records.size,
+                     records.first,
+                     records.last,
+                   ])
+    end
+  end
+
+  sub_test_case(":member") do
+    def setup
+      @dataset = Datasets::HouseOfCouncillor.new(type: :member)
     end
 
     def record(*args)

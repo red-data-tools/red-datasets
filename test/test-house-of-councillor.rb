@@ -210,4 +210,54 @@ class HouseOfCouncillorTest < Test::Unit::TestCase
                    ])
     end
   end
+
+  sub_test_case(":question") do
+    def setup
+      @dataset = Datasets::HouseOfCouncillor.new(type: :question)
+    end
+
+    def record(*args)
+      Datasets::HouseOfCouncillor::Question.new(*args)
+    end
+
+    test("#each") do
+      records = @dataset.each.to_a
+      assert_equal([
+                     7518,
+                     record(1,
+                            1,
+                            "食生活安定に関する質問主意書",
+                            "市来　乙彦",
+                            1,
+                            "https://www.sangiin.go.jp/japanese/joho1/kousei/syuisyo/001/syuh/s001001.htm",
+                            "https://www.sangiin.go.jp/japanese/joho1/kousei/syuisyo/001/touh/t001001.htm",
+                            "https://www.sangiin.go.jp/japanese/joho1/kousei/syuisyo/001/syup/s001001.pdf",
+                            "https://www.sangiin.go.jp/japanese/joho1/kousei/syuisyo/001/toup/t001001.pdf",
+                            "https://www.sangiin.go.jp/japanese/joho1/kousei/syuisyo/001/meisai/m001001.htm",
+                            Date.parse("1947-06-06"),
+                            Date.parse("1947-06-23"),
+                            Date.parse("1947-06-28"),
+                            nil),
+                     record(212,
+                            67,
+                            "公的機関の職員の国籍に関する再質問主意書",
+                            "神谷　宗幣",
+                            1,
+                            nil,
+                            nil,
+                            nil,
+                            nil,
+                            "https://www.sangiin.go.jp/japanese/joho1/kousei/syuisyo/212/meisai/m212067.htm",
+                            Date.parse("2023-11-24"),
+                            nil,
+                            nil,
+                            nil),
+                   ],
+                   [
+                     records.size,
+                     records.first,
+                     records.last,
+                   ])
+    end
+  end
 end

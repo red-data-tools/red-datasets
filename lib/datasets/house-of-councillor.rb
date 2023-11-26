@@ -78,10 +78,26 @@ module Datasets
                         :career,
                         :career_on)
 
+    Question = Struct.new(:submit_time,
+                          :submit_number,
+                          :title,
+                          :submitter,
+                          :number_of_submissions,
+                          :question_for_text_html_url,
+                          :answer_for_text_html_url,
+                          :question_for_text_pdf_url,
+                          :answer_for_text_pdf_url,
+                          :question_url,
+                          :submitted_on,
+                          :transfered_on,
+                          :received_answer_on,
+                          :notes)
+
     VALID_TYPES = [
       :bill,
       :in_house_group,
       :member,
+      :question
     ]
 
     def initialize(type: :bill)
@@ -95,7 +111,7 @@ module Datasets
       end
 
       @metadata.id = "house-of-councillor"
-      @metadata.name = "Bill, in-House group, member of the House of Councillors of Japan"
+      @metadata.name = "Bill, in-House group, member and question of the House of Councillors of Japan"
       @metadata.url = "https://smartnews-smri.github.io/house-of-councillors"
       @metadata.licenses = ["MIT"]
       @metadata.description = "The House of Councillors of Japan (type: #{@type})"
@@ -113,6 +129,8 @@ module Datasets
             record = InHouseGroup.new(*row.fields)
           when :member
             record = Member.new(*row.fields)
+          when :question
+            record = Question.new(*row.fields)
           end
           yield(record)
         end
@@ -130,6 +148,8 @@ module Datasets
         data_url << "/kaiha.csv"
       when :member
         data_url << "/giin.csv"
+      when :question
+        data_url << "/syuisyo.csv"
       end
       data_path = cache_dir_path + "#{@type}.csv"
       download(data_path, data_url)

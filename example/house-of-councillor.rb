@@ -29,3 +29,12 @@ house_of_councillor.each do |record|
       record.professional_name_reading,
     ]
 end
+
+# Question
+house_of_councillor = Datasets::HouseOfCouncillor.new(type: :question)
+house_of_councillor.each do |record|
+  # Select number of submissions greater than 1
+  next unless 1 < record.number_of_submissions
+
+  p record.number_of_submissions, record.values
+end

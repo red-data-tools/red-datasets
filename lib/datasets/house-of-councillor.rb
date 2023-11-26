@@ -2,7 +2,7 @@ require_relative "dataset"
 
 module Datasets
   class HouseOfCouncillor < Dataset
-    Record = Struct.new(:professional_name,
+    Member = Struct.new(:professional_name,
                         :true_name,
                         :profile_url,
                         :professional_name_reading,
@@ -17,8 +17,20 @@ module Datasets
                         :career,
                         :career_on)
 
-    def initialize
-      super
+    VALID_TYPES = [
+      :member,
+    ]
+
+    def initialize(type: :member)
+      super()
+      @type = type
+      unless VALID_TYPES.include?(type)
+        message = ":type must be one of ["
+        message << VALID_TYPES.collect(&:inspect).join(",")
+        message << "]: #{@type.inspect}"
+        raise ArgumentError, message
+      end
+
       @metadata.id = "house-of-councillor"
       @metadata.name = "Bill of the House of Councillors of Japan"
       @metadata.url = "https://smartnews-smri.github.io/house-of-councillors"
@@ -31,7 +43,10 @@ module Datasets
 
       open_data do |csv|
         csv.each do |row|
-          record = Record.new(*row.fields)
+          case @type
+          when :member
+            record = Member.new(*row.fields)
+          end
           yield(record)
         end
       end
@@ -40,9 +55,14 @@ module Datasets
     private
 
     def open_data
-      data_path = cache_dir_path + "giin.csv"
-      data_url = "https://smartnews-smri.github.io/house-of-councillors/data/giin.csv"
+      data_url = "https://smartnews-smri.github.io/house-of-councillors/data"
+      case @type
+      when :member
+        data_url << "/giin.csv"
+      end
+      data_path = cache_dir_path + "#{@type}.csv"
       download(data_path, data_url)
+
       CSV.open(data_path, col_sep: ",", headers: true, converters: %i(date integer)) do |csv|
         yield(csv)
       end

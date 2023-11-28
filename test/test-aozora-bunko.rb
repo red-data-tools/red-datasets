@@ -114,13 +114,13 @@ class AozoraBunkoTest < Test::Unit::TestCase
           book = Datasets::AozoraBunko::Book.new
           book.cache_path = @cache_path
 
-          book.title_id = '000750'
-          book.person_id = '000146'
-          book.html_file_url = 'http://www.lcv.ne.jp/~ibs52086/fire/'
+          book.title_id = '061551'
+          book.person_id = '002225'
+          book.html_file_url = 'http://minken.party/2019/03/09/yakunin/'
           book.html_file_character_encoding = 'UTF-8'
 
-          assert_equal('<title>種田山頭火句集 | 『草木塔抄』他　FIRE ON THE MOUNTAIN</title>',
-                       book.html.split("\n")[7])
+          assert_equal('<title>自由民権現代研究会</title>',
+                       book.html[/<title>.*?<\/title>/])
         end
       end
 

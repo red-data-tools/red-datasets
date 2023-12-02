@@ -105,7 +105,7 @@ module Datasets
       @type = type
       unless VALID_TYPES.include?(type)
         message = ":type must be one of ["
-        message << VALID_TYPES.collect(&:inspect).join(",")
+        message << VALID_TYPES.collect(&:inspect).join(", ")
         message << "]: #{@type.inspect}"
         raise ArgumentError, message
       end

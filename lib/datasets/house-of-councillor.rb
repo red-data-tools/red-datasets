@@ -128,6 +128,9 @@ module Datasets
           when :in_house_group
             record = InHouseGroup.new(*row.fields)
           when :member
+            %w(当選年).each do |ints_column_name|
+              row[ints_column_name] = parse_ints(row[ints_column_name])
+            end
             record = Member.new(*row.fields)
           when :question
             record = Question.new(*row.fields)
@@ -157,6 +160,10 @@ module Datasets
       CSV.open(data_path, col_sep: ",", headers: true, converters: %i(date integer)) do |csv|
         yield(csv)
       end
+    end
+
+    def parse_ints(column_value)
+      column_value.to_s.split("、").collect(&:to_i)
     end
   end
 end

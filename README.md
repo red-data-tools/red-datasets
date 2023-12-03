@@ -29,6 +29,7 @@ You can use datasets easily because you can access each dataset with multiple wa
 * Fuel Economy Dataset
 * Geolonia Japanese Addresses
 * Hepatitis
+* House of Councillors of Japan
 * Iris Dataset
 * Libsvm
 * MNIST database

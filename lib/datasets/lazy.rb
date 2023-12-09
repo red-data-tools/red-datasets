@@ -58,6 +58,7 @@ module Datasets
   LAZY_LOADER.register(:Geolonia, "datasets/geolonia")
   LAZY_LOADER.register(:Hepatitis, "datasets/hepatitis")
   LAZY_LOADER.register(:HouseOfCouncillor, "datasets/house-of-councillor")
+  LAZY_LOADER.register(:HouseOfRepresentative, "datasets/house-of-representative")
   LAZY_LOADER.register(:Iris, "datasets/iris")
   LAZY_LOADER.register(:ITACorpus, "datasets/ita-corpus")
   LAZY_LOADER.register(:KuzushijiMNIST, "datasets/kuzushiji-mnist")

@@ -17,23 +17,35 @@ module Datasets
                         :submitter,
                         :submitter_in_house_groups,
                         :house_of_representatives_of_accepted_bill_on_preliminary_consideration,
-                        :house_of_representatives_of_preliminary_refer_on_and_commission,
+                        :house_of_representatives_of_preliminary_refer_on,
+                        :house_of_representatives_of_preliminary_refer_commission,
                         :house_of_representatives_of_accepted_bill_on,
-                        :house_of_representatives_of_refer_on_and_commission,
-                        :house_of_representatives_of_finished_consideration_on_and_result,
-                        :house_of_representatives_of_finished_deliberation_on_and_result,
+                        :house_of_representatives_of_refer_on,
+                        :house_of_representatives_of_refer_commission,
+                        :house_of_representatives_of_finished_consideration_on,
+                        :house_of_representatives_of_consideration_result,
+                        :house_of_representatives_of_finished_deliberation_on,
+                        :house_of_representatives_of_deliberation_result,
                         :house_of_representatives_of_attitude_of_in_house_group_during_deliberation,
                         :house_of_representatives_of_support_in_house_group_during_deliberation,
                         :house_of_representatives_of_opposition_in_house_group_during_deliberation,
                         :house_of_councillors_of_accepted_bill_on_preliminary_consideration,
-                        :house_of_councillors_of_preliminary_refer_on_and_commission,
+                        :house_of_councillors_of_preliminary_refer_on,
+                        :house_of_councillors_of_preliminary_refer_commission,
                         :house_of_councillors_of_accepted_bill_on,
-                        :house_of_councillors_of_refer_on_and_commission,
-                        :house_of_councillors_of_finished_consideration_on_and_result,
-                        :house_of_councillors_of_finished_deliberation_on_and_result,
-                        :promulgated_on_and_law_number,
+                        :house_of_councillors_of_refer_on,
+                        :house_of_councillors_of_refer_commission,
+                        :house_of_councillors_of_finished_consideration_on,
+                        :house_of_councillors_of_consideration_result,
+                        :house_of_councillors_of_finished_deliberation_on,
+                        :house_of_councillors_of_deliberation_result,
+                        :promulgated_on,
+                        :law_number,
                         :submitters,
                         :supporters_of_submitted_bill)
+
+    SPLIT_COLUMN_CHAR_ON_HEADER = "／".freeze
+    SPLIT_COLUMN_CHAR_ON_FIELD = SPLIT_COLUMN_CHAR_ON_HEADER
 
     def initialize
       super()
@@ -50,6 +62,7 @@ module Datasets
 
       open_data do |csv|
         csv.each do |row|
+          row = split_csv_column(row)
           %w(議案提出会派 衆議院審議時賛成会派 衆議院審議時反対会派 議案提出者一覧 議案提出の賛成者).each do |array_column_name|
             row[array_column_name] = parse_array(row[array_column_name])
           end
@@ -73,6 +86,25 @@ module Datasets
 
     def parse_array(column_value)
       column_value.to_s.split("; ")
+    end
+
+    def split_csv_column(row)
+      new_headers = row.headers
+      new_fields = row.fields
+      new_headers.each_with_index do |header, idx|
+        next unless header.include?(SPLIT_COLUMN_CHAR_ON_HEADER)
+
+        header.split(SPLIT_COLUMN_CHAR_ON_HEADER).tap do |substrings|
+          new_headers[idx] = substrings[0]
+          new_headers.insert(idx + 1, substrings[1])
+        end
+
+        new_fields[idx].split(SPLIT_COLUMN_CHAR_ON_FIELD).tap do |substrings|
+          new_fields[idx] = substrings[0]
+          new_fields.insert(idx + 1, substrings[1])
+        end
+      end
+      CSV::Row.new(new_headers, new_fields)
     end
   end
 end

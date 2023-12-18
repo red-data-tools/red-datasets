@@ -1,4 +1,5 @@
 require_relative "dataset"
+require_relative "japanese-date-parser"
 
 module Datasets
   class HouseOfRepresentative < Dataset
@@ -44,7 +45,6 @@ module Datasets
                         :submitters,
                         :supporters_of_submitted_bill)
 
-    JAPANESE_DATE_MATCHER = /\A(平成|令和)\s*(\d{1,2}|元)年\s*\d{1,2}月\s*\d{1,2}日\z/.freeze
     SPLIT_COLUMN_CHAR_ON_HEADER = "／".freeze
     SPLIT_COLUMN_CHAR_ON_FIELD = SPLIT_COLUMN_CHAR_ON_HEADER
 
@@ -65,7 +65,7 @@ module Datasets
         csv.each do |row|
           row = split_csv_column(row)
           row.fields.each_with_index do |field, idx|
-            row[idx] = parse_japanese_date(field)
+            row[idx] = JapaneseDateParser.new(field).parse
           end
           %w(議案提出会派 衆議院審議時賛成会派 衆議院審議時反対会派 議案提出者一覧 議案提出の賛成者).each do |array_column_name|
             row[array_column_name] = parse_array(row[array_column_name])
@@ -90,20 +90,6 @@ module Datasets
 
     def parse_array(column_value)
       column_value.to_s.split("; ")
-    end
-
-    def parse_japanese_date(field)
-      return field unless field.to_s.match?(JAPANESE_DATE_MATCHER)
-      Date.parse(normalize_jisx0301_format(field))
-    end
-
-    def normalize_jisx0301_format(japanese_date_string)
-      japanese_date_string.gsub(/平成/, "H")
-                          .gsub(/令和/, "R")
-                          .gsub(/元/, "01")
-                          .gsub(/\s/, "0")
-                          .gsub(/[年月]/, ".")
-                          .gsub(/[日]/, "")
     end
 
     def split_csv_column(row)

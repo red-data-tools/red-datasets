@@ -6,9 +6,11 @@ end
 require "net/http"
 require "pathname"
 
+require_relative "error"
+
 module Datasets
   class Downloader
-    class TooManyRedirects < StandardError; end
+    class TooManyRedirects < Error; end
 
     def initialize(url)
       if url.is_a?(URI::Generic)

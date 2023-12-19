@@ -1,6 +1,6 @@
 module Datasets
   class JapaneseDateParser
-    class UnsupportedEraInitialRange < StandardError; end
+    class UnsupportedEraInitialRange < Error; end
 
     ERA_INITIALS = {
       "平成" => "H",

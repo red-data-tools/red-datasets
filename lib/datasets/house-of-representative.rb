@@ -63,7 +63,6 @@ module Datasets
 
       open_data do |csv|
         csv.each do |row|
-          row = split_csv_column(row)
           row.fields.each_with_index do |field, idx|
             row[idx] = JapaneseDateParser.new(field).parse
           end
@@ -83,32 +82,14 @@ module Datasets
       data_path = cache_dir_path + "gian.csv"
       download(data_path, data_url)
 
-      CSV.open(data_path, col_sep: ",", headers: true, converters: %i(integer)) do |csv|
-        yield(csv)
+      File.open(data_path) do |data_file|
+        # There are two columns within one column. To split into two columns, `#gsub` is necessary.
+        yield(CSV.new(data_file.read.gsub("／", ","), col_sep: ",", headers: true, converters: %i(integer)))
       end
     end
 
     def parse_array(column_value)
       column_value&.split("; ")
-    end
-
-    def split_csv_column(row)
-      new_headers = row.headers
-      new_fields = row.fields
-      new_headers.each_with_index do |header, idx|
-        next unless header.include?(SPLIT_COLUMN_CHAR_ON_HEADER)
-
-        header.split(SPLIT_COLUMN_CHAR_ON_HEADER).tap do |substrings|
-          new_headers[idx] = substrings[0]
-          new_headers.insert(idx + 1, substrings[1])
-        end
-
-        new_fields[idx].split(SPLIT_COLUMN_CHAR_ON_FIELD).tap do |substrings|
-          new_fields[idx] = substrings[0]
-          new_fields.insert(idx + 1, substrings[1])
-        end
-      end
-      CSV::Row.new(new_headers, new_fields)
     end
   end
 end

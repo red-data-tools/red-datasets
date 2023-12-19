@@ -89,7 +89,7 @@ module Datasets
     end
 
     def parse_array(column_value)
-      column_value.to_s.split("; ")
+      column_value&.split("; ")
     end
 
     def split_csv_column(row)

@@ -80,7 +80,7 @@ module Datasets
 
     def open_data
       data_url = "https://raw.githubusercontent.com/smartnews-smri/house-of-representatives/main/data/gian.csv"
-      data_path = cache_dir_path + "bill.csv"
+      data_path = cache_dir_path + "gian.csv"
       download(data_path, data_url)
 
       CSV.open(data_path, col_sep: ",", headers: true, converters: %i(integer)) do |csv|

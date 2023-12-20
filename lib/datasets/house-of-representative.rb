@@ -76,10 +76,11 @@ module Datasets
       data_path = cache_dir_path + "gian.csv"
       download(data_path, data_url)
 
+      parser = JapaneseDateParser.new
       japanese_date_converter = lambda do |field, info|
         case info.header
         when /年月日\z/
-          JapaneseDateParser.new(field).parse
+          parser.parse(field)
         else
           field
         end

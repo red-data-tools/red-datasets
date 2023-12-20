@@ -7,12 +7,8 @@ module Datasets
       "令和" => "R",
     }.freeze
 
-    def initialize(string)
-      @string = string
-    end
-
-    def parse
-      case @string
+    def parse(string)
+      case string
       when nil
         nil
       when /\A(平成|令和|..)\s*(\d{1,2}|元)年\s*(\d{1,2})月\s*(\d{1,2})日\z/
@@ -35,7 +31,7 @@ module Datasets
         day = match_data[4].rjust(2, "0")
         Date.jisx0301("#{era_initial}#{year}.#{month}.#{day}")
       else
-        @string
+        string
       end
     end
   end

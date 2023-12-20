@@ -63,12 +63,6 @@ module Datasets
 
       open_data do |csv|
         csv.each do |row|
-          row.fields.each_with_index do |field, idx|
-            row[idx] = JapaneseDateParser.new(field).parse
-          end
-          %w(議案提出会派 衆議院審議時賛成会派 衆議院審議時反対会派 議案提出者一覧 議案提出の賛成者).each do |array_column_name|
-            row[array_column_name] = parse_array(row[array_column_name])
-          end
           record = Record.new(*row.fields)
           yield(record)
         end
@@ -82,9 +76,30 @@ module Datasets
       data_path = cache_dir_path + "gian.csv"
       download(data_path, data_url)
 
+      japanese_date_converter = lambda do |field, info|
+        case info.header
+        when /年月日\z/
+          JapaneseDateParser.new(field).parse
+        else
+          field
+        end
+      end
+      array_converter = lambda do |field, info|
+        case info.header
+        when "議案提出会派", "衆議院審議時賛成会派", "衆議院審議時反対会派", "議案提出者一覧", "議案提出の賛成者"
+          parse_array(field)
+        else
+          field
+        end
+      end
       File.open(data_path) do |data_file|
+        options = {
+          col_sep: ",",
+          headers: true,
+          converters: [:integer, japanese_date_converter, array_converter],
+        }
         # There are two columns within one column. To split into two columns, `#gsub` is necessary.
-        yield(CSV.new(data_file.read.gsub("／", ","), col_sep: ",", headers: true, converters: %i(integer)))
+        yield(CSV.new(data_file.read.gsub("／", ","), **options))
       end
     end
 

@@ -78,8 +78,7 @@ module Datasets
 
       parser = JapaneseDateParser.new
       japanese_date_converter = lambda do |field, info|
-        case info.header
-        when /年月日\z/
+        if info.header.end_with?("年月日")
           parser.parse(field)
         else
           field

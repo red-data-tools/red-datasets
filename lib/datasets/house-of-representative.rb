@@ -45,9 +45,6 @@ module Datasets
                         :submitters,
                         :supporters_of_submitted_bill)
 
-    SPLIT_COLUMN_CHAR_ON_HEADER = "／".freeze
-    SPLIT_COLUMN_CHAR_ON_FIELD = SPLIT_COLUMN_CHAR_ON_HEADER
-
     def initialize
       super()
 

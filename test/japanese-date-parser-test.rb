@@ -21,7 +21,7 @@ class JapaneseDateParserTest < Test::Unit::TestCase
   test("unsupported era initial range") do
     expected_message = "era must be one of [平成, 令和]: 昭和"
     assert_raise(Datasets::JapaneseDateParser::UnsupportedEraInitialRange.new(expected_message)) do
-      @parser.parse(("昭和元年 1月 1日"))
+      @parser.parse("昭和元年 1月 1日")
     end
   end
 end

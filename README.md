@@ -30,6 +30,7 @@ You can use datasets easily because you can access each dataset with multiple wa
 * Geolonia Japanese Addresses
 * Hepatitis
 * House of Councillors of Japan
+* House of Representatives of Japan
 * Iris Dataset
 * Libsvm
 * MNIST database

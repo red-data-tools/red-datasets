@@ -43,7 +43,7 @@ module Datasets
       data_path = cache_dir_path + "quora_duplicate_questions.tsv"
       data_url = "https://qim.fs.quoracdn.net/quora_duplicate_questions.tsv"
       download(data_path, data_url)
-      CSV.open(data_path, col_sep: "\t", headers: true, converters: :all) do |csv|
+      CSV.open(data_path, col_sep: "\t", headers: true, converters: :integer) do |csv|
         yield(csv)
       end
     end

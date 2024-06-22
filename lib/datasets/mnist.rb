@@ -4,9 +4,6 @@ require_relative "dataset"
 
 module Datasets
   class MNIST < Dataset
-    BASE_URL = "http://yann.lecun.com/exdb/mnist/"
-    FALLBACK_URL = "https://ossci-datasets.s3.amazonaws.com/mnist/"
-
     class Record < Struct.new(:data, :label)
       def pixels
         data.unpack("C*")
@@ -28,7 +25,7 @@ module Datasets
 
       @metadata.id = "#{dataset_name.downcase}-#{type}"
       @metadata.name = "#{dataset_name}: #{type}"
-      @metadata.url = self.class::BASE_URL
+      @metadata.url = base_urls.first
       @metadata.licenses = licenses
       @type = type
 
@@ -45,8 +42,8 @@ module Datasets
 
       image_path = cache_dir_path + target_file(:image)
       label_path = cache_dir_path + target_file(:label)
-      base_url = self.class::BASE_URL
-      fallback_url = self.class::FALLBACK_URL
+      base_url = base_urls.first
+      fallback_url = base_urls.second
 
       begin
         download(image_path, base_url + target_file(:image))
@@ -71,6 +68,13 @@ module Datasets
     end
 
     private
+    def base_urls
+      [
+        "http://yann.lecun.com/exdb/mnist/",
+        "https://ossci-datasets.s3.amazonaws.com/mnist/",
+      ]
+    end
+
     def licenses
       []
     end

@@ -33,9 +33,21 @@ module Datasets
       @cache_path ||= CachePath.new(@metadata.id)
     end
 
-    def download(output_path, url, &block)
-      downloader = Downloader.new(url)
-      downloader.download(output_path, &block)
+    def download(output_path, *urls, &block)
+      urls.each do |url|
+        downloader = Downloader.new(url)
+        downloader.download(output_path, &block)
+        return
+      rescue Net::HTTPClientException => error
+        if urls.last != url
+          message = "site is not available: " +
+                    "#{error.class}: #{error.message}: " +
+                    "Attempting to download from an alternative site"
+          $stderr.puts(message)
+        else
+          raise error
+        end
+      end
     end
 
     def extract_bz2(bz2)

@@ -42,27 +42,11 @@ module Datasets
 
       image_path = cache_dir_path + target_file(:image)
       label_path = cache_dir_path + target_file(:label)
-      base_url = base_urls.first
-      fallback_url = base_urls.second
 
-      begin
-        download(image_path, base_url + target_file(:image))
-      rescue Net::HTTPClientException => error
-        if error.response.code == "403"
-          download(image_path, fallback_url + target_file(:image))
-        else
-          raise error
-        end
-      end
-      begin
-        download(label_path, base_url + target_file(:label))
-      rescue Net::HTTPClientException => error
-        if error.response.code == "403"
-          download(label_path, fallback_url + target_file(:label))
-        else
-          raise error
-        end
-      end
+      download(image_path,
+               *base_urls.collect { |base_url| base_url + target_file(:image) })
+      download(label_path,
+               *base_urls.collect { |base_url| base_url + target_file(:label) })
 
       open_data(image_path, label_path, &block)
     end

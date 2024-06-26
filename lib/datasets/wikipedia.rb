@@ -90,7 +90,7 @@ module Datasets
         @contributor = nil
         @current_tag = nil
         @tag_stack = []
-        @text_stack = [""]
+        @text_stack = [+""]
         @first_page = true
       end
 
@@ -172,7 +172,7 @@ module Datasets
 
       def push_stacks(tag)
         @tag_stack << tag
-        @text_stack << ""
+        @text_stack << +""
       end
 
       def pop_stacks

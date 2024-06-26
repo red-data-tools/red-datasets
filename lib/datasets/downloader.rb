@@ -169,7 +169,7 @@ module Datasets
     private def yield_chunks(path)
       path.open("rb") do |output|
         chunk_size = 1024 * 1024
-        chunk = ""
+        chunk = +""
         while output.read(chunk_size, chunk)
           yield(chunk)
         end

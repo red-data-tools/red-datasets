@@ -41,10 +41,10 @@ module Datasets
         return
       rescue Net::HTTPClientException => error
         if urls.last != url
-          failed_message = "failed to download: #{url}"
-          fallback_message = "fallback to: #{urls[idx + 1]}"
+          failed_url = "<#{url}>"
+          fallback_url = "<#{urls[idx + 1]}>"
           message = "#{error.response.code} #{error.response.message}: " +
-                    "#{failed_message} .. #{fallback_message}"
+                    "fallback: #{failed_url} -> #{fallback_url}"
           $stderr.puts(message)
         else
           raise error

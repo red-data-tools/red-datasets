@@ -33,9 +33,23 @@ module Datasets
       @cache_path ||= CachePath.new(@metadata.id)
     end
 
-    def download(output_path, url, &block)
-      downloader = Downloader.new(url)
-      downloader.download(output_path, &block)
+    def download(output_path, url, *fallback_urls, &block)
+      urls = [url] + fallback_urls
+      urls.each_with_index do |url, idx|
+        downloader = Downloader.new(url)
+        downloader.download(output_path, &block)
+        return
+      rescue Net::HTTPClientException => error
+        if urls.last != url
+          failed_url = "<#{url}>"
+          fallback_url = "<#{urls[idx + 1]}>"
+          message = "#{error.response.code} #{error.response.message}: " +
+                    "fallback: #{failed_url} -> #{fallback_url}"
+          $stderr.puts(message)
+        else
+          raise error
+        end
+      end
     end
 
     def extract_bz2(bz2)

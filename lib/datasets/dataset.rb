@@ -35,14 +35,14 @@ module Datasets
 
     def download(output_path, url, *fallback_urls, &block)
       urls = [url] + fallback_urls
-      urls.each_with_index do |url, idx|
+      urls.each_with_index do |url, index|
         downloader = Downloader.new(url)
         downloader.download(output_path, &block)
         return
       rescue Net::HTTPClientException => error
         if urls.last != url
           failed_url = "<#{url}>"
-          fallback_url = "<#{urls[idx + 1]}>"
+          fallback_url = "<#{urls[index + 1]}>"
           message = "#{error.response.code} #{error.response.message}: " +
                     "fallback: #{failed_url} -> #{fallback_url}"
           $stderr.puts(message)

@@ -47,7 +47,7 @@ module Datasets
                     "fallback: <#{failed_url}> -> <#{fallback_url}>"
           $stderr.puts(message)
         else
-          raise error
+          raise
         end
       end
     end

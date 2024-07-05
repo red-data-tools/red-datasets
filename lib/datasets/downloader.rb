@@ -12,8 +12,9 @@ module Datasets
   class Downloader
     class TooManyRedirects < Error; end
 
-    def initialize(url)
+    def initialize(url, *fallback_urls)
       @url = normalize_url(url)
+      @fallback_urls = fallback_urls.collect { |fallback_url| normalize_url(fallback_url) }
     end
 
     def download(output_path, &block)
@@ -159,6 +160,16 @@ module Datasets
             $stderr.puts "Redirect to #{url}"
             return start_http(url, headers, limit - 1, &block)
           else
+            if response.is_a?(Net::HTTPForbidden)
+              fallback_url = @fallback_urls.shift
+              unless fallback_url.nil?
+                message = "#{response.code}: #{response.message}: " +
+                          "fallback: <#{url}> -> <#{fallback_url}>"
+                $stderr.puts(message)
+                return start_http(fallback_url, headers, limit, &block)
+              end
+            end
+
             message = response.code
             if response.message and not response.message.empty?
               message += ": #{response.message}"

@@ -13,15 +13,7 @@ module Datasets
     class TooManyRedirects < Error; end
 
     def initialize(url)
-      if url.is_a?(URI::Generic)
-        url = url.dup
-      else
-        url = URI.parse(url)
-      end
-      @url = url
-      unless @url.is_a?(URI::HTTP)
-        raise ArgumentError, "download URL must be HTTP or HTTPS: <#{@url}>"
-      end
+      @url = normalize_url(url)
     end
 
     def download(output_path, &block)
@@ -85,6 +77,18 @@ module Datasets
           raise TooManyRedirects, "too many redirections: #{@url} .. #{last_url}"
         end
       end
+    end
+
+    private def normalize_url(url)
+      if url.is_a?(URI::Generic)
+        url = url.dup
+      else
+        url = URI.parse(url)
+      end
+      unless url.is_a?(URI::HTTP)
+        raise ArgumentError, "download URL must be HTTP or HTTPS: <#{url}>"
+      end
+      url
     end
 
     private def synchronize(output_path, partial_output_path)

@@ -161,7 +161,9 @@ module Datasets
             return start_http(url, headers, limit - 1, &block)
           else
             if response.is_a?(Net::HTTPForbidden)
-              fallback_url = @fallback_urls.shift
+              index = @fallback_urls.index(url)
+              fallback_index = index.nil? ? 0 : index + 1
+              fallback_url = @fallback_urls[fallback_index]
               unless fallback_url.nil?
                 message = "#{response.code}: #{response.message}: " +
                           "fallback: <#{url}> -> <#{fallback_url}>"

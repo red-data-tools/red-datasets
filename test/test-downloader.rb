@@ -17,7 +17,7 @@ class DownloaderTest < Test::Unit::TestCase
       output_path = @tmp_dir + "file"
       downloader = Datasets::Downloader.new(first_url)
 
-      downloader.define_singleton_method(:start_http) do |url, headers|
+      downloader.define_singleton_method(:start_http) do |url, fallback_urls, headers|
         raise Datasets::Downloader::TooManyRedirects, "too many redirections: #{last_url}"
       end
 

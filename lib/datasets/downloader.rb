@@ -40,7 +40,7 @@ module Datasets
             headers["Range"] = "bytes=#{start}-"
           end
 
-          start_http(@url, headers) do |response|
+          start_http(@url, @fallback_urls, headers) do |response|
             if response.is_a?(Net::HTTPPartialContent)
               mode = "ab"
             else
@@ -140,7 +140,7 @@ module Datasets
       end
     end
 
-    private def start_http(url, headers, limit = 10, &block)
+    private def start_http(url, fallback_urls, headers, limit = 10, &block)
       if limit == 0
         raise TooManyRedirects, "too many redirections: #{url}"
       end
@@ -158,17 +158,15 @@ module Datasets
           when Net::HTTPRedirection
             url = URI.parse(response[:location])
             $stderr.puts "Redirect to #{url}"
-            return start_http(url, headers, limit - 1, &block)
+            return start_http(url, fallback_urls, headers, limit - 1, &block)
           else
             if response.is_a?(Net::HTTPForbidden)
-              index = @fallback_urls.index(url)
-              fallback_index = index.nil? ? 0 : index + 1
-              fallback_url = @fallback_urls[fallback_index]
-              unless fallback_url.nil?
+              next_url, *rest_fallback_urls = fallback_urls
+              if next_url
                 message = "#{response.code}: #{response.message}: " +
-                          "fallback: <#{url}> -> <#{fallback_url}>"
+                          "fallback: <#{url}> -> <#{next_url}>"
                 $stderr.puts(message)
-                return start_http(fallback_url, headers, limit, &block)
+                return start_http(next_url, rest_fallback_urls, headers, &block)
               end
             end
 

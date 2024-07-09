@@ -12,16 +12,9 @@ module Datasets
   class Downloader
     class TooManyRedirects < Error; end
 
-    def initialize(url)
-      if url.is_a?(URI::Generic)
-        url = url.dup
-      else
-        url = URI.parse(url)
-      end
-      @url = url
-      unless @url.is_a?(URI::HTTP)
-        raise ArgumentError, "download URL must be HTTP or HTTPS: <#{@url}>"
-      end
+    def initialize(url, *fallback_urls)
+      @url = normalize_url(url)
+      @fallback_urls = fallback_urls.collect { |fallback_url| normalize_url(fallback_url) }
     end
 
     def download(output_path, &block)
@@ -47,7 +40,7 @@ module Datasets
             headers["Range"] = "bytes=#{start}-"
           end
 
-          start_http(@url, headers) do |response|
+          start_http(@url, @fallback_urls, headers) do |response|
             if response.is_a?(Net::HTTPPartialContent)
               mode = "ab"
             else
@@ -85,6 +78,18 @@ module Datasets
           raise TooManyRedirects, "too many redirections: #{@url} .. #{last_url}"
         end
       end
+    end
+
+    private def normalize_url(url)
+      if url.is_a?(URI::Generic)
+        url = url.dup
+      else
+        url = URI.parse(url)
+      end
+      unless url.is_a?(URI::HTTP)
+        raise ArgumentError, "download URL must be HTTP or HTTPS: <#{url}>"
+      end
+      url
     end
 
     private def synchronize(output_path, partial_output_path)
@@ -135,7 +140,7 @@ module Datasets
       end
     end
 
-    private def start_http(url, headers, limit = 10, &block)
+    private def start_http(url, fallback_urls, headers, limit = 10, &block)
       if limit == 0
         raise TooManyRedirects, "too many redirections: #{url}"
       end
@@ -153,8 +158,18 @@ module Datasets
           when Net::HTTPRedirection
             url = URI.parse(response[:location])
             $stderr.puts "Redirect to #{url}"
-            return start_http(url, headers, limit - 1, &block)
+            return start_http(url, fallback_urls, headers, limit - 1, &block)
           else
+            if response.is_a?(Net::HTTPForbidden)
+              next_url, *rest_fallback_urls = fallback_urls
+              if next_url
+                message = "#{response.code}: #{response.message}: " +
+                          "fallback: <#{url}> -> <#{next_url}>"
+                $stderr.puts(message)
+                return start_http(next_url, rest_fallback_urls, headers, &block)
+              end
+            end
+
             message = response.code
             if response.message and not response.message.empty?
               message += ": #{response.message}"

@@ -33,8 +33,8 @@ module Datasets
       @cache_path ||= CachePath.new(@metadata.id)
     end
 
-    def download(output_path, url, &block)
-      downloader = Downloader.new(url)
+    def download(output_path, url, *fallback_urls, &block)
+      downloader = Downloader.new(url, *fallback_urls)
       downloader.download(output_path, &block)
     end
 

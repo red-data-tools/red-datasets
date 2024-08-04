@@ -88,8 +88,8 @@ articles (related to Kyoto) into English.
           when :article
             next unless base_name.end_with?(".xml")
             listener = ArticleListener.new(block)
+            parser = REXML::Parsers::StreamParser.new(entry.read, listener)
             with_increased_entity_expansion_text_limit do
-              parser = REXML::Parsers::StreamParser.new(entry.read, listener)
               parser.parse
             end
           when :lexicon

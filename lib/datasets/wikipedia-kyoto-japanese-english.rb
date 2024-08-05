@@ -89,7 +89,9 @@ articles (related to Kyoto) into English.
             next unless base_name.end_with?(".xml")
             listener = ArticleListener.new(block)
             parser = REXML::Parsers::StreamParser.new(entry.read, listener)
-            parser.parse
+            with_increased_entity_expansion_text_limit do
+              parser.parse
+            end
           when :lexicon
             next unless base_name == "kyoto_lexicon.csv"
             is_header = true
@@ -106,12 +108,23 @@ articles (related to Kyoto) into English.
     end
 
     private
+
+    ENTITY_EXPANSION_TEXT_LIMIT = 163_840
+
     def download_tar_gz
       base_name = "wiki_corpus_2.01.tar.gz"
       data_path = cache_dir_path + base_name
       data_url = "https://alaginrc.nict.go.jp/WikiCorpus/src/#{base_name}"
       download(data_path, data_url)
       data_path
+    end
+
+    def with_increased_entity_expansion_text_limit
+      default_limit = REXML::Security.entity_expansion_text_limit
+      REXML::Security.entity_expansion_text_limit = ENTITY_EXPANSION_TEXT_LIMIT
+      yield
+    ensure
+      REXML::Security.entity_expansion_text_limit = default_limit
     end
 
     class ArticleListener

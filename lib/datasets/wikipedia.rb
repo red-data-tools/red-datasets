@@ -48,11 +48,16 @@ module Datasets
       open_data do |input|
         listener = ArticlesListener.new(block)
         parser = REXML::Parsers::StreamParser.new(input, listener)
-        parser.parse
+        with_increased_entity_expansion_text_limit do
+          parser.parse
+        end
       end
     end
 
     private
+
+    ENTITY_EXPANSION_TEXT_LIMIT = 1_342_177_280
+
     def base_name
       "#{@language}wiki-latest-#{type_in_path}.xml.bz2"
     end
@@ -78,6 +83,14 @@ module Datasets
       else
         @type.to_s
       end
+    end
+
+    def with_increased_entity_expansion_text_limit
+      default_limit = REXML::Security.entity_expansion_text_limit
+      REXML::Security.entity_expansion_text_limit = ENTITY_EXPANSION_TEXT_LIMIT
+      yield
+    ensure
+      REXML::Security.entity_expansion_text_limit = default_limit
     end
 
     class ArticlesListener

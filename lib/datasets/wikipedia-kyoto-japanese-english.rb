@@ -139,7 +139,7 @@ articles (related to Kyoto) into English.
         @sentence = nil
         @text_container_stack = []
         @element_stack = []
-        @text_stack = [""]
+        @text_stack = [+""]
       end
 
       def tag_start(name, attributes)
@@ -220,7 +220,7 @@ articles (related to Kyoto) into English.
       private
       def push_stacks(name, attributes)
         @element_stack.push({name: name, attributes: attributes})
-        @text_stack.push("")
+        @text_stack.push(+"")
       end
 
       def pop_stacks

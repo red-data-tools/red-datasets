@@ -104,7 +104,7 @@ module Datasets
 
     private
     def open_data
-      data_url = "https://www.post.japanpost.jp/zipcode/dl"
+      data_url = +"https://www.post.japanpost.jp/zipcode/dl"
       case @reading
       when :lowercase
         data_url << "/kogaki/zip/ken_all.zip"

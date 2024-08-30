@@ -17,7 +17,7 @@ module Datasets
       data_path = cache_dir_path + data_base_name
       data_url = "#{download_base_url}/data-raw/#{data_base_name}"
       download(data_path, data_url)
-      CSV.open(data_path, headers: :first_row, converters: :all) do |csv|
+      CSV.open(data_path, headers: :first_row, converters: :numeric) do |csv|
         record_class = self.class::Record
         csv.each do |row|
           record = record_class.new(*row.fields)

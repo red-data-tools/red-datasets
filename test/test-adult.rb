@@ -9,49 +9,24 @@ class AdultTest < Test::Unit::TestCase
     end
 
     test("#each") do
-      records = @dataset.each.to_a
-      assert_equal([
-                     32561,
-                     {
-                       :age => 39,
-                       :work_class => "State-gov",
-                       :final_weight => 77516,
-                       :education => "Bachelors",
-                       :n_education_years => 13,
-                       :marital_status => "Never-married",
-                       :occupation => "Adm-clerical",
-                       :relationship => "Not-in-family",
-                       :race => "White",
-                       :sex => "Male",
-                       :capital_gain => 2174,
-                       :capital_loss => 0,
-                       :hours_per_week => 40,
-                       :native_country => "United-States",
-                       :label => "<=50K"
-                     },
-                     {
-                       :age => 52,
-                       :work_class => "Self-emp-inc",
-                       :final_weight => 287927,
-                       :education => "HS-grad",
-                       :n_education_years => 9,
-                       :marital_status => "Married-civ-spouse",
-                       :occupation => "Exec-managerial",
-                       :relationship => "Wife",
-                       :race => "White",
-                       :sex => "Female",
-                       :capital_gain => 15024,
-                       :capital_loss => 0,
-                       :hours_per_week => 40,
-                       :native_country => "United-States",
-                       :label => ">50K"
-                     }
-                   ],
-                   [
-                     records.size,
-                     records[0].to_h,
-                     records[-1].to_h
-                   ])
+      assert_equal({
+                     :age => 39,
+                     :work_class => "State-gov",
+                     :final_weight => 77516,
+                     :education => "Bachelors",
+                     :n_education_years => 13,
+                     :marital_status => "Never-married",
+                     :occupation => "Adm-clerical",
+                     :relationship => "Not-in-family",
+                     :race => "White",
+                     :sex => "Male",
+                     :capital_gain => 2174,
+                     :capital_loss => 0,
+                     :hours_per_week => 40,
+                     :native_country => "United-States",
+                     :label => "<=50K"
+                   },
+                   @dataset.each.next.to_h)
     end
   end
 

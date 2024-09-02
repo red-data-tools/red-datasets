@@ -36,7 +36,7 @@ Available from http://lib.stat.cmu.edu/datasets/.
       file_name = "cadata.txt"
       download(data_path, data_url)
       open_data(data_path, file_name) do |input|
-        data = ""
+        data = +""
         input.each_line do |line|
           next unless line.start_with?(" ")
           data << line.lstrip.gsub(/ +/, ",")

@@ -37,7 +37,7 @@ module Datasets
       data_r_url = "#{download_base_url}/R/#{data_r_base_name}"
       download(data_r_path, data_r_url)
       descriptions = {}
-      comment = ""
+      comment = +""
       File.open(data_r_path) do |data_r|
         data_r.each_line do |line|
           case line.chomp
@@ -51,7 +51,7 @@ module Datasets
           when /\A"(.+)"\z/
             name = Regexp.last_match[1]
             descriptions[name] = parse_roxygen(comment.rstrip)
-            comment = ""
+            comment = +""
           end
         end
         descriptions[@ggplot2_dataset_name]

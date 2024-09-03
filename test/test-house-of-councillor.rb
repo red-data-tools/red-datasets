@@ -1,4 +1,11 @@
 class HouseOfCouncillorTest < Test::Unit::TestCase
+  test("invalid") do
+    message = ":type must be one of [:bill, :in_house_group, :member, :question]: :invalid"
+    assert_raise(ArgumentError.new(message)) do
+      Datasets::HouseOfCouncillor.new(type: :invalid)
+    end
+  end
+
   sub_test_case(":bill") do
     def setup
       @dataset = Datasets::HouseOfCouncillor.new

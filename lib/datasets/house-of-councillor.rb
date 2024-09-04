@@ -104,7 +104,7 @@ module Datasets
       super()
       @type = type
       unless VALID_TYPES.include?(type)
-        message = ":type must be one of ["
+        message = +":type must be one of ["
         message << VALID_TYPES.collect(&:inspect).join(", ")
         message << "]: #{@type.inspect}"
         raise ArgumentError, message
@@ -143,7 +143,7 @@ module Datasets
     private
 
     def open_data
-      data_url = "https://smartnews-smri.github.io/house-of-councillors/data"
+      data_url = +"https://smartnews-smri.github.io/house-of-councillors/data"
       case @type
       when :bill
         data_url << "/gian.csv"

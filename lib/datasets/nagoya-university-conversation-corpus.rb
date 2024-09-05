@@ -28,8 +28,8 @@ module Datasets
 
     def initialize
       super()
-      @metadata.id = 'nagoya-university-conversation-curpus'
-      @metadata.name = 'Nagoya University Conversation Curpus'
+      @metadata.id = 'nagoya-university-conversation-corpus'
+      @metadata.name = 'Nagoya University Conversation Corpus'
       @metadata.url = 'https://mmsrv.ninjal.ac.jp/nucc/'
       @metadata.licenses = ['CC-BY-NC-ND-4.0']
       @metadata.description = <<~DESCRIPTION

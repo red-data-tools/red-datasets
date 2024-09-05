@@ -15,7 +15,7 @@ module Datasets
         match_data = Regexp.last_match
         era_initial = ERA_INITIALS[match_data[1]]
         if era_initial.nil?
-          message = "era must be one of ["
+          message = +"era must be one of ["
           message << ERA_INITIALS.keys.join(", ")
           message << "]: #{match_data[1]}"
           raise UnsupportedEraInitialRange, message

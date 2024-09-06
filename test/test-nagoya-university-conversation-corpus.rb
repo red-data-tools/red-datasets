@@ -7,6 +7,7 @@ class NagoyaUniversityConversationCorpusTest < Test::Unit::TestCase
     test("#sentences") do
       first_sentences = @dataset.each.next.sentences
       assert_equal([
+                     856,
                      {
                        participant_id: 'F107',
                        content: '＊＊＊の町というのはちいちゃくって、城壁がこう町全体をぐるっと回ってて、それが城壁の上を歩いても１時間ぐらいですよね。',
@@ -17,6 +18,7 @@ class NagoyaUniversityConversationCorpusTest < Test::Unit::TestCase
                      },
                    ],
                    [
+                     first_sentences.size,
                      first_sentences[0].to_h,
                      first_sentences[-1].to_h,
                    ])
@@ -25,6 +27,7 @@ class NagoyaUniversityConversationCorpusTest < Test::Unit::TestCase
     test("#participants") do
       first_participants = @dataset.each.next.participants
       assert_equal([
+                     4,
                      {
                        id: 'F107',
                        attribute: '女性３０代後半',
@@ -39,6 +42,7 @@ class NagoyaUniversityConversationCorpusTest < Test::Unit::TestCase
                      },
                    ],
                    [
+                     first_participants.size,
                      first_participants[0].to_h,
                      first_participants[-1].to_h,
                    ])

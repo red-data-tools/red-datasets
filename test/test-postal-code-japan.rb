@@ -1,4 +1,11 @@
 class PostalCodeJapanTest < Test::Unit::TestCase
+  test("invalid") do
+    message = ":reading must be one of [:lowercase, :uppercase, :romaji]: :invalid"
+    assert_raise(ArgumentError.new(message)) do
+      Datasets::PostalCodeJapan.new(reading: :invalid)
+    end
+  end
+
   sub_test_case(":reading") do
     test(":lowercase") do
       dataset = Datasets::PostalCodeJapan.new(reading: :lowercase)

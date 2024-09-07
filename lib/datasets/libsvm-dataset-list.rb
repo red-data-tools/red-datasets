@@ -110,7 +110,7 @@ module Datasets
           @row = []
         when "td"
           @in_td = true
-          @row << {:text => ""}
+          @row << {:text => +""}
         when "a"
           @row.last[:href] = attributes["href"] if @in_td
         end

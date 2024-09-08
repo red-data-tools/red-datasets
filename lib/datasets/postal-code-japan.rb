@@ -41,7 +41,7 @@ module Datasets
       super()
       @reading = reading
       unless VALID_READINGS.include?(@reading)
-        message = ":reading must be one of ["
+        message = +":reading must be one of ["
         message << VALID_READINGS.collect(&:inspect).join(", ")
         message << "]: #{@reading.inspect}"
         raise ArgumentError, message

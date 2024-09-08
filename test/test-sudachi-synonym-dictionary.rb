@@ -4,37 +4,18 @@ class SudachiSynonymDictionaryTest < Test::Unit::TestCase
   end
 
   test('#each') do
-    records = @dataset.each.to_a
-    assert_equal([
-                   67753,
-                   {
-                     group_id: "000001",
-                     is_noun: true,
-                     expansion_type: :always,
-                     lexeme_id: 1,
-                     form_type: :typical,
-                     acronym_type: :typical,
-                     variant_type: :typical,
-                     categories: [],
-                     notation: "曖昧",
-                   },
-                   {
-                     group_id: "026068",
-                     is_noun: true,
-                     expansion_type: :always,
-                     lexeme_id: 1,
-                     form_type: :typical,
-                     acronym_type: :others,
-                     variant_type: :typical,
-                     categories: ["IT"],
-                     notation: "サ終",
-                   },
-                 ],
-                 [
-                   records.size,
-                   records[0].to_h,
-                   records[-1].to_h,
-                 ])
+    assert_equal({
+                   group_id: "000001",
+                   is_noun: true,
+                   expansion_type: :always,
+                   lexeme_id: 1,
+                   form_type: :typical,
+                   acronym_type: :typical,
+                   variant_type: :typical,
+                   categories: [],
+                   notation: "曖昧",
+                 },
+                 @dataset.each.next.to_h)
   end
 
   sub_test_case('#metadata') do

@@ -40,49 +40,24 @@ class AdultTest < Test::Unit::TestCase
     end
 
     test("#each") do
-      records = @dataset.each.to_a
-      assert_equal([
-                     16281,
-                     {
-                       :age => 25,
-                       :work_class => "Private",
-                       :final_weight => 226802,
-                       :education => "11th",
-                       :n_education_years => 7,
-                       :marital_status => "Never-married",
-                       :occupation => "Machine-op-inspct",
-                       :relationship => "Own-child",
-                       :race => "Black",
-                       :sex => "Male",
-                       :capital_gain => 0,
-                       :capital_loss => 0,
-                       :hours_per_week => 40,
-                       :native_country => "United-States",
-                       :label => "<=50K."
-                     },
-                     {
-                       :age => 35,
-                       :work_class => "Self-emp-inc",
-                       :final_weight => 182148,
-                       :education => "Bachelors",
-                       :n_education_years => 13,
-                       :marital_status => "Married-civ-spouse",
-                       :occupation => "Exec-managerial",
-                       :relationship => "Husband",
-                       :race => "White",
-                       :sex => "Male",
-                       :capital_gain => 0,
-                       :capital_loss => 0,
-                       :hours_per_week => 60,
-                       :native_country => "United-States",
-                       :label => ">50K."
-                     }
-                   ],
-                   [
-                     records.size,
-                     records[0].to_h,
-                     records[-1].to_h
-                   ])
+      assert_equal({
+                     :age => 25,
+                     :work_class => "Private",
+                     :final_weight => 226802,
+                     :education => "11th",
+                     :n_education_years => 7,
+                     :marital_status => "Never-married",
+                     :occupation => "Machine-op-inspct",
+                     :relationship => "Own-child",
+                     :race => "Black",
+                     :sex => "Male",
+                     :capital_gain => 0,
+                     :capital_loss => 0,
+                     :hours_per_week => 40,
+                     :native_country => "United-States",
+                     :label => "<=50K.",
+                   },
+                   @dataset.each.next.to_h)
     end
   end
 

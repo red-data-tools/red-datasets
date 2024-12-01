@@ -111,7 +111,8 @@ module Datasets
           rescue ArgumentError
             # The process that acquired the lock will be exited before
             # it stores its process ID.
-            valid_lock_path = (lock_path.mtime > 10)
+            elapsed_time = Time.now - lock_path.mtime
+            valid_lock_path = (elapsed_time > 10)
           else
             begin
               Process.getpgid(pid)

@@ -1,5 +1,34 @@
 # News
 
+## 0.1.8 - 2025-02-07
+
+### Improvements
+
+  * Suppressed "literal string will be frozen" warnings.
+
+    * Patch by Tsutomu Katsube
+
+  * `Datasets::HouseOfCouncillor`: Added.
+
+    * [GH-143](https://github.com/red-data-tools/red-datasets/issues/143)
+
+    * [GH-181](https://github.com/red-data-tools/red-datasets/issues/181)
+
+    * Patch by Tsutomu Katsube
+
+  * `Datasets::HouseOfRepresentative`: Added.
+
+    * [GH-143](https://github.com/red-data-tools/red-datasets/issues/142)
+
+    * [GH-181](https://github.com/red-data-tools/red-datasets/issues/184)
+
+    * Patch by Tsutomu Katsube
+
+### Thanks
+
+  * Tsutomu Katsube
+
+
 ## 0.1.7 - 2023-05-29
 
 ### Improvements

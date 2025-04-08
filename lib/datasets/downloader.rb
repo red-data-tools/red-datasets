@@ -12,9 +12,11 @@ module Datasets
   class Downloader
     class TooManyRedirects < Error; end
 
-    def initialize(url, *fallback_urls)
+    def initialize(url, *fallback_urls, http_method: nil, http_parameters: nil)
       @url = normalize_url(url)
       @fallback_urls = fallback_urls.collect { |fallback_url| normalize_url(fallback_url) }
+      @http_method = http_method
+      @http_parameters = http_parameters
     end
 
     def download(output_path, &block)
@@ -151,7 +153,21 @@ module Datasets
       http.start do
         path = url.path
         path += "?#{url.query}" if url.query
-        request = Net::HTTP::Get.new(path, headers)
+        if @http_method == :post
+          # TODO: We may want to add @http_content_type, @http_body
+          # and so on.
+          if @http_parameters
+            body = URI.encode_www_form(@http_parameters)
+            content_type = "application/x-www-form-urlencoded"
+            headers = {"Content-Type" => content_type}.merge(headers)
+          else
+            body = ""
+          end
+          request = Net::HTTP::Post.new(path, headers)
+          request.body = body
+        else
+          request = Net::HTTP::Get.new(path, headers)
+        end
         http.request(request) do |response|
           case response
           when Net::HTTPSuccess, Net::HTTPPartialContent

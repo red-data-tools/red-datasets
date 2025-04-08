@@ -1,5 +1,12 @@
 # News
 
+## 0.1.9 - 2025-04-08
+
+### Improvements
+
+  * `Datasets::Penguins`: Changed to use `POST` for downloading data
+    from EDI.
+
 ## 0.1.8 - 2025-02-07
 
 ### Improvements

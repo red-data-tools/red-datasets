@@ -177,7 +177,8 @@ module Datasets
             $stderr.puts "Redirect to #{url}"
             return start_http(url, fallback_urls, headers, limit - 1, &block)
           else
-            if response.is_a?(Net::HTTPForbidden)
+            case response
+            when Net::HTTPForbidden, Net::HTTPNotFound
               next_url, *rest_fallback_urls = fallback_urls
               if next_url
                 message = "#{response.code}: #{response.message}: " +

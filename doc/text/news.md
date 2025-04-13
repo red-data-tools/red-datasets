@@ -1,5 +1,11 @@
 # News
 
+## 0.2.0 - 2025-04-13
+
+### Fixes
+
+  * `Datasets::MNIST`: Fixed a bug that dataset can't be downloaded.
+
 ## 0.1.9 - 2025-04-08
 
 ### Improvements

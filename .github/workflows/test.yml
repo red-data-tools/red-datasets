@@ -63,5 +63,7 @@ jobs:
         run: |
           bundle install
       - name: Test
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           bundle exec rake

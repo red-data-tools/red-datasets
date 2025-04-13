@@ -168,6 +168,12 @@ module Datasets
         else
           request = Net::HTTP::Get.new(path, headers)
         end
+        if url.scheme == "https" and url.host == "api.github.com"
+          gh_token = ENV["GH_TOKEN"]
+          if gh_token
+            headers = headers.merge("Authorization" => "Bearer #{gh_token}")
+          end
+        end
         http.request(request) do |response|
           case response
           when Net::HTTPSuccess, Net::HTTPPartialContent

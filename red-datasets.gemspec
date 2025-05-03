@@ -43,4 +43,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency("test-unit")
   spec.add_development_dependency("yard")
   spec.add_development_dependency("kramdown")
+  spec.add_development_dependency("steep")
+  spec.add_development_dependency("typeprof")
 end

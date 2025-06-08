@@ -26,7 +26,7 @@ jobs:
     runs-on: ${{ matrix.runs-on }}
     env:
       # We can invalidate the current cache by updating this.
-      CACHE_VERSION: "2024-09-01"
+      CACHE_VERSION: "2025-06-09"
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1

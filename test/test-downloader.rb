@@ -1,3 +1,5 @@
+require_relative "helper"
+
 class DownloaderTest < Test::Unit::TestCase
   include Helper::Sandbox
 

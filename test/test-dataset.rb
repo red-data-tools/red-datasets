@@ -1,3 +1,5 @@
+require_relative "helper"
+
 class TestDataset < Test::Unit::TestCase
   sub_test_case("#clear_cache!") do
     include Helper::PathRestorable

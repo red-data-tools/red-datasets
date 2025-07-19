@@ -1,3 +1,5 @@
+require_relative "helper"
+
 class AozoraBunkoTest < Test::Unit::TestCase
   include Helper::PathRestorable
 

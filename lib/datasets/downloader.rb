@@ -20,13 +20,16 @@ module Datasets
     end
 
     def download(output_path, &block)
-      if output_path.exist?
-        yield_chunks(output_path, &block) if block_given?
+      if use_cache(output_path, &block)
         return
       end
 
       partial_output_path = Pathname.new("#{output_path}.partial")
       synchronize(output_path, partial_output_path) do
+        if use_cache(output_path, &block)
+          next
+        end
+
         output_path.parent.mkpath
 
         n_retries = 0
@@ -92,6 +95,15 @@ module Datasets
         raise ArgumentError, "download URL must be HTTP or HTTPS: <#{url}>"
       end
       url
+    end
+
+    private def use_cache(output_path, &block)
+      if output_path.exist?
+        yield_chunks(output_path, &block) if block_given?
+        true
+      else
+        false
+      end
     end
 
     private def synchronize(output_path, partial_output_path)

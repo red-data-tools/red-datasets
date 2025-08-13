@@ -24,7 +24,7 @@ module Datasets
 
       partial_output_path = Pathname.new("#{output_path}.partial")
       synchronize(output_path, partial_output_path) do
-        next if use_cache(output_path, &block)
+        return if use_cache(output_path, &block)
 
         output_path.parent.mkpath
 

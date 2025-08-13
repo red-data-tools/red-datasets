@@ -20,15 +20,11 @@ module Datasets
     end
 
     def download(output_path, &block)
-      if use_cache(output_path, &block)
-        return
-      end
+      return if use_cache(output_path, &block)
 
       partial_output_path = Pathname.new("#{output_path}.partial")
       synchronize(output_path, partial_output_path) do
-        if use_cache(output_path, &block)
-          next
-        end
+        next if use_cache(output_path, &block)
 
         output_path.parent.mkpath
 

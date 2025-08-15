@@ -122,7 +122,7 @@ module Datasets
             # The process that acquired the lock will be exited before
             # it stores its process ID.
             elapsed_time = Time.now - lock_path.mtime
-            valid_lock_path = (elapsed_time > 10)
+            valid_lock_path = (elapsed_time < 10)
           else
             begin
               Process.getpgid(pid)

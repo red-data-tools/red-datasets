@@ -1,5 +1,36 @@
 # News
 
+## 0.2.1 - 2025-10-14
+
+### Improvements
+
+  * `Datasets::Downloader`: Ensured using the system certifications on
+    HTTPS download.
+
+    * [GH-248](https://github.com/red-data-tools/red-datasets/issues/248)
+
+### Fixes
+
+  * `Datasets::Downloader`: Avoided duplicate downloads.
+
+    * [GH-242](https://github.com/red-data-tools/red-datasets/issues/242)
+
+    * [GH-243](https://github.com/red-data-tools/red-datasets/issues/243)
+
+    * Patch by Tsutomu Katsube
+
+  * `Datasets::Downloader`: Fixed lock validation logic.
+
+    * [GH-246](https://github.com/red-data-tools/red-datasets/issues/246)
+
+    * Patch by kojix2
+
+### Thanks
+
+  * Tsutomu Katsube
+
+  * kojix2
+
 ## 0.2.0 - 2025-04-13
 
 ### Fixes

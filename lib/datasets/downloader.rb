@@ -158,6 +158,11 @@ module Datasets
       http = Net::HTTP.new(url.hostname, url.port)
       # http.set_debug_output($stderr)
       http.use_ssl = (url.scheme == "https")
+      if http.use_ssl?
+        store = OpenSSL::X509::Store.new
+        store.set_default_paths
+        http.cert_store = store
+      end
       http.start do
         path = url.path
         path += "?#{url.query}" if url.query

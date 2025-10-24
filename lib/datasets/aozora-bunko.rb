@@ -94,7 +94,10 @@ module Datasets
         downloader.download(text_file_output_path)
 
         @text = ZipExtractor.new(text_file_output_path).extract_first_file do |input|
-          input.read.encode(Encoding::UTF_8, normalize_encoding(text_file_character_encoding))
+          input.read.encode(Encoding::UTF_8,
+                            normalize_encoding(text_file_character_encoding),
+                            invalid: :replace,
+                            undef: :replace)
         end
 
         @text

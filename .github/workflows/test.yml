@@ -32,7 +32,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         if: |
           runner.os == 'Linux'
         with:
@@ -41,7 +41,7 @@ jobs:
           key: ${{ env.CACHE_VERSION }}-${{ runner.os }}-${{ hashFiles('lib/**') }}
           restore-keys: |
             ${{ env.CACHE_VERSION }}-${{ runner.os }}-
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         if: |
           runner.os == 'macOS'
         with:
@@ -50,7 +50,7 @@ jobs:
           key: ${{ env.CACHE_VERSION }}-${{ runner.os }}-${{ hashFiles('lib/**') }}
           restore-keys: |
             ${{ env.CACHE_VERSION }}-${{ runner.os }}-
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         if: |
           runner.os == 'Windows'
         with:

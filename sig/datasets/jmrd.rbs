@@ -8,13 +8,13 @@ module Datasets
     end
 
     class Utterance < Struct[untyped]
-      attr_accessor utterance_id(): Integer?
+      attr_accessor utterance_id(): String?
       attr_accessor speaker(): String?
       attr_accessor text(): String?
       attr_accessor checked_knowledge(): Array[CheckedKnowledge]?
 
       def initialize: (
-        ?Integer? utterance_id,
+        ?String? utterance_id,
         ?String? speaker,
         ?String? text,
         ?Array[CheckedKnowledge]? checked_knowledge
@@ -23,25 +23,25 @@ module Datasets
 
     class Knowledge < Struct[untyped]
       attr_accessor title(): String?
-      attr_accessor year(): Integer?
+      attr_accessor year(): String?
       attr_accessor director_name(): String?
       attr_accessor director_description(): String?
       attr_accessor cast_names(): Array[String]?
       attr_accessor cast_descriptions(): Array[String]?
       attr_accessor genres(): Array[String]?
       attr_accessor reviews(): Array[String]?
-      attr_accessor synopsis(): String?
+      attr_accessor synopsis(): Array[String]?
 
       def initialize: (
         ?String? title,
-        ?Integer? year,
+        ?String? year,
         ?String? director_name,
         ?String? director_description,
         ?Array[String]? cast_names,
         ?Array[String]? cast_descriptions,
         ?Array[String]? genres,
         ?Array[String]? reviews,
-        ?String? synopsis
+        ?Array[String]? synopsis
       ) -> void
     end
 

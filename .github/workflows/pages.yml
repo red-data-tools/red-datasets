@@ -23,7 +23,7 @@ jobs:
       CACHE_VERSION: "2022-10-21"
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ruby

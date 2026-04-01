@@ -57,7 +57,7 @@ class JMRDTest < Test::Unit::TestCase
     end
 
     test("invalid") do
-      message = "Type must be :train, :valid, or :test: :invalid"
+      message = ":type must be one of [:train, :valid, :test]: :invalid"
       assert_raise(ArgumentError.new(message)) do
         Datasets::JMRD.new(type: :invalid)
       end

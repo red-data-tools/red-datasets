@@ -77,7 +77,7 @@ module Datasets
       DESCRIPTION
 
       unless [:train, :valid, :test].include?(type)
-        raise ArgumentError, "Type must be :train, :valid, or :test: #{type.inspect}"
+        raise ArgumentError, ":type must be one of [:train, :valid, :test]: #{type.inspect}"
       end
       @type = type
     end

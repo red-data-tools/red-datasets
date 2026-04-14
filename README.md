@@ -32,6 +32,7 @@ You can use datasets easily because you can access each dataset with multiple wa
 * House of Councillors of Japan
 * House of Representatives of Japan
 * Iris Dataset
+* JMRD (Japanese Movie Recommendation Dialogue Dataset)
 * Libsvm
 * MNIST database
 * Mushroom

@@ -1,0 +1,9 @@
+coverage.dump
+coverage.info
+coverage/
+stackprof*.dump
+testbed/diff-lcs
+pkg/
+*.log
+.*.sw*
+*.dump

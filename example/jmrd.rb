@@ -24,7 +24,7 @@ jmrd.each do |dialogue|
   dialogue.utterances.each do |utterance|
     speaker_label = utterance.speaker == "recommender" ? "[R]" : "[S]"
     puts "  #{speaker_label} #{utterance.text}"
-
+    
     if utterance.checked_knowledge&.any?
       knowledge_types = utterance.checked_knowledge.map { |ck| ck.type }.join(", ")
       puts "      (knowledge: #{knowledge_types})"

@@ -115,7 +115,7 @@ module Datasets
     end
 
     def parse_questionnaire(data)
-      return nil if data.nil?
+      return if data.nil?
 
       Questionnaire.new(
         parse_questionnaire_answers(data["recommender"]),

@@ -208,7 +208,7 @@ class HouseOfCouncillorTest < Test::Unit::TestCase
                             nil,
                             nil,
                             "https://www.sangiin.go.jp/japanese/joho1/kousei/syuisyo/221/meisai/m221050.htm",
-                            Date.parse("2026-05-23"),
+                            Date.parse("2026-05-22"),
                             nil,
                             nil,
                             nil),

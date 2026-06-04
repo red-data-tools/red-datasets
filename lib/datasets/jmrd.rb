@@ -87,7 +87,7 @@ module Datasets
 
       open_data do |json_data|
         json_data.each do |dialogue_data|
-          yield parse_dialogue(dialogue_data)
+          yield build_dialogue(dialogue_data)
         end
       end
     end
@@ -103,7 +103,7 @@ module Datasets
       yield json_data
     end
 
-    def parse_dialogue(data)
+    def build_dialogue(data)
       Dialogue.new(
         data["dialog_id"],
         data["movie_title"],

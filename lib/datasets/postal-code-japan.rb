@@ -48,7 +48,7 @@ module Datasets
       end
       @metadata.id = "postal-code-japan-#{@reading}"
       @metadata.name = "Postal code in Japan (#{@reading})"
-      @metadata.url = "https://www.post.japanpost.jp/service/search/zipcode/download/"
+      @metadata.url = "https://www.post.japanpost.jp/zipcode/download.html"
       @metadata.licenses = ["CC0-1.0"]
       @metadata.description = "Postal code in Japan (reading: #{@reading})"
     end
@@ -104,7 +104,7 @@ module Datasets
 
     private
     def open_data
-      data_url = +"https://www.post.japanpost.jp/service/search/zipcode/download"
+      data_url = +"https://www.post.japanpost.jp/zipcode/dl"
       case @reading
       when :lowercase
         data_url << "/kogaki/zip/ken_all.zip"

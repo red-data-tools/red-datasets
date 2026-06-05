@@ -133,7 +133,7 @@ class HouseOfCouncillorTest < Test::Unit::TestCase
     test("#each") do
       records = @dataset.each.to_a
       assert_equal([
-                     247,
+                     248,
                      record("青木　愛",
                             nil,
                             "https://www.sangiin.go.jp/japanese/joho1/kousei/giin/profile/7007006.htm",
@@ -183,7 +183,7 @@ class HouseOfCouncillorTest < Test::Unit::TestCase
     test("#each") do
       records = @dataset.each.to_a
       assert_equal([
-                     8368,
+                     8370,
                      record(1,
                             1,
                             "食生活安定に関する質問主意書",
@@ -199,16 +199,16 @@ class HouseOfCouncillorTest < Test::Unit::TestCase
                             Date.parse("1947-06-28"),
                             nil),
                      record(221,
-                            51,
-                            "福岡県議会の海外視察に関する質問主意書",
-                            "北村　晴男",
+                            53,
+                            "ホルムズ海峡の封鎖等の影響により事業活動を縮小した事業主を迅速に支援するための雇用調整助成金の要件見直し等に関する質問主意書",
+                            "石垣　のりこ",
                             1,
                             nil,
                             nil,
                             nil,
                             nil,
                             "https://www.sangiin.go.jp/japanese/joho1/kousei/syuisyo/221/meisai/m221051.htm",
-                            Date.parse("2026-05-27"),
+                            Date.parse("2026-06-03"),
                             nil,
                             nil,
                             nil),

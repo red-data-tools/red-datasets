@@ -133,7 +133,7 @@ class HouseOfCouncillorTest < Test::Unit::TestCase
     test("#each") do
       records = @dataset.each.to_a
       assert_equal([
-                     248,
+                     247,
                      record("青木　愛",
                             nil,
                             "https://www.sangiin.go.jp/japanese/joho1/kousei/giin/profile/7007006.htm",
@@ -207,7 +207,7 @@ class HouseOfCouncillorTest < Test::Unit::TestCase
                             nil,
                             nil,
                             nil,
-                            "https://www.sangiin.go.jp/japanese/joho1/kousei/syuisyo/221/meisai/m221051.htm",
+                            "https://www.sangiin.go.jp/japanese/joho1/kousei/syuisyo/221/meisai/m221053.htm",
                             Date.parse("2026-06-03"),
                             nil,
                             nil,

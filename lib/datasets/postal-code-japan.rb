@@ -48,7 +48,7 @@ module Datasets
       end
       @metadata.id = "postal-code-japan-#{@reading}"
       @metadata.name = "Postal code in Japan (#{@reading})"
-      @metadata.url = "https://www.post.japanpost.jp/zipcode/download.html"
+      @metadata.url = "https://www.post.japanpost.jp/service/search/zipcode/download/"
       @metadata.licenses = ["CC0-1.0"]
       @metadata.description = "Postal code in Japan (reading: #{@reading})"
     end

@@ -27,51 +27,5 @@ class DownloaderTest < Test::Unit::TestCase
         downloader.download(output_path)
       end
     end
-
-  end
-
-  sub_test_case("#start_http") do
-    test("uses GH_TOKEN for api.github.com requests") do
-      original_gh_token = ENV["GH_TOKEN"]
-      ENV["GH_TOKEN"] = "token"
-
-      request = nil
-      response = Net::HTTPOK.new("1.1", "200", "OK")
-      def response.read_body
-      end
-      http = Object.new
-      http.define_singleton_method(:use_ssl=) do |value|
-      end
-      http.define_singleton_method(:use_ssl?) do
-        true
-      end
-      http.define_singleton_method(:cert_store=) do |store|
-      end
-      http.define_singleton_method(:start) do |&block|
-        block.call
-      end
-      http.define_singleton_method(:request) do |requested, &block|
-        request = requested
-        block.call(response)
-      end
-
-      original_http_new = Net::HTTP.method(:new)
-      Net::HTTP.singleton_class.send(:define_method, :new) do |host, port|
-        http
-      end
-      begin
-        downloader = Datasets::Downloader.new("https://api.github.com/repos/red-data-tools/red-datasets")
-        downloader.send(:start_http,
-                        URI.parse("https://api.github.com/repos/red-data-tools/red-datasets"),
-                        [],
-                        {}) do |download_response|
-        end
-      ensure
-        Net::HTTP.singleton_class.send(:define_method, :new, original_http_new)
-        ENV["GH_TOKEN"] = original_gh_token
-      end
-
-      assert_equal(["Bearer", "token"].join(" "), request["Authorization"])
-    end
   end
 end

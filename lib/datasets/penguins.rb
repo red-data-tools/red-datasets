@@ -26,9 +26,7 @@ module Datasets
         super
         species = self.class.name.split("::").last.downcase
         @metadata.id = "palmerpenguins-#{species}"
-        package_id = http_parameters["packageid"]
-        @metadata.url = "https://portal.edirepository.org/nis/mapbrowse" +
-                        "?packageid=#{package_id}"
+        @metadata.url = self.class::URL
         @metadata.licenses = ["CC0-1.0"]
         @data_path = cache_dir_path + "#{species}.csv"
       end
@@ -48,10 +46,7 @@ module Datasets
       end
 
       private def open_data
-        download(data_path,
-                 "https://portal.edirepository.org/nis/dataviewer",
-                 http_method: :post,
-                 http_parameters: http_parameters)
+        download(data_path, metadata.url)
         CSV.open(data_path, headers: :first_row, converters: :all) do |csv|
           yield csv
         end
@@ -61,37 +56,19 @@ module Datasets
     # Adelie penguin data from: https://doi.org/10.6073/pasta/abc50eed9138b75f54eaada0841b9b86
     class Adelie < SpeciesBase
       DOI = "doi.org/10.6073/pasta/abc50eed9138b75f54eaada0841b9b86".freeze
-
-      private def http_parameters
-        {
-          "packageid" => "knb-lter-pal.219.3",
-          "entityid" => "002f3893385f710df69eeebe893144ff",
-        }
-      end
+      URL = "https://github.com/red-data-tools/red-datasets-mirror/releases/download/mirror/palmerpenguins-adelie-knb-lter-pal.219.3.csv".freeze
     end
 
     # Chinstrap penguin data from: https://doi.org/10.6073/pasta/409c808f8fc9899d02401bdb04580af7
     class Chinstrap < SpeciesBase
       DOI = "doi.org/10.6073/pasta/409c808f8fc9899d02401bdb04580af7".freeze
-
-      private def http_parameters
-        {
-          "packageid" => "knb-lter-pal.221.2",
-          "entityid" => "fe853aa8f7a59aa84cdd3197619ef462",
-        }
-      end
+      URL = "https://github.com/red-data-tools/red-datasets-mirror/releases/download/mirror/palmerpenguins-chinstrap-knb-lter-pal.221.2.csv".freeze
     end
 
     # Gentoo penguin data from: https://doi.org/10.6073/pasta/2b1cff60f81640f182433d23e68541ce
     class Gentoo < SpeciesBase
       DOI = "doi.org/10.6073/pasta/2b1cff60f81640f182433d23e68541ce".freeze
-
-      private def http_parameters
-        {
-          "packageid" => "knb-lter-pal.220.3",
-          "entityid" => "e03b43c924f226486f2f0ab6709d2381",
-        }
-      end
+      URL = "https://github.com/red-data-tools/red-datasets-mirror/releases/download/mirror/palmerpenguins-gentoo-knb-lter-pal.220.3.csv".freeze
     end
   end
 

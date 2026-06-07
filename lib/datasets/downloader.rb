@@ -169,7 +169,7 @@ module Datasets
         if url.scheme == "https" and url.host == "api.github.com"
           gh_token = ENV["GH_TOKEN"]
           if gh_token
-            headers = headers.merge("Authorization" => ["Bearer", gh_token].join(" "))
+            headers = {"Authorization" => "Bearer #{gh_token}"}.merge(headers)
           end
         end
         if @http_method == :post

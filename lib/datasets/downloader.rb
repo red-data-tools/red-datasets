@@ -166,26 +166,27 @@ module Datasets
       http.start do
         path = url.path
         path += "?#{url.query}" if url.query
+        request_headers = headers
+        if url.scheme == "https" and url.host == "api.github.com"
+          gh_token = ENV["GH_TOKEN"]
+          if gh_token
+            request_headers = {"Authorization" => "Bearer #{gh_token}"}.merge(request_headers)
+          end
+        end
         if @http_method == :post
           # TODO: We may want to add @http_content_type, @http_body
           # and so on.
           if @http_parameters
             body = URI.encode_www_form(@http_parameters)
             content_type = "application/x-www-form-urlencoded"
-            headers = {"Content-Type" => content_type}.merge(headers)
+            request_headers = {"Content-Type" => content_type}.merge(request_headers)
           else
             body = ""
           end
-          request = Net::HTTP::Post.new(path, headers)
+          request = Net::HTTP::Post.new(path, request_headers)
           request.body = body
         else
-          request = Net::HTTP::Get.new(path, headers)
-        end
-        if url.scheme == "https" and url.host == "api.github.com"
-          gh_token = ENV["GH_TOKEN"]
-          if gh_token
-            headers = headers.merge("Authorization" => "Bearer #{gh_token}")
-          end
+          request = Net::HTTP::Get.new(path, request_headers)
         end
         http.request(request) do |response|
           case response

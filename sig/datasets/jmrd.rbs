@@ -1,0 +1,116 @@
+module Datasets
+  class JMRD < Dataset
+    class CheckedKnowledge < Struct[untyped]
+      attr_accessor type(): String?
+      attr_accessor content(): String?
+
+      def initialize: (?String? type, ?String? content) -> void
+    end
+
+    class Utterance < Struct[untyped]
+      attr_accessor utterance_id(): String?
+      attr_accessor speaker(): String?
+      attr_accessor text(): String?
+      attr_accessor checked_knowledge(): Array[CheckedKnowledge]?
+
+      def initialize: (
+        ?String? utterance_id,
+        ?String? speaker,
+        ?String? text,
+        ?Array[CheckedKnowledge]? checked_knowledge
+      ) -> void
+    end
+
+    class Knowledge < Struct[untyped]
+      attr_accessor title(): String?
+      attr_accessor year(): String?
+      attr_accessor director_name(): String?
+      attr_accessor director_description(): String?
+      attr_accessor cast_names(): Array[String]?
+      attr_accessor cast_descriptions(): Array[String]?
+      attr_accessor genres(): Array[String]?
+      attr_accessor reviews(): Array[String]?
+      attr_accessor synopsis(): Array[String]?
+
+      def initialize: (
+        ?String? title,
+        ?String? year,
+        ?String? director_name,
+        ?String? director_description,
+        ?Array[String]? cast_names,
+        ?Array[String]? cast_descriptions,
+        ?Array[String]? genres,
+        ?Array[String]? reviews,
+        ?Array[String]? synopsis
+      ) -> void
+    end
+
+    class QuestionnaireAnswers < Struct[untyped]
+      attr_accessor q1(): Integer?
+      attr_accessor q2(): Integer?
+      attr_accessor q3(): Integer?
+      attr_accessor q4(): Integer?
+      attr_accessor q5(): Integer?
+
+      def initialize: (
+        ?Integer? q1,
+        ?Integer? q2,
+        ?Integer? q3,
+        ?Integer? q4,
+        ?Integer? q5
+      ) -> void
+    end
+
+    class Questionnaire < Struct[untyped]
+      attr_accessor recommender(): QuestionnaireAnswers?
+      attr_accessor seeker(): QuestionnaireAnswers?
+
+      def initialize: (
+        ?QuestionnaireAnswers? recommender,
+        ?QuestionnaireAnswers? seeker
+      ) -> void
+    end
+
+    class Dialogue < Struct[untyped]
+      attr_accessor dialog_id(): String?
+      attr_accessor movie_title(): String?
+      attr_accessor first_speaker(): String?
+      attr_accessor questionnaire(): Questionnaire?
+      attr_accessor knowledge(): Knowledge?
+      attr_accessor utterances(): Array[Utterance]
+
+      def initialize: (
+        ?String? dialog_id,
+        ?String? movie_title,
+        ?String? first_speaker,
+        ?Questionnaire? questionnaire,
+        ?Knowledge? knowledge,
+        ?Array[Utterance] utterances
+      ) -> void
+    end
+
+    @type: Symbol
+    @metadata: Metadata
+
+    def initialize: (?type: Symbol) -> void
+
+    def each: () { (Dialogue) -> void } -> void
+            | () -> Enumerator[Dialogue, void]
+
+    private
+
+    def open_data: () { (Array[Hash[String, untyped]]) -> void } -> void
+
+    def parse_dialogue: (Hash[String, untyped] data) -> Dialogue
+
+    def parse_questionnaire: (Hash[String, untyped]? data) -> Questionnaire?
+
+    def parse_questionnaire_answers: (Hash[String, untyped]? data) -> QuestionnaireAnswers?
+
+    def parse_knowledge: (Hash[String, untyped]? data) -> Knowledge?
+
+    def parse_utterances: (Array[Hash[String, untyped]]? data) -> Array[Utterance]
+
+    def parse_utterance: (Hash[String, untyped] data) -> Utterance
+  end
+end

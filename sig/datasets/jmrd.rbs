@@ -111,6 +111,8 @@ module Datasets
 
     def parse_utterances: (Array[Hash[String, untyped]]? data) -> Array[Utterance]
 
+    def parse_checked_knowledge: (Hash[String, untyped] data) -> CheckedKnowledge
+
     def parse_utterance: (Hash[String, untyped] data) -> Utterance
   end
 end

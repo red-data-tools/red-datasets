@@ -159,11 +159,18 @@ module Datasets
       end
     end
 
+    def parse_checked_knowledge(data)
+      CheckedKnowledge.new(
+        data["type"],
+        data["content"]
+      )
+    end
+
     def parse_utterance(data)
       checked_knowledge = nil
       if data["checked_knowledge"]
         checked_knowledge = data["checked_knowledge"].map do |ck|
-          CheckedKnowledge.new(ck["type"], ck["content"])
+          parse_checked_knowledge(ck)
         end
       end
 

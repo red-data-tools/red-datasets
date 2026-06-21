@@ -1,62 +1,65 @@
 class JMRDTest < Test::Unit::TestCase
-  sub_test_case("type") do
-    test("train") do
-      dataset = Datasets::JMRD.new(type: :train)
-      dialogues = dataset.to_a
-
-      assert_equal(4575, dialogues.size)
-
-      first_dialogue = dialogues[0]
-      assert_equal("01884", first_dialogue.dialog_id)
-      assert_equal("時をかける少女", first_dialogue.movie_title)
-      assert_equal("recommender", first_dialogue.first_speaker)
-
-      # Check questionnaire
-      assert_not_nil(first_dialogue.questionnaire)
-      assert_equal(5, first_dialogue.questionnaire.recommender.q1)
-      assert_equal(4, first_dialogue.questionnaire.seeker.q1)
-
-      # Check knowledge
-      assert_not_nil(first_dialogue.knowledge)
-      assert_equal("時をかける少女", first_dialogue.knowledge.title)
-      assert_equal("２００６年", first_dialogue.knowledge.year)
-      assert_equal("細田守", first_dialogue.knowledge.director_name)
-
-      # Check utterances
-      assert_equal(26, first_dialogue.utterances.size)
-      assert_equal("01884_00", first_dialogue.utterances[0].utterance_id)
-      assert_equal("recommender", first_dialogue.utterances[0].speaker)
-      assert_equal("こんにちは", first_dialogue.utterances[0].text)
-      assert_not_nil(first_dialogue.utterances[0].checked_knowledge)
-      assert_equal(1, first_dialogue.utterances[0].checked_knowledge.size)
-      assert_equal("[知識なし]", first_dialogue.utterances[0].checked_knowledge[0].type)
+  sub_test_case("train") do
+    def setup
+      @dataset = Datasets::JMRD.new(type: :train)
     end
 
-    test("valid") do
-      dataset = Datasets::JMRD.new(type: :valid)
-      dialogues = dataset.to_a
+    test("#each") do
+      assert_equal({
+                     :dialogue_size => 4575,
+                     :dialog_id => "01884",
+                     :movie_title => "時をかける少女",
+                     :first_speaker => "recommender",
+                     :recommender_q1 => 5,
+                     :seeker_q1 => 4,
+                     :knowledge_title => "時をかける少女",
+                     :knowledge_year => "２００６年",
+                     :director_name => "細田守",
+                     :utterance_size => 26,
+                     :utterance_id => "01884_00",
+                     :utterance_speaker => "recommender",
+                     :utterance_text => "こんにちは",
+                     :checked_knowledge_size => 1,
+                     :checked_knowledge_type => "[知識なし]",
+                   },
+                   first_dialogue_summary(@dataset.to_a))
+    end
+  end
 
-      assert_equal(200, dialogues.size)
-
-      first_dialogue = dialogues[0]
-      assert_not_nil(first_dialogue.dialog_id)
-      assert_not_nil(first_dialogue.movie_title)
-      assert(["recommender", "seeker"].include?(first_dialogue.first_speaker))
+  sub_test_case("valid") do
+    def setup
+      @dataset = Datasets::JMRD.new(type: :valid)
     end
 
-    test("test") do
-      dataset = Datasets::JMRD.new(type: :test)
-      dialogues = dataset.to_a
+    test("#each") do
+      assert_equal({
+                     :dialogue_size => 200,
+                     :has_dialog_id => true,
+                     :has_movie_title => true,
+                     :valid_first_speaker => true,
+                   },
+                   dialogue_summary(@dataset.to_a))
+    end
+  end
 
-      assert_equal(300, dialogues.size)
-
-      first_dialogue = dialogues[0]
-      assert_not_nil(first_dialogue.dialog_id)
-      assert_not_nil(first_dialogue.movie_title)
-      assert(["recommender", "seeker"].include?(first_dialogue.first_speaker))
+  sub_test_case("test") do
+    def setup
+      @dataset = Datasets::JMRD.new(type: :test)
     end
 
-    test("invalid") do
+    test("#each") do
+      assert_equal({
+                     :dialogue_size => 300,
+                     :has_dialog_id => true,
+                     :has_movie_title => true,
+                     :valid_first_speaker => true,
+                   },
+                   dialogue_summary(@dataset.to_a))
+    end
+  end
+
+  sub_test_case("invalid type") do
+    test("raises error") do
       message = ":type must be one of [:train, :valid, :test]: :invalid"
       assert_raise(ArgumentError.new(message)) do
         Datasets::JMRD.new(type: :invalid)
@@ -65,40 +68,79 @@ class JMRDTest < Test::Unit::TestCase
   end
 
   sub_test_case("#metadata") do
+    def setup
+      @dataset = Datasets::JMRD.new(type: :train)
+    end
+
     test("#id") do
-      dataset = Datasets::JMRD.new(type: :train)
-      assert_equal("jmrd", dataset.metadata.id)
+      assert_equal("jmrd", @dataset.metadata.id)
     end
 
     test("#name") do
-      dataset = Datasets::JMRD.new(type: :train)
       assert_equal("Japanese Movie Recommendation Dialogue Dataset (JMRD)",
-                   dataset.metadata.name)
+                   @dataset.metadata.name)
     end
 
     test("#url") do
-      dataset = Datasets::JMRD.new(type: :train)
-      assert_equal("https://github.com/ku-nlp/JMRD", dataset.metadata.url)
+      assert_equal("https://github.com/ku-nlp/JMRD", @dataset.metadata.url)
     end
 
     test("#licenses") do
-      dataset = Datasets::JMRD.new(type: :train)
       assert_equal([Datasets::License.new("CC-BY-SA-4.0")],
-                   dataset.metadata.licenses)
+                   @dataset.metadata.licenses)
     end
 
     test("#description") do
-      dataset = Datasets::JMRD.new(type: :train)
-      description = dataset.metadata.description
+      description = @dataset.metadata.description
       assert do
-        description.include?("Japanese Movie Recommendation Dialogue Dataset")
-      end
-      assert do
-        description.include?("5,000 dialogues")
-      end
-      assert do
-        description.include?("knowledge-grounded")
+        [
+          "Japanese Movie Recommendation Dialogue Dataset",
+          "5,000 dialogues",
+          "knowledge-grounded",
+        ].all? do |phrase|
+          description.include?(phrase)
+        end
       end
     end
+  end
+
+  private
+
+  def dialogue_summary(dialogues)
+    first_dialogue = dialogues[0]
+    {
+      :dialogue_size => dialogues.size,
+      :has_dialog_id => !first_dialogue.dialog_id.nil?,
+      :has_movie_title => !first_dialogue.movie_title.nil?,
+      :valid_first_speaker => valid_speaker?(first_dialogue.first_speaker),
+    }
+  end
+
+  def valid_speaker?(speaker)
+    ["recommender", "seeker"].include?(speaker)
+  end
+
+  def first_dialogue_summary(dialogues)
+    first_dialogue = dialogues[0]
+    first_utterance = first_dialogue.utterances[0]
+    first_checked_knowledge = first_utterance.checked_knowledge[0]
+
+    {
+      :dialogue_size => dialogues.size,
+      :dialog_id => first_dialogue.dialog_id,
+      :movie_title => first_dialogue.movie_title,
+      :first_speaker => first_dialogue.first_speaker,
+      :recommender_q1 => first_dialogue.questionnaire.recommender.q1,
+      :seeker_q1 => first_dialogue.questionnaire.seeker.q1,
+      :knowledge_title => first_dialogue.knowledge.title,
+      :knowledge_year => first_dialogue.knowledge.year,
+      :director_name => first_dialogue.knowledge.director_name,
+      :utterance_size => first_dialogue.utterances.size,
+      :utterance_id => first_utterance.utterance_id,
+      :utterance_speaker => first_utterance.speaker,
+      :utterance_text => first_utterance.text,
+      :checked_knowledge_size => first_utterance.checked_knowledge.size,
+      :checked_knowledge_type => first_checked_knowledge.type,
+    }
   end
 end

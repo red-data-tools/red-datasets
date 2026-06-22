@@ -30,7 +30,7 @@ jobs:
       # We can invalidate the current cache by updating this.
       CACHE_VERSION: "2025-12-07"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}

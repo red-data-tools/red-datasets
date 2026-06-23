@@ -51,6 +51,10 @@ module Datasets
     )
 
     def initialize(type: :train)
+      unless [:train, :valid, :test].include?(type)
+        raise ArgumentError, ":type must be one of [:train, :valid, :test]: #{type.inspect}"
+      end
+
       super()
       @metadata.id = "jmrd"
       @metadata.name = "Japanese Movie Recommendation Dialogue Dataset (JMRD)"
@@ -76,9 +80,6 @@ module Datasets
         Dialogue Dataset and Dialogue System."
       DESCRIPTION
 
-      unless [:train, :valid, :test].include?(type)
-        raise ArgumentError, ":type must be one of [:train, :valid, :test]: #{type.inspect}"
-      end
       @type = type
     end
 

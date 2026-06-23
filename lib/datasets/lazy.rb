@@ -61,6 +61,7 @@ module Datasets
   LAZY_LOADER.register(:HouseOfRepresentative, "datasets/house-of-representative")
   LAZY_LOADER.register(:Iris, "datasets/iris")
   LAZY_LOADER.register(:ITACorpus, "datasets/ita-corpus")
+  LAZY_LOADER.register(:JMRD, "datasets/jmrd")
   LAZY_LOADER.register(:KuzushijiMNIST, "datasets/kuzushiji-mnist")
   LAZY_LOADER.register(:LIBSVM, "datasets/libsvm")
   LAZY_LOADER.register(:LIBSVMDatasetList, "datasets/libsvm-dataset-list")

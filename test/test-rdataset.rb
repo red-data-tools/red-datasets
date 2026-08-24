@@ -48,20 +48,20 @@ class RdatasetTest < Test::Unit::TestCase
       test("without package_name") do
         records = @dataset.each.to_a
         assert_equal([
-                       3499,
+                       3648,
                        {
-                         package: "AER",
-                         dataset: "Affairs",
-                         title: "Fair's Extramarital Affairs Data",
-                         rows: 601,
-                         cols: 9,
-                         n_binary: 2,
-                         n_character: 0,
-                         n_factor: 2,
+                         package: "admiral",
+                         dataset: "admiral_adlb",
+                         title: "Lab Analysis Dataset",
+                         rows: 330,
+                         cols: 115,
+                         n_binary: 13,
+                         n_character: 79,
+                         n_factor: 0,
                          n_logical: 0,
-                         n_numeric: 7,
-                         csv: "https://vincentarelbundock.github.io/Rdatasets/csv/AER/Affairs.csv",
-                         doc: "https://vincentarelbundock.github.io/Rdatasets/doc/AER/Affairs.html"
+                         n_numeric: 25,
+                         csv: "https://vincentarelbundock.github.io/Rdatasets/csv/admiral/admiral_adlb.csv",
+                         doc: "https://vincentarelbundock.github.io/Rdatasets/doc/admiral/admiral_adlb.html"
                        },
                        {
                          package: "wooldridge",

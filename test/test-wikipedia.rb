@@ -7,13 +7,13 @@ class WikipediaTest < Test::Unit::TestCase
       end
 
       test("#each") do
-        contributor = Datasets::Wikipedia::Contributor.new("Asparagusus", 43603280)
+        contributor = Datasets::Wikipedia::Contributor.new("Graham87", 194203)
         revision = Datasets::Wikipedia::Revision.new
-        revision.id = 1219062925
-        revision.parent_id = 1219062840
-        revision.timestamp = Time.iso8601("2024-04-15T14:38:04Z")
+        revision.id = 1367012995
+        revision.parent_id = 1362980932
+        revision.timestamp = Time.iso8601("2026-07-31T12:02:55Z")
         revision.contributor = contributor
-        revision.comment = "Restored revision 1002250816 by [[Special:Contributions/Elli|Elli]] ([[User talk:Elli|talk]]): Unexplained redirect breaking"
+        revision.comment = "1 revision imported: import old edit from [[nost:AccessibleComputing]]"
         revision.model = "wikitext"
         revision.format = "text/x-wiki"
         revision.text = <<-TEXT.chomp

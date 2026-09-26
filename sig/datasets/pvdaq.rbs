@@ -1,0 +1,76 @@
+module Datasets
+  class PVDAQ < Dataset
+    type numeric = Integer | Float
+
+    class Record < Struct[untyped]
+      attr_accessor system_id(): Integer?
+      attr_accessor system_public_name(): String?
+      attr_accessor site_location(): String?
+      attr_accessor timezone_or_utc_offset(): (Integer | String)?
+      attr_accessor latitude(): numeric?
+      attr_accessor longitude(): numeric?
+      attr_accessor elevation_m(): numeric?
+      attr_accessor dc_capacity_kw(): numeric?
+      attr_accessor koppen_geiger_climate(): String?
+      attr_accessor pvcz_composite(): Integer?
+      attr_accessor pvcz_t_rack(): Integer?
+      attr_accessor pvcz_t_roof(): Integer?
+      attr_accessor pvcz_humidity(): Integer?
+      attr_accessor pvcz_wind(): Integer?
+      attr_accessor tracking(): String?
+      attr_accessor type(): String?
+      attr_accessor azimuth(): numeric?
+      attr_accessor tilt(): numeric?
+      attr_accessor first_timestamp(): String?
+      attr_accessor last_timestamp(): String?
+      attr_accessor years(): numeric?
+      attr_accessor n_records(): Integer?
+      attr_accessor dataset_size_mb(): numeric?
+      attr_accessor n_available_sensor_channels(): Integer?
+      attr_accessor qa_status(): String?
+      attr_accessor qa_issue(): String?
+
+      def initialize: (
+        ?Integer? system_id,
+        ?String? system_public_name,
+        ?String? site_location,
+        ?(Integer | String)? timezone_or_utc_offset,
+        ?numeric? latitude,
+        ?numeric? longitude,
+        ?numeric? elevation_m,
+        ?numeric? dc_capacity_kw,
+        ?String? koppen_geiger_climate,
+        ?Integer? pvcz_composite,
+        ?Integer? pvcz_t_rack,
+        ?Integer? pvcz_t_roof,
+        ?Integer? pvcz_humidity,
+        ?Integer? pvcz_wind,
+        ?String? tracking,
+        ?String? type,
+        ?numeric? azimuth,
+        ?numeric? tilt,
+        ?String? first_timestamp,
+        ?String? last_timestamp,
+        ?numeric? years,
+        ?Integer? n_records,
+        ?numeric? dataset_size_mb,
+        ?Integer? n_available_sensor_channels,
+        ?String? qa_status,
+        ?String? qa_issue
+      ) -> void
+    end
+
+    @metadata: Metadata
+
+    def initialize: () -> void
+
+    def each: () { (Record) -> void } -> void
+            | () -> Enumerator[Record, void]
+
+    private
+
+    def open_data: () { (untyped) -> void } -> void
+
+    def build_record: (untyped row) -> Record
+  end
+end

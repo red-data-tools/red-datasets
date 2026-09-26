@@ -74,6 +74,7 @@ module Datasets
   LAZY_LOADER.register(:PennTreebank, "datasets/penn-treebank")
   LAZY_LOADER.register(:PMJTDatasetList, "datasets/pmjt-dataset-list")
   LAZY_LOADER.register(:PostalCodeJapan, "datasets/postal-code-japan")
+  LAZY_LOADER.register(:PVDAQ, "datasets/pvdaq")
   LAZY_LOADER.register(:QuoraDuplicateQuestionPair,
                        "datasets/quora-duplicate-question-pair")
   LAZY_LOADER.register(:RdatasetList, "datasets/rdataset")

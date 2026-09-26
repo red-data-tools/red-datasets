@@ -40,6 +40,7 @@ You can use datasets easily because you can access each dataset with multiple wa
 * The Penn Treebank Project
 * PMJT - Pre-Modern Japanese Text dataset list
 * Postal Codes in Japan
+* PVDAQ (Photovoltaic Data Acquisition)
 * Rdatasets
 * Seaborn
 * Sudachi Synonym Dictionary

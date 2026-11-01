@@ -121,7 +121,7 @@ class AozoraBunkoTest < Test::Unit::TestCase
           book.html_file_url = 'http://minken.party/2019/03/09/yakunin/'
           book.html_file_character_encoding = 'UTF-8'
 
-          assert_equal('<title>自由民権現代研究会</title>',
+          assert_equal('<title>1880【現代語訳】植木枝盛「官僚は減るべし、役人は増えるべし」（原題「官吏は減るべく役人は増すべきの説」）｜自由民権現代研究会</title>',
                        book.html[/<title>.*?<\/title>/])
         end
       end
